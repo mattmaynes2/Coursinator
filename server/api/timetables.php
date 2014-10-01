@@ -1,18 +1,17 @@
 <?php
-	include('lib/json.php');
-	
 	if ($_SERVER['REQUEST_METHOD'] != 'POST'){
-		http_response_code(400);
+		http_response_code(405);
 		echo '{"e":1,"msg":"Method must be POST."}';
 		exit;
 	}
 	
-	$in = readjson();
+	require_once('lib/json.php');
 	
-	header("Content-Type", "application/javascript; charset=utf-8");
+	$in = readjson();
 	
 	$r = ['e' => 0,
 		'timetables' => [],
 	];
 	
+	header("Content-Type", "application/javascript; charset=utf-8");
 	echo json_encode($r);

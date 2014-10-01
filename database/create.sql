@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS courses (
 	-- The code is the four digit number that is given for each course.
 	-- The first number represents the year that the course should be take.
 	-- (ex. MATH 3004, the code is 3004).
-	code CHAR(8) PRIMARY KEY NOT NULL,
+	code VARCHAR(15) PRIMARY KEY NOT NULL,
 	title VARCHAR(63) NOT NULL,
 	description VARCHAR(255) NOT NULL,
 	
@@ -17,9 +17,10 @@ CREATE TABLE IF NOT EXISTS courses (
 CREATE TABLE IF NOT EXISTS prerequisites (
 	id INTEGER PRIMARY KEY NOT NULL,
 	
-	course_code INTEGER
+	course_code VARCHAR(15)
 		NOT NULL
 		REFERENCES course(code)
+			ON DELETE CASCADE
 	,
 	allow_concurrent BOOLEAN NOT NULL,
 	required_credits FLOAT NULL,
@@ -30,7 +31,7 @@ CREATE TABLE IF NOT EXISTS prerequisites (
 CREATE TABLE IF NOT EXISTS course_offerings (
 	-- The CRN.
 	id INTEGER PRIMARY KEY NOT NULL,
-	course_code CHAR(8)
+	course_code VARCHAR(15)
 		NOT NULL
 		REFERENCES course(code)
 			ON DELETE CASCADE
@@ -81,7 +82,7 @@ CREATE TABLE IF NOT EXISTS program_elements (
 		REFERENCES program(id)
 			ON DELETE CASCADE
 	,
-	course_code CHAR(8)
+	course_code VARCHAR(15)
 		NOT NULL
 		REFERENCES course(code)
 			ON DELETE CASCADE
