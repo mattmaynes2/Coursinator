@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS course_offerings (
 	-- (M)onday, (T)uesday, (W)ednesday, thu(R)sday, (F)riday.
 	days VARCHAR(5) NOT NULL,
 	
-	enrolled INTEGER NOT NULL,
+	enrolled INTEGER NOT NULL DEFAULT 0,
 	capacity INTEGER NOT NULL,
 	room VARCHAR(63) NOT NULL,
 	
