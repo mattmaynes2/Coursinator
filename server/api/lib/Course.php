@@ -1,7 +1,7 @@
 <?php
 	require_once('db.php');
 	
-	class Course {
+	class Course implements JsonSerializable {
 		const LEVEL_UNDERGRAD = 0;
 		const LEVEL_GRAD      = 1;
 		
@@ -29,6 +29,39 @@
 			if (!$r)
 				throw new Exception("Invalid code '$code'");
 			return $r;
+		}
+		
+		static function fetch($code){
+			$q = new Query('Course');
+			$q->select('Course')->where_eq(Course::code, $code);
+			return $q->executeFetchScalar();
+		}
+		
+		const sql_table  = 'courses';
+		const code  = 'courses.code';
+		const title = 'courses.title';
+		const desc  = 'courses.description';
+		const level = 'courses.level';
+		
+		const sql_fields = [
+			self::code,
+			self::title,
+			self::level,
+			self::desc,
+		];
+		static function sql_from($row) {
+			$r = new self($row[0]);
+			$r->sql_load($row);
+			return $r;
+		}
+		function sql_load($row) {
+			list(
+				$this->code,
+				$this->title,
+				$this->desc,
+				$this->level
+			) = $row;
+			return $this;
 		}
 		
 		private $code = NULL;
@@ -78,6 +111,26 @@
 			return $this->level;
 		}
 		
+		function load() {
+			static $s = NULL;
+			if (!$s) {
+				global $db;
+				$s = $db->prepare('
+					SELECT code, title, description, level
+					FROM courses
+					WHERE code = ?;
+				');
+			}
+			
+			$s->execute([$this->code]);
+			$r = $s->fetch();
+			if (!$r) return FALSE;
+			
+			list($this->code, $this->title, $this->desc, $this->level) = $r;
+			$s->closeCursor();
+			return $s;
+		}
+		
 		function save(){
 			static $s = NULL;
 			if (!$s) {
@@ -96,5 +149,14 @@
 			]);
 			$s->closeCursor();
 			return $s;
+		}
+		
+		function jsonSerialize(){
+			return [
+				'code'  => $this->code,
+				'title' => $this->title,
+				'level' => $this->level,
+				'desc'  => $this->desc,
+			];
 		}
 	}
