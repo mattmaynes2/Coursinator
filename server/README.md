@@ -7,3 +7,11 @@ For the PHP API the only thing that is required is the database connection info.
 - `COURSINATOR_DB`:   The DSN describing the database to connect to.
 - `COURSINATOR_USER`: The username of the database if required.
 - `COURSINATOR_PASS`: The password if required.
+
+These can set in the Apache config if desired.
+
+~~~apache
+SetEnv COURSINATOR_DB   mysql:dbname=coursinator
+SetEnv COURSINATOR_USER root
+SetEnv COURSINATOR_PASS passwd
+~~~
