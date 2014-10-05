@@ -47,8 +47,8 @@
 		private $from = NULL;
 		private $where = '';
 		private $join = '';
-		private $classes = [];
-		private $values = [];
+		private $classes = NULL;
+		private $values = NULL;
 		private $order = NULL;
 		
 		private $result = NULL;
@@ -58,7 +58,9 @@
 		 * \param $from The class to select from.
 		 */
 		function __construct($from){
-			$this->from = ' FROM '.$from::sql_table;
+			$this->from    = ' FROM '.$from::sql_table;
+			$this->classes = [];
+			$this->values  = [];
 		}
 		
 		/** Select values.
@@ -171,7 +173,7 @@
 		 */
 		function executeFetchScalar(){
 			$r = $this->executeFetchOne();
-			if (!$r) return FALSE;
+			if ($r === FALSE) return FALSE;
 			return $r[0];
 		}
 		
@@ -192,7 +194,7 @@
 		 */
 		function fetch(){
 			$row = $this->result->fetch(PDO::FETCH_NUM);
-			if (!$row) return FALSE;
+			if ($row === FALSE) return FALSE;
 			
 			return $this->transform_row($row);
 		}
@@ -203,7 +205,7 @@
 		 */
 		function fetchScalar(){
 			$r = $this->fetch();
-			if (!$r) return FALSE;
+			if ($r === FALSE) return FALSE;
 			return $r[0];
 		}
 		
@@ -213,7 +215,7 @@
 		 */
 		function fetchAll(){
 			$f = $this->result->fetchAll(PDO::FETCH_NUM);
-			if (!$f) return FALSE;
+			if ($f === FALSE) return FALSE;
 			
 			$r = [];
 			foreach ($f as $row) {
@@ -229,7 +231,7 @@
 		function fetchAllScalar(){
 			$r = [];
 			$res = $this->fetchAll();
-			if (!$res) return FALSE;
+			if ($res === FALSE) return FALSE;
 			foreach ($res as $row)
 				$r[] = $row[0];
 			return $r;
