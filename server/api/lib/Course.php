@@ -124,7 +124,7 @@
 			
 			$s->execute([$this->code]);
 			$r = $s->fetch();
-			if (!$r) return FALSE;
+			if ($r === FALSE) return FALSE;
 			
 			list($this->code, $this->title, $this->desc, $this->level) = $r;
 			$s->closeCursor();
