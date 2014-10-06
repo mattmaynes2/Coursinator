@@ -1,1 +1,5 @@
 *.bak
+
+# Mac OS X Hidden Files
+.DS_Store
+.localized
