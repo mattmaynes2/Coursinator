@@ -122,7 +122,7 @@ public class Program{
 		
 		
 		for(int i = 0; i < nodes.getLength(); i++){
-			this.elements.add(ProgramElement.buildElement(nodes.item(i)));
+			this.elements.add(ProgramElement.buildElement((Element)nodes.item(i)));
 		}
 	}
 	

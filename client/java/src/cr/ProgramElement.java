@@ -8,12 +8,16 @@
  * @author Matthew Maynes
  */
  
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 
 public class ProgramElement{
 
-// 	private Course course;
+	/**
+	 * Stores the course data for this program element
+	 */
+	private Course course;
 	
 	/**
 	 * Indicates the term in which this course is offered
@@ -29,7 +33,32 @@ public class ProgramElement{
 	public ProgramElement(){
 		this.term = 0;
 		this.year = 0;
-		//this.course = new Course();
+		this.course = new Course();
+	}
+	
+	
+	public Course getCourse(){
+		return this.course;
+	}
+	
+	public int getTerm(){
+		return this.term;
+	}
+	
+	public int getYear(){
+		return this.year;
+	}
+	
+	public void setCourse(Course course){
+		this.course = course;
+	}
+	
+	public void setTerm(int term){
+		this.term = term;
+	}
+	
+	public void setYear(int year){
+		this.year = year;
 	}
 	
 	
@@ -42,8 +71,20 @@ public class ProgramElement{
 	 *
 	 * @return a new program element representing the data in the given node
 	 */
-	public static ProgramElement buildElement(Node node){
-		return null;
+	public static ProgramElement buildElement(Element node){
+		ProgramElement elem = new ProgramElement();
+		NodeList nodes;
+		
+		nodes = node.getElementsByTagName("course");
+		if(nodes.getLength() > 0) elem.setCourse(Course.buildCourse((Element)nodes.item(0)));
+		
+		nodes = node.getElementsByTagName("term");
+		if(nodes.getLength() > 0) elem.setTerm(Integer.parseInt(nodes.item(0).getNodeValue()));
+		
+		nodes = node.getElementsByTagName("year");
+		if(nodes.getLength() > 0) elem.setYear(Integer.parseInt(nodes.item(0).getNodeValue()));
+		
+		return elem;
 	}
 
 }
