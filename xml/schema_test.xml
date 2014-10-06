@@ -1,0 +1,21 @@
+<!--This XML should validate against program.xsd-->
+<program name="Software">
+	<element>
+		<course>
+			<code>SYSC4505</code>
+			<title>Distributed Network Processing</title>
+			<term_span>1</term_span>
+		</course>
+		<term>1</term>
+		<year>3</year>
+	</element>
+	<element>
+		<course>
+			<code>SYSC3110</code>
+			<title>Software Development Project</title>
+			<term_span>1</term_span>
+		</course>
+		<term>1</term>
+		<year>3</year>
+	</element>
+</program>
