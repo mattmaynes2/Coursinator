@@ -61,7 +61,10 @@ public class ProgramElement{
 		this.year = year;
 	}
 	
-	
+	@Override
+	public String toString(){
+		return "<ProgramElement> Year: " + this.year + " Term: " + this.term + "{Course: " + this.course.toString() + "}";
+	}
 	
 	/**
 	 * Builds a program element using the data contained in 

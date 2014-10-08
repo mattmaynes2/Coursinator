@@ -48,6 +48,13 @@ public class Program{
 	private String title;
 	
 	/**
+	 * The file containing the XML schema for validating input data
+	 *
+	 * @see read
+	 */
+	private File xsd;
+	
+	/**
 	 * Constructs an empty program object
 	 */
 	public Program (){
@@ -62,6 +69,7 @@ public class Program{
 	public Program (String title){
 		this.elements = new ArrayList<ProgramElement>();
 		this.title = title;
+		this.xsd = new File("program.xsd");
 	}
 
 	/**
@@ -100,10 +108,26 @@ public class Program{
 		return this.elements.remove(elem);
 	}
 	
+	/**
+	 * Returns all of the elements in this program
+	 */
+	public List<ProgramElement> getElements(){
+		return this.elements;
+	}
+	
+	/**
+	 * Sets the path to the xsd file
+	 */
+	public void setXSD(String path){
+		this.xsd = new File(path);
+	}
+	
 	
 	/**
 	 * Reads an entire stream into memory to be parsed. The input
-	 * file must be in the XML format as defined by Program.xsd
+	 * file must be in the XML format as defined by Program.xsd. 
+	 *
+	 * IMPORTANT: The path for Program.xsd must be set before running this function 
 	 *
 	 * @param file - The input file to read in an buffer
 	 *
@@ -114,7 +138,7 @@ public class Program{
 	 * @throws NullPointerException 		- If file is null.
 	 */
 	public void read(File file) throws IllegalArgumentException, SAXException, IOException, NullPointerException, ParserConfigurationException {
-		this.validateXML(new File("/Users/Matt/Desktop/Carleton/2014 - 2015/Fall Term/SYSC 4504/Project/Coursinator/xml/program.xsd"), file);
+		this.validateXML(this.xsd, file);
 	
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc 			= builder.parse(file);
@@ -139,7 +163,7 @@ public class Program{
 	 * @throws IOException 				- If the validator is processing a SAXSource and the underlying XMLReader throws an IOException.
 	 * @throws NullPointerException 	- If file is null.
 	 */
-	private void validateXML(File xsd, File xml) throws IllegalArgumentException, SAXException, IOException, NullPointerException{
+	public void validateXML(File xsd, File xml) throws IllegalArgumentException, SAXException, IOException, NullPointerException{
         SchemaFactory factory 	= SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema 			= factory.newSchema(new StreamSource(new FileInputStream(xsd)));
         Validator validator 	= schema.newValidator();
