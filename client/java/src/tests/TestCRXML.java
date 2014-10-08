@@ -9,7 +9,7 @@
  *
  */
  
- 
+package tests; 
 import cr.*;
 
 public class TestCRXML implements Test{
