@@ -1,5 +1,8 @@
+package gui;
+
 import javax.swing.*;
 import java.awt.*;
+import gui.*;
 
 public class StudentInfoPanel extends JPanel
 {
@@ -21,31 +24,18 @@ public class StudentInfoPanel extends JPanel
 		bg = new ButtonGroup();
 		
 		//Set up panel
-		setLayout(new GridBagLayout());
-		
-		GridBagConstraints gbc = new GridBagConstraints();
+		setLayout(new GridLayout(0,1));
 		
 		//Add components
-		
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		
-		gbc.gridx=0;
-		gbc.gridy=0;
-
-		
-		gbc.gridy = 1;
-		add(onPattern,gbc);
+		add(onPattern);
 		bg.add(onPattern);
 		
-		gbc.gridy = 2;
-		add(offPattern, gbc);
+		add(offPattern);
 		bg.add(offPattern);
-		
-		gbc.gridy = 3;
-		add(submit, gbc);
-		
-		gbc.gridy = 4;
-		add(yearStatus, gbc);
-		
+	
+		add(yearStatus);
+		add(submit);
+	
+		setPreferredSize(new Dimension(200,100));
 	}
 }

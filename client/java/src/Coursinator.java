@@ -8,12 +8,21 @@
  * @date October 6, 2014
  * @author Matthew Maynes, Cameron Blanchard and Kevin Cox
  */
- 
- 
+
+import gui.*; 
+import javax.swing.*;
+
 public class Coursinator{
 
 	public static void main(String[] args){
-		
+		try
+		{
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		}catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		CoursePickerView view = new CoursePickerView();
 		
 		
 	}
