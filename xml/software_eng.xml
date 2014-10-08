@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--This XML should validate against program.xsd-->
+<program name="Software Engineering">
+	<element>
+		<course>
+			<code>MATH1104</code>
+			<title>Linear Algebra for Eng. Students</title>
+			<term_span>1</term_span>
+		</course>
+		<term>1</term>
+		<year>1</year>
+	</element>
+	<element>
+		<course>
+			<code>MATH1004</code>
+			<title>Calculus for Engineering Students</title>
+			<term_span>1</term_span>
+		</course>
+		<term>1</term>
+		<year>1</year>
+	</element>
+	<element>
+		<course>
+			<code>PHYS1003</code>
+			<title>Intro Mechanics & Thermodynamics</title>
+			<term_span>1</term_span>
+		</course>
+		<term>1</term>
+		<year>1</year>
+	</element>
+	<element>
+		<course>
+			<code>SYSC1005</code>
+			<title>Introduction to Software Development</title>
+			<term_span>1</term_span>
+		</course>
+	</element>
+	<element>
+		<course>
+			<code>SYSC4505</code>
+			<title>Distributed Network Processing</title>
+			<term_span>1</term_span>
+		</course>
+		<term>1</term>
+		<year>3</year>
+	</element>
+	<element>
+		<course>
+			<code>SYSC3110</code>
+			<title>Software Development Project</title>
+			<term_span>1</term_span>
+		</course>
+		<term>1</term>
+		<year>3</year>
+	</element>
+</program>

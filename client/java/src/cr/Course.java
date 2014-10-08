@@ -62,6 +62,11 @@ public class Course{
 		this.span = span;
 	}
 	
+	@Override
+	public String toString(){
+		return "<Course: " + this.code + "> Span: " + this.span + " [Title: " + this.title + "]";
+	}
+	
 	/**
 	 * Builds a course given the data in the passed node
 	 *
