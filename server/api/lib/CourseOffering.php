@@ -1,7 +1,7 @@
 <?php
 	require_once('db.php');
 	
-	class CourseOffering implements JsonSerializable {
+	class CourseOffering {
 		static function fetch($id){
 			$q = new Query('CourseOffering');
 			$q->select('CourseOffering')->where_eq(CourseOffering::id, $id);
@@ -206,18 +206,19 @@
 			return $s;
 		}
 		
-		function jsonSerialize(){
-			return [
-				'id'          => $this->id,
-				'course_code' => $this->course_code,
-				'year'        => $this->year,
-				'section'     => $this->section,
-				'term'        => $this->term,
-				'days'        => $this->days,
-				'enrolled'    => $this->enrolled,
-				'capacity'    => $this->capacity,
-				'room'        => $this->room,
-				'type'        => $this->type,
-			];
+		function to_xml(){
+			$r = '<course-offering';
+			$r .= ' id="'.htmlspecialchars($this->id).'"';
+			$r .= ' course="'.htmlspecialchars($this->course_code).'"';
+			$r .= ' year="'.htmlspecialchars($this->year).'"';
+			$r .= ' section="'.htmlspecialchars($this->section).'"';
+			$r .= ' term="'.htmlspecialchars($this->term).'"';
+			$r .= ' days="'.htmlspecialchars($this->days).'"';
+			$r .= ' enrolled="'.htmlspecialchars($this->enrolled).'"';
+			$r .= ' capacity="'.htmlspecialchars($this->capacity).'"';
+			$r .= ' room="'.htmlspecialchars($this->room).'"';
+			$r .= ' type="'.htmlspecialchars($this->type).'"';
+			$r .= '/>';
+			return $r;
 		}
 	}

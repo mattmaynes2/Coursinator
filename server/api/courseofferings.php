@@ -10,16 +10,14 @@
 		$q->where_startswith(CourseOffering::course_code, 'WGST');
 		$q->execute();
 		
-		$r = [
-			'e' => 0,
-			// 'sql' => $q->sql(),
-			'courses' => $q->fetchAllScalar(),
-		];
+		$r = '<response e="0"><courses>';
+		foreach ($q->fetchAllScalar() as $co) {
+			$r .= $co->to_xml();
+		}
+		$r .= '</courses></response>';
 		
-		$q->closeCursor();
-		
-		header("Content-Type", "application/javascript; charset=utf-8");
-		echo json_encode($r);
+		header('Content-Type: text/xml; charset=utf-8');
+		echo $r;
 		break;
 	case 'POST':
 		/*
@@ -86,14 +84,11 @@
 		
 		$db->commit();
 		
-		header("Content-Type", "application/javascript; charset=utf-8");
-		echo json_encode([
-			"e" => 0,
-			"added" => $added,
-		]);
+		header('Content-Type: text/xml; charset=utf-8');
+		echo '<response e="0"><added>'.$added.'</added></response>';
 		break;
 	default:
-		header("Content-Type", "application/javascript; charset=utf-8");
+		header('Content-Type: text/xml; charset=utf-8');
 		http_response_code(405);
-		echo '{"e":1,"msg":"Method must be GET or POST."}';
+		echo '<response e="1" msg="Method must be GET or POST"/>';
 	}
