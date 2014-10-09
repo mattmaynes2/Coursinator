@@ -70,45 +70,6 @@
 		private $level = NULL;
 		
 		function __construct($code){
-			$this->setcode($code);
-		}
-		
-		function setcode($code){
-			$this->code = self::code_validate($code);
-		}
-		function getcode(){
-			return $this->code;
-		}
-		
-		function settitle($title){
-			$this->title = $title;
-		}
-		function gettitle($title){
-			return $this->tilte;
-		}
-		
-		function setlevel($level){
-			switch ($level) {
-			case self::LEVEL_UNDERGRAD:
-			case self::LEVEL_GRAD:
-				break; // Do nothing, already good.
-			
-			case "undergrad":
-				$level = self::LEVEL_UNDERGRAD;
-				break;
-			
-			case "grad":
-				$level = self::LEVEL_GRAD;
-				break;
-			
-			default:
-				throw new Exception("Bad level '$level'");
-			}
-			
-			$this->level = $level;
-		}
-		function getlevel(){
-			return $this->level;
 		}
 		
 		function load() {
@@ -151,12 +112,7 @@
 			return $s;
 		}
 		
-		function jsonSerialize(){
-			return [
-				'code'  => $this->code,
-				'title' => $this->title,
-				'level' => $this->level,
-				'desc'  => $this->desc,
-			];
+		function to_xml(){
+			return "";
 		}
 	}

@@ -7,15 +7,14 @@
 		
 		switch ($type){
 		case 'sqlite':
-			$autoincrement = 'AUTOINCREMENT';
+			$autoincrement = 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL';
 			break;
 		case 'mysql':
-			$autoincrement = 'AUTO_INCREMENT';
+			$autoincrement = 'INTEGER PRIMARY KEY AUTO_INCREMENT';
 			break;
 		default:
 			$autoincrement = '';
 		}
-		
 		
 		$db->beginTransaction();
 		
@@ -45,7 +44,7 @@
 			);
 			
 			CREATE TABLE IF NOT EXISTS prerequisites (
-				id INTEGER PRIMARY KEY $autoincrement NOT NULL,
+				id $autoincrement NOT NULL,
 				
 				course_code VARCHAR(15)
 					NOT NULL
@@ -60,7 +59,7 @@
 			
 			CREATE TABLE IF NOT EXISTS course_offerings (
 				-- The CRN.
-				id INTEGER PRIMARY KEY $autoincrement NOT NULL,
+				id $autoincrement NOT NULL,
 				course_code VARCHAR(15)
 					NOT NULL
 					REFERENCES course(code)
@@ -97,7 +96,7 @@
 			
 			
 			CREATE TABLE IF NOT EXISTS programs (
-				id INTEGER PRIMARY KEY $autoincrement NOT NULL,
+				id $autoincrement NOT NULL,
 				
 				-- The year the program starts.
 				year INTEGER NOT NULL,
