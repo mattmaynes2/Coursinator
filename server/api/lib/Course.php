@@ -110,6 +110,12 @@
 		function getlevel() {
 			return $this->level;
 		}
+		function getlevelstr() {
+			switch ($this->level) {
+			case self::LEVEL_UNDERGRAD: return "underdraduate";
+			case self::LEVEL_GRAD:      return "graduate";
+			}
+		}
 		
 		function load() {
 			static $s = NULL;
@@ -152,6 +158,13 @@
 		}
 		
 		function to_xml() {
-			return "";
+			$r = '<course';
+			$r .= ' code="'.htmlspecialchars($this->code).'"';
+			$r .= ' title="'.htmlspecialchars($this->title).'"';
+			$r .= ' level="'.htmlspecialchars($this->getlevelstr()).'"';
+			$r .= ' desc="'.htmlspecialchars($this->desc).'"';
+			$r .= '/>';
+			
+			return $r;
 		}
 	}
