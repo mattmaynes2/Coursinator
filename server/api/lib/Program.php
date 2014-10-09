@@ -60,6 +60,9 @@
 		}
 		
 		function to_xml(){
-			return "<program></program>";
+			$r = "<program>";
+			
+			$r += "</program>";
+			return $r;
 		}
 	}
