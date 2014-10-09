@@ -3,8 +3,6 @@
 		exit;
 	}
 	
-	require_once('lib/json.php');
-	
 	switch ($_SERVER['REQUEST_METHOD']) {
 	case "POST":
 		header('Content-Type: text/xml; charset=utf-8');
