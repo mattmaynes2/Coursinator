@@ -132,11 +132,11 @@
 		
 		$db->commit();
 		
-		header("Content-Type", "application/javascript; charset=utf-8");
-		echo '{"e":0}';
+		header('Content-Type: text/xml; charset=utf-8');
+		echo '<response e="0"/>';
 		break;
 	default:
-		header("Content-Type", "application/javascript; charset=utf-8");
 		http_response_code(405);
-		echo '{"e":1,"msg":"Method must be POST."}';
+		header('Content-Type: text/xml; charset=utf-8');
+		echo '<response e="1" msg="Method must be POST."/>';
 	}
