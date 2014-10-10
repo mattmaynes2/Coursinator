@@ -15,26 +15,20 @@ public class CoursePickerView extends JFrame
 		//Initialize components
 		studentInfo = new StudentInfoPanel();
 		courses = new CourseGrid();
-		setLayout(new GridBagLayout());
+		setLayout(new BorderLayout());
 		setSize(1000, 500);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		setDefaultLookAndFeelDecorated(false);
 		
-		GridBagConstraints gbc = new GridBagConstraints();
+		add(studentInfo, BorderLayout.WEST);
+	
+		add(courses,BorderLayout.EAST);
 		
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		gbc.insets = new Insets(10,10,10,10);
-		
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		
-		add(studentInfo, gbc);
-		
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		add(courses,gbc);
 		setVisible(true);
+		
+		Program testProgram = new Program("../../../xml/software_eng.xml");
+		courses.loadCourses(testProgram.getElements());
 		pack();
 	}
 
