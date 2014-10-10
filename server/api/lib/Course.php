@@ -158,12 +158,13 @@
 		}
 		
 		function to_xml() {
-			$r = '<course';
-			$r .= ' code="'.htmlspecialchars($this->code).'"';
-			$r .= ' title="'.htmlspecialchars($this->title).'"';
-			$r .= ' level="'.htmlspecialchars($this->getlevelstr()).'"';
-			$r .= ' desc="'.htmlspecialchars($this->desc).'"';
-			$r .= '/>';
+			$r = '<course>';
+			$r .= '<code>'.htmlspecialchars($this->code).'</code>';
+			$r .= '<title>'.htmlspecialchars($this->title).'</title>';
+			$r .= '<term-span>1</term-span>';
+			$r .= '<level>'.htmlspecialchars($this->getlevelstr()).'</level>';
+			$r .= '<desc>'.htmlspecialchars($this->desc).'</desc>';
+			$r .= '<course/>';
 			
 			return $r;
 		}

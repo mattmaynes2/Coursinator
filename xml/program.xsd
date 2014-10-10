@@ -12,7 +12,9 @@ elementFormDefault="qualified">
 										<xs:sequence>
 											<xs:element name="code"/>
 											<xs:element name="title"/>
-											<xs:element name="term_span"/>
+											<xs:element name="term-span"/>
+											<xs:element name="level"/>
+											<xs:element name="desc"/>
 										</xs:sequence>
 									</xs:complexType>
 								</xs:element>
