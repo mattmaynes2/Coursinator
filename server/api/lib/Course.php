@@ -1,7 +1,7 @@
 <?php
 	require_once('db.php');
 	
-	class Course implements JsonSerializable {
+	class Course {
 		const LEVEL_UNDERGRAD = 0;
 		const LEVEL_GRAD      = 1;
 		
@@ -10,7 +10,7 @@
 		 * This function will return a course code in the form ABCD1234 or
 		 * FALSE if the code was invalid.
 		 */
-		static function code_normalize($code){
+		static function code_normalize($code) {
 			$code = strtoupper($code);
 			$code = preg_replace('/[^A-Z0-9]/', '', $code);
 			
@@ -24,14 +24,14 @@
 		 *
 		 * Like `code_normalize()` but it throws on an invalid code.
 		 */
-		static function code_validate($code){
+		static function code_validate($code) {
 			$r = self::code_normalize($code);
 			if (!$r)
 				throw new Exception("Invalid code '$code'");
 			return $r;
 		}
 		
-		static function fetch($code){
+		static function fetch($code) {
 			$q = new Query('Course');
 			$q->select('Course')->where_eq(Course::code, $code);
 			return $q->executeFetchScalar();
@@ -69,25 +69,25 @@
 		private $desc = "";
 		private $level = NULL;
 		
-		function __construct($code){
+		function __construct($code) {
 			$this->setcode($code);
 		}
 		
-		function setcode($code){
+		function setcode($code) {
 			$this->code = self::code_validate($code);
 		}
-		function getcode(){
+		function getcode() {
 			return $this->code;
 		}
 		
-		function settitle($title){
+		function settitle($title) {
 			$this->title = $title;
 		}
-		function gettitle($title){
+		function gettitle($title) {
 			return $this->tilte;
 		}
 		
-		function setlevel($level){
+		function setlevel($level) {
 			switch ($level) {
 			case self::LEVEL_UNDERGRAD:
 			case self::LEVEL_GRAD:
@@ -107,8 +107,14 @@
 			
 			$this->level = $level;
 		}
-		function getlevel(){
+		function getlevel() {
 			return $this->level;
+		}
+		function getlevelstr() {
+			switch ($this->level) {
+			case self::LEVEL_UNDERGRAD: return "underdraduate";
+			case self::LEVEL_GRAD:      return "graduate";
+			}
 		}
 		
 		function load() {
@@ -131,7 +137,7 @@
 			return $s;
 		}
 		
-		function save(){
+		function save() {
 			static $s = NULL;
 			if (!$s) {
 				global $db;
@@ -151,12 +157,15 @@
 			return $s;
 		}
 		
-		function jsonSerialize(){
-			return [
-				'code'  => $this->code,
-				'title' => $this->title,
-				'level' => $this->level,
-				'desc'  => $this->desc,
-			];
+		function to_xml() {
+			$r = '<course>';
+			$r .= '<code>'.htmlspecialchars($this->code).'</code>';
+			$r .= '<title>'.htmlspecialchars($this->title).'</title>';
+			$r .= '<term-span>1</term-span>';
+			$r .= '<level>'.htmlspecialchars($this->getlevelstr()).'</level>';
+			$r .= '<desc>'.htmlspecialchars($this->desc).'</desc>';
+			$r .= '<course/>';
+			
+			return $r;
 		}
 	}

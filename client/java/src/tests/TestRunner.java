@@ -7,6 +7,7 @@
  * @date October 6, 2014
  * @author Matthew Maynes
  */
+package tests;
 
 import java.util.ArrayList;
 
