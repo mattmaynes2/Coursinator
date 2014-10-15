@@ -1,77 +1,26 @@
 <?php
 	require_once('db.php');
 	
-	class CourseOffering {
-		static function fetch($id){
-			$q = new Query('CourseOffering');
-			$q->select('CourseOffering')->where_eq(CourseOffering::id, $id);
-			return $q->executeFetchScalar();
-		}
-		
-		const TERM_FALL   = 0;
-		const TERM_WINTER = 1;
-		const TERM_SUMMER = 2;
-		
-		const TYPE_LEC = 0;
-		const TYPE_LAB = 1;
-		const TYPE_TUT = 2;
-		
-		const sql_table   = 'course_offerings';
-		const id          = 'course_offerings.id';
-		const course_code = 'course_offerings.course_code';
-		const year        = 'course_offerings.year';
-		const section     = 'course_offerings.section';
-		const term        = 'course_offerings.term';
-		const days        = 'course_offerings.days';
-		const enrolled    = 'course_offerings.enrolled';
-		const capacity    = 'course_offerings.capacity';
-		const room        = 'course_offerings.room';
-		const type        = 'course_offerings.type';
+	class Prerequsite {
+		const sql_table  = 'prerequisites';
+		const type       = 'prerequisites.type';
+		const course     = 'prerequisites.course_code';
+		const exclude    = 'prerequisites.exclude';
+		const concurrent = 'prerequisites.concurrent';
 		
 		const sql_fields = [
-			self::id,
-			self::course_code,
-			self::year,
-			self::section,
-			self::term,
-			self::days,
-			self::enrolled,
-			self::capacity,
-			self::room,
 			self::type,
+			self::course_code,
+			self::course,
+			self::exclude,
+			self::concurrent,
 		];
 		
-		private $id          = NULL;
-		private $course_code = NULL;
-		private $year        = NULL;
-		private $section     = NULL;
-		private $term        = NULL;
-		private $days        = NULL;
-		private $enrolled    = NULL;
-		private $capacity    = NULL;
-		private $room        = NULL;
 		private $type        = NULL;
-		
-		static function sql_from($row){
-			$r = new self();
-			$r->sql_load($row);
-			return $r;
-		}
-		function sql_load($row) {
-			list(
-				$this->id,
-				$this->course_code,
-				$this->year,
-				$this->section,
-				$this->term,
-				$this->days,
-				$this->enrolled,
-				$this->capacity,
-				$this->room,
-				$this->type,
-			) = $row;
-			return $this;
-		}
+		private $course_code = NULL;
+		private $course      = NULL;
+		private $exclude     = NULL;
+		private $concurrent  = NULL;
 		
 		function __construct(){
 		}
@@ -87,7 +36,7 @@
 			return $this->year;
 		}
 		function setyear($year){
-			return $this->year = +$year;
+			return $this->year = $year;
 		}
 		
 		function getsection(){
@@ -101,7 +50,7 @@
 			return $this->term;
 		}
 		function setterm($term){
-			return $this->term = +$term;
+			return $this->term = $term;
 		}
 		
 		function getdays(){
@@ -115,7 +64,7 @@
 			return $this->enrolled;
 		}
 		function setenrolled($enr){
-			return $this->enrolled = +$enr;
+			return $this->enrolled = $enr;
 		}
 		function enroll(){
 			return ++$this->enrolled;
@@ -128,7 +77,7 @@
 			return $this->capacity;
 		}
 		function setcapacity($cap){
-			return $this->capacity = +$cap;
+			return $this->capacity = $cap;
 		}
 		
 		function getroom(){

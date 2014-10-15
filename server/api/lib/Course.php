@@ -164,7 +164,7 @@
 			$r .= '<term-span>1</term-span>';
 			$r .= '<level>'.htmlspecialchars($this->getlevelstr()).'</level>';
 			$r .= '<desc>'.htmlspecialchars($this->desc).'</desc>';
-			$r .= '<course/>';
+			$r .= '</course>';
 			
 			return $r;
 		}

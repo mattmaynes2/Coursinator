@@ -1,5 +1,17 @@
 <?php
 	function readxml() {
-		$xml = file_get_contents('php://input');
-		return DOMDocument::loadXML($xml);
+		$r = new DOMDocument();
+		$r->load('php://input');
+		return $r;
+	}
+	
+	function getChildrenByTag($e, $t) {
+		$r = [];
+		foreach ($e->childNodes as $c) {
+			if (!is_a($c, 'DOMElement')) continue;
+			if ($c->tagName != $t) continue;
+			
+			$r[] = $c;
+		}
+		return $r;
 	}

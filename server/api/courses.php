@@ -8,11 +8,13 @@
 	case 'GET':
 		$q = new Query('Course');
 		$q->select('Course');
-		$q->where_startswith(Course::code, 'WGST');
+		
+		if (isset($_GET['code']))
+			$q->where_startswith(Course::code, strtoupper($_GET['code']));
+		
 		$q->execute();
 		
-		$r = '<?xml version="1.0"?>'."\n";
-		$r .= '<response e="0"><courses>';
+		$r = '<response e="0"><courses>';
 		foreach ($q->fetchAllScalar() as $course) {
 			$r .= $course->to_xml();
 		}

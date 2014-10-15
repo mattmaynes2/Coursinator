@@ -2,9 +2,17 @@
 	$dsn = getenv('COURSINATOR_DB');
 	$user = getenv('COURSINATOR_USER');
 	$pass = getenv('COURSINATOR_PASS');
-	$db = new PDO($dsn, $user, $pass);
+	if ($user)
+		$db = new PDO($dsn, $user, $pass);
+	else
+		$db = new PDO($dsn);
 	
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	switch ($db->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+	case 'sqlite':
+		$db->exec('PRAGMA foreign_keys=ON');
+		break;
+	}
 	
 	function db_exec($sql, $values) {
 		global $db;
