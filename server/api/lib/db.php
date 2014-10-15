@@ -6,6 +6,15 @@
 	
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 	
+	function db_exec($sql, $values) {
+		global $db;
+		
+		$r = $db->prepare($sql);
+		$r->execute($values);
+		
+		return $r;
+	}
+	
 	/** A SQL query wrapper.
 	 *
 	 * This allows a user to query the database without knowing implementation
@@ -148,11 +157,7 @@
 		/** Execute the query.
 		 */
 		function execute(){
-			global $db;
-			
-			$this->result = $db->prepare($this->sql());
-			$this->result->execute($this->values);
-			
+			$this->result = db_exec($this->sql(), $this->values);
 			return $this;
 		}
 		
