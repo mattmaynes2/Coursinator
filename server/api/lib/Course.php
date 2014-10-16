@@ -33,7 +33,7 @@
 		
 		static function fetch($code) {
 			$q = new Query('Course');
-			$q->select('Course')->where_eq(Course::code, $code);
+			$q->select_object('Course')->where_eq(Course::code, $code);
 			return $q->executeFetchScalar();
 		}
 		
@@ -115,6 +115,50 @@
 			case self::LEVEL_UNDERGRAD: return "underdraduate";
 			case self::LEVEL_GRAD:      return "graduate";
 			}
+		}
+		
+		/** Return unsatisfied prerequsites.
+		 * 
+		 * Note: code is an sql expression.
+		 */
+		static
+		function query_prerequisites($code, $completed, $values=[]) {
+			global $db;
+			
+			foreach ($completed as &$c) {
+				if (is_a($c, 'Course')) {
+					$c = $c->getcode();
+				}
+			}
+			
+			$haspreq = new Query('coursegroups elg');
+			$haspreq->select('count(elg.id)');
+			$haspreq->where('elg.id = prerequisites.eligible');
+			$haspreq->join('coursegroup_courses elgc', 'elgc.id = elg.id');
+			
+			$haspreq->where_in('elgc.course_code', $completed);
+			$haspreq->where('NOT EXISTS (
+				SELECT course_code
+				FROM coursegroup_courses
+				WHERE coursegroup_courses.id = prerequisites.excluded
+				AND   coursegroup_courses.course_code = elgc.course_code
+			)', []);
+			
+			$q = new Query('prerequisites');
+			$q->select('course_code');
+			$q->select('eligible');
+			$q->select('excluded');
+			$q->where('course_code = '.$code, $values);
+			$q->where('('.$haspreq->sql().') < credits', $haspreq->values());
+			
+			return $q;
+		}
+		
+		/** Check if preprequsites are satisfied by the given courses.
+		 */
+		function unsatisfied_prerequisites($completed) {
+			$q = self::query_prerequisites('?', $completed, [$this->code]);
+			return $q->executeFetchAll();
 		}
 		
 		function load() {

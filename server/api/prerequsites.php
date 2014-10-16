@@ -54,10 +54,10 @@
 		
 		$root = $doc->documentElement;
 		
-		if ($root->tagName != 'prerequsites') {
+		if ($root->tagName != 'prerequisites') {
 			http_response_code(400);
 			header('Content-Type: text/xml; charset=utf-8');
-			echo '<response e="1" msg="Root element must be \'prerequsites\'"/>';
+			echo '<response e="1" msg="Root element must be \'prerequisites\'"/>';
 			return;
 		}
 		

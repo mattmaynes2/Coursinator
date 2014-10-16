@@ -4,7 +4,7 @@
 	class CourseOffering {
 		static function fetch($id){
 			$q = new Query('CourseOffering');
-			$q->select('CourseOffering')->where_eq(CourseOffering::id, $id);
+			$q->select_object('CourseOffering')->where_eq(CourseOffering::id, $id);
 			return $q->executeFetchScalar();
 		}
 		

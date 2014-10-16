@@ -4,7 +4,7 @@
 	class Program {
 		static function fetch($code){
 			$q = new Query('Program');
-			$q->select('Program')->where_eq(Program::id, $code);
+			$q->select_object('Program')->where_eq(Program::id, $code);
 			return $q->executeFetchScalar();
 		}
 		

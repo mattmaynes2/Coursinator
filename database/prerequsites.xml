@@ -1,4 +1,4 @@
-<prerequsites>
+<prerequisites>
 	<course code="SYSC2006">
 		<prerequsite code="SYSC1005"/>
 	</course>
@@ -7,6 +7,7 @@
 	</course>
 	<course code="SYSC2004">
 		<prerequsite code="SYSC2006"/>
+		<prerequsite code="SYSC2001"/>
 	</course>
 	<!--<course code="SYSC2003">
 		<prerequsite code="SYSC2001"/>
@@ -19,4 +20,4 @@
 	<!-- 	<prerequsite code="SYSC2003"/> -->
 	<!-- 	<prerequsite code="SYSC2100"/> -->
 	<!-- </course> -->
-</prerequsites>
+</prerequisites>

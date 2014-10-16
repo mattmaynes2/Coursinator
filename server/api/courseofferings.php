@@ -6,7 +6,7 @@
 	switch ($_SERVER['REQUEST_METHOD']) {
 	case 'GET':
 		$q = new Query('CourseOffering');
-		$q->select('CourseOffering');
+		$q->select_object('CourseOffering');
 		$q->where_startswith(CourseOffering::course_code, 'WGST');
 		$q->execute();
 		

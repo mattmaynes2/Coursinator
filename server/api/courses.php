@@ -7,21 +7,31 @@
 	switch ($_SERVER['REQUEST_METHOD']) {
 	case 'GET':
 		$q = new Query('Course');
-		$q->select('Course');
+		$q->select_object('Course');
 		
+		// Filter based on course code (or prefix thereof)
 		if (isset($_GET['code']))
 			$q->where_startswith(Course::code, strtoupper($_GET['code']));
 		
+		// Filter where dependancies are satisfied.
+		if (isset($_GET['qualified'])) {
+			$completed = isset($_GET['completed']) ? $_GET['completed'] : [];
+			foreach ($completed as &$c) {
+				$c = strtoupper($c);
+			}
+			
+			$preqquery = Course::query_prerequisites(Course::code, $completed);
+			$q->where_exists($preqquery, false);
+		}
+		
 		$q->execute();
 		
-		$r = '<response e="0"><courses>';
-		foreach ($q->fetchAllScalar() as $course) {
-			$r .= $course->to_xml();
-		}
-		$r .= '</courses></response>';
-		
 		header('Content-Type: text/xml; charset=utf-8');
-		echo $r;
+		echo '<response e="0"><courses>';
+		foreach ($q->fetchAllScalar() as $course) {
+			echo $course->to_xml();
+		}
+		echo '</courses></response>';
 		break;
 	default:
 		header('Content-Type: text/xml; charset=utf-8');

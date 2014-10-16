@@ -55,33 +55,32 @@
 			
 			CREATE TABLE IF NOT EXISTS coursegroup_courses (
 				id INTEGER
+					NOT NULL
 					REFERENCES coursegroups(id)
 						ON DELETE CASCADE
-					NOT NULL
 				,
-				course_code VARCHAR(15) NOT NULL,
+				course_code VARCHAR(15),
 				
 				-- If the prerequsite can be taken concurrently.
 				concurrent BOOLEAN NOT NULL DEFAULT TRUE,
-				
 				PRIMARY KEY (id, course_code)
 			);
 			
 			CREATE TABLE IF NOT EXISTS prerequisites (
 				course_code VARCHAR(15)
+					NOT NULL
 					REFERENCES courses(code)
 						ON DELETE CASCADE
-					NOT NULL
 				,
 				eligible INTEGER
+					NOT NULL
 					REFERENCES coursegroups(id)
 						ON DELETE CASCADE
-					NOT NULL
 				,
 				excluded INTEGER
+					NOT NULL DEFAULT 1 -- The empty group.
 					REFERENCES coursegroups(id)
 						ON DELETE CASCADE
-					NOT NULL DEFAULT 1 -- The empty group.
 				,
 				credits INTEGER NOT NULL,
 				PRIMARY KEY (course_code, eligible, excluded)
