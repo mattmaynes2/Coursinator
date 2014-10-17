@@ -6,6 +6,33 @@
 	
 	switch ($_SERVER['REQUEST_METHOD']) {
 	case 'GET':
+		/** Query Courses
+		 *
+		 * Parameters:
+		 * - code: Filter courses by the given code or prefix.
+		 *     Examples:
+		 *         /api/courses.php?code=ECOR101
+		 *         /api/courses.php?code=SYSC
+		 * - qualified: Only return courses that can be taken given the
+		 *              courses given in the `completed` and `taking`
+		 *              parameters.
+		 *     Examples:
+		 *         /api/courses.php?qualified&completed[]=SYSC1005
+		 *         /api/courses.php?qualified&completed[]=SYSC1005&completed[]=ECOR1010&taking[]=SYSC2006
+		 * - completed: An array of completed courses. Ignored if
+		 *              `qualified` not set
+		 * - taking: An array of courses that are being taken in the same
+		 *           term. Ignored if `qualified` not set.
+		 *
+		 * Returns:
+		 *     <response e="0">
+		 *       <courses>
+		 *         <!-- One course element per course in the result. -->
+		 *         <course>...</course>
+		 *       </courses>
+		 *     </response>
+		 */
+		
 		$q = new Query('Course');
 		$q->select_object('Course');
 		
