@@ -122,21 +122,30 @@
 		 * Note: code is an sql expression.
 		 */
 		static
-		function query_prerequisites($code, $completed, $values=[]) {
+		function query_prerequisites($code, $completed, $taking=[], $values=[]) {
 			global $db;
 			
+			// Convert all the courses to strings.
 			foreach ($completed as &$c) {
 				if (is_a($c, 'Course')) {
 					$c = $c->getcode();
 				}
 			}
 			
+			// Warning: Dragons Ahead!  This is a complex query. With a lot
+			// of parts.
+			
+			///// Inner query.
+			// This inner query counts how many courses in $completed are
+			// in the elgible group and not in the excluded group.
 			$haspreq = new Query('coursegroups elg');
 			$haspreq->select('count(elg.id)');
 			$haspreq->where('elg.id = prerequisites.eligible');
 			$haspreq->join('coursegroup_courses elgc', 'elgc.id = elg.id');
 			
+			// Where the course is in the completed group.
 			$haspreq->where_in('elgc.course_code', $completed);
+			// And it is not one of the courses that is excluded.
 			$haspreq->where('NOT EXISTS (
 				SELECT course_code
 				FROM coursegroup_courses
@@ -144,6 +153,9 @@
 				AND   coursegroup_courses.course_code = elgc.course_code
 			)', []);
 			
+			///// Outer Query
+			// This query selects prerequsites where the number of credits
+			// earned is less then the required credits.
 			$q = new Query('prerequisites');
 			$q->select('course_code');
 			$q->select('eligible');
@@ -156,8 +168,8 @@
 		
 		/** Check if preprequsites are satisfied by the given courses.
 		 */
-		function unsatisfied_prerequisites($completed) {
-			$q = self::query_prerequisites('?', $completed, [$this->code]);
+		function unsatisfied_prerequisites($completed, $taking=[]) {
+			$q = self::query_prerequisites('?', $completed, $taking, [$this->code]);
 			return $q->executeFetchAll();
 		}
 		
