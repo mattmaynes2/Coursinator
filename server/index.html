@@ -16,7 +16,8 @@
 		</header>
 		<br />
 		<section>
-			<form action="CourseSuggestions.php">
+			<form action="api/courses.php">
+				<input type="hidden" name="qualified"/>
 				<table>
 					<tr>
 						<td>
@@ -49,7 +50,7 @@
 								<button type="button" id="remove_course_button" onclick="removeCourseSelection()"><</input>
 							</td>
 							<td style="width:200px">
-								<select multiple name="courses_taken[]" id="courses_taken" size="20" style="width:100%">
+								<select multiple name="completed[]" id="courses_taken" size="20" style="width:100%">
 								</select>
 							</td>
 						</table>

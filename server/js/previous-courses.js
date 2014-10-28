@@ -25,6 +25,7 @@ function getProgram()
 			if (programRequest.readyState==4 && programRequest.status==200)
 			{
 				//TODO Load the courses for the program into the listbox
+				document.write(programRequest.responseText);
 			}
 		}
 	

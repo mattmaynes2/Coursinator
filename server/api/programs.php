@@ -6,9 +6,12 @@
 	}
 	
 	require_once('lib/db.php');
-	
+	require_once('lib/Program.php');
 	$r = ['e' => 0,
 	];
+	
+	$requested_program = $_GET['program'];
+	$r['program_xml'] = Program.sql_from(Program.fetch($requested_program))->to_xml();
 	
 	header("Content-Type", "application/javascript; charset=utf-8");
 	echo json_encode($r);
