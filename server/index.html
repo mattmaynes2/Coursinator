@@ -4,6 +4,7 @@
 		<title>Coursinator</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta name="description" content="Coursinator allows students to input their courses and their program to get an auto generated schedule that encapsulates all of their courses for the coming term" />
+		<script type="text/javascript" src="js/previous-courses.js"></script>
 	</head>
 	<body>
 		<header>
@@ -13,12 +14,13 @@
 				</div>
 			</nav>
 		</header>
+		<br />
 		<section>
 			<table>
 				<tr>
 					<td>
 						<div>Program:
-							<select name="program_select" id="program_select">
+							<select name="program_select" id="program_select" onchange="getProgram()">
 								<option value="0">Software</option>
 								<option value="1">Science</option>
 								<option value="2">Mechanical</option>
@@ -26,7 +28,21 @@
 						</div>
 					</td>
 					<td>
-						Right Panel
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<input type="radio" name="pattern" value="onpattern" checked="true" onclick="getProgram()">On Pattern</br>
+							<input type="radio" name="pattern" value="offpattern" onclick="hideProgram()">Off Pattern</br>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div>
+							<select multiple name="course_select" id="course_select" style="visibility:hidden">
+							</select>
+						</div>
 					</td>
 				</tr>
 			</table>
