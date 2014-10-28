@@ -32,23 +32,36 @@
 				<tr>
 					<td>
 						<div>
-							<input type="radio" name="pattern" value="onpattern" checked="true" onclick="getProgram()">On Pattern</br>
-							<input type="radio" name="pattern" value="offpattern" onclick="hideProgram()">Off Pattern</br>
+							<input type="radio" name="pattern" value="onpattern" checked="true" onclick="getProgram()">On Pattern</br></input>
+							<input type="radio" name="pattern" value="offpattern" onclick="hideProgram()">Off Pattern</br></input>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td style="width:100px">
+						<div style="width:100%">
+							<select multiple name="course_select" id="course_select" style="visibility:hidden; width:100%">
+							</select>
+						</div>
+					</td>
+					<td style="width:20px">
+						<button type="button" id="add_course_button" onclick="addCourseSelection()" style="visibility:hidden">></input>
+						<button type="button" id="remove_course_button" onclick="removeCourseSelection()" style="visibility:hidden"><</input>
+					</td>
+					<td style="width:100px">
+						<div style="width:100%">
+							<select multiple name="courses_taken" id="courses_taken" style="visibility:hidden; width:100%">
+							</select>
 						</div>
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<div>
-							<select multiple name="course_select" id="course_select" style="visibility:hidden">
-							</select>
-						</div>
+						
 					</td>
 				</tr>
 			</table>
 		</section>
-	
-	
 	</body>
 
 </html>
