@@ -1,10 +1,8 @@
 //Hides the program courses list
 function hideProgram()
 {
-	document.getElementById("course_select").style.visibility = "hidden";
-	document.getElementById("courses_taken").style.visibility = "hidden";
-	document.getElementById("add_course_button").style.visibility = "hidden";
-	document.getElementById("remove_course_button").style.visibility = "hidden";
+	document.getElementById("off_pattern_options").style.display = "none";
+	document.getElementById("on_pattern_options").style.display = "block";
 }
 
 //Fills the program courses list with programs for the selected courses
@@ -15,10 +13,8 @@ function getProgram()
 	var listbox = document.getElementById("course_select");
 	var selectedProgram = document.getElementById("program_select").options[document.getElementById("program_select").selectedIndex].value;
 	
-	document.getElementById("course_select").style.visibility = "visible";
-	document.getElementById("courses_taken").style.visibility = "visible";
-	document.getElementById("add_course_button").style.visibility = "visible";
-	document.getElementById("remove_course_button").style.visibility = "visible";
+	document.getElementById("off_pattern_options").style.display = "block";
+	document.getElementById("on_pattern_options").style.display = "none";
 	
 	listbox.innerHTML = listbox.innerHTML + "<option value=\"" + selectedProgram + "\">"+selectedProgram+"</option>";//TODO Remove this
 	

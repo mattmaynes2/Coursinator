@@ -16,51 +16,65 @@
 		</header>
 		<br />
 		<section>
-			<table>
-				<tr>
-					<td>
-						<div>Program:
-							<select name="program_select" id="program_select" onchange="getProgram()">
-								<option value="0">Software</option>
-								<option value="1">Science</option>
-								<option value="2">Mechanical</option>
-							</select>
-						</div>
-					</td>
-					<td>
-				</tr>
-				<tr>
-					<td>
-						<div>
-							<input type="radio" name="pattern" value="onpattern" checked="true" onclick="getProgram()">On Pattern</br></input>
-							<input type="radio" name="pattern" value="offpattern" onclick="hideProgram()">Off Pattern</br></input>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td style="width:100px">
-						<div style="width:100%">
-							<select multiple name="course_select" id="course_select" style="visibility:hidden; width:100%">
-							</select>
-						</div>
-					</td>
-					<td style="width:20px">
-						<button type="button" id="add_course_button" onclick="addCourseSelection()" style="visibility:hidden">></input>
-						<button type="button" id="remove_course_button" onclick="removeCourseSelection()" style="visibility:hidden"><</input>
-					</td>
-					<td style="width:100px">
-						<div style="width:100%">
-							<select multiple name="courses_taken" id="courses_taken" style="visibility:hidden; width:100%">
-							</select>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						
-					</td>
-				</tr>
-			</table>
+			<form action="CourseSuggestions.php">
+				<table>
+					<tr>
+						<td>
+							<div>Program:
+								<select name="program_select" id="program_select" onchange="getProgram()">
+									<option value="0">Software</option>
+									<option value="1">Science</option>
+									<option value="2">Mechanical</option>
+								</select>
+							</div>
+						</td>
+						<td>
+					</tr>
+					<tr>
+						<td>
+							<div>
+								<input type="radio" name="pattern" value="onpattern" checked="true" onclick="hideProgram()">On Pattern</br></input>
+								<input type="radio" name="pattern" value="offpattern" onclick="getProgram()">Off Pattern</br></input>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<table id="off_pattern_options" style="display: none">
+							<td style="width:200px; height:300px">
+								<select multiple name="course_select" id="course_select" size="20" style="width:100%">
+								</select>
+							</td>
+							<td style="width:20px">
+								<button type="button" id="add_course_button" onclick="addCourseSelection()" style="margin-bottom:10px">></input>
+								<button type="button" id="remove_course_button" onclick="removeCourseSelection()"><</input>
+							</td>
+							<td style="width:200px">
+								<select multiple name="courses_taken[]" id="courses_taken" size="20" style="width:100%">
+								</select>
+							</td>
+						</table>
+					</tr>
+					<tr>
+						<td>
+							<table id="on_pattern_options">
+								<tr>
+									<td>
+										<div>Year status:
+											<select name="year_select">
+												<option value="1">First Year</option>
+												<option value="2">Second Year</option>
+												<option value="3">Third Year</option>
+												<option value="4">Fourth Year</option>
+											</select>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<input type="submit" value="Get Course Suggestions"/>
+			</form>
 		</section>
 	</body>
 
