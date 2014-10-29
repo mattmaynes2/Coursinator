@@ -18,12 +18,15 @@
 	$q->where("program_id = ?", [$requested_program]);
 	$rows = $q->executeFetchAll();
 	
-	foreach($rows as $course)
+	$response = '<program>';
+	
+	foreach ($rows as $course)
 	{
-		$response .= $course[0].',';
+		$code = $course[0];
+		$response .= "<course>$code</course>";
 	}
 	
-	trim($response, ',');
+	$response .= "</program>";
 	
-	header("Content-Type", "application/javascript; charset=utf-8");
-	echo json_encode($rows);
+	header("Content-Type", "application/xml; charset=utf-8");
+	echo $response;

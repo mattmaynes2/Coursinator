@@ -30,16 +30,15 @@ function getProgram()
 			{
 				listbox.innerHTML = "";
 				selected_courses.innerHTML = "";
-				
-				//TODO Load the courses for the program into the listbox
-				//document.write(programRequest.responseText);
-				var courses = JSON.parse(programRequest.responseText);
+				var parser = new DOMParser();
+				var doc = parser.parseFromString(programRequest.responseText, "application/xml");
+				var courses = doc.getElementsByTagName("course");
 				
 				for (var i=0; i<courses.length; i++)
 				{
 					var newopt = document.createElement("option");
-					newopt.value = courses[i][0];
-					newopt.text = courses[i][0];
+					newopt.value = courses[i].childNodes[0].nodeValue;
+					newopt.text = courses[i].childNodes[0].nodeValue;
 					listbox.add(newopt);
 				}
 			}
