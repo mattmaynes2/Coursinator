@@ -11,7 +11,13 @@ function getProgram()
 	var programRequest;
 	
 	var listbox = document.getElementById("course_select");
+	var selected_courses = document.getElementById("courses_taken");
 	var selectedProgram = document.getElementById("program_select").options[document.getElementById("program_select").selectedIndex].value;
+	
+	if (!document.getElementById("offpattern").checked)
+	{
+		return;
+	}
 	
 	document.getElementById("off_pattern_options").style.display = "block";
 	document.getElementById("on_pattern_options").style.display = "none";
@@ -22,10 +28,13 @@ function getProgram()
 		{
 			if (programRequest.readyState==4 && programRequest.status==200)
 			{
+				listbox.innerHTML = "";
+				selected_courses.innerHTML = "";
+				
 				//TODO Load the courses for the program into the listbox
 				//document.write(programRequest.responseText);
 				var courses = JSON.parse(programRequest.responseText);
-
+				
 				for (var i=0; i<courses.length; i++)
 				{
 					var newopt = document.createElement("option");
