@@ -16,8 +16,6 @@ function getProgram()
 	document.getElementById("off_pattern_options").style.display = "block";
 	document.getElementById("on_pattern_options").style.display = "none";
 	
-	listbox.innerHTML = listbox.innerHTML + "<option value=\"" + selectedProgram + "\">"+selectedProgram+"</option>";//TODO Remove this
-	
 	programRequest = new XMLHttpRequest();
 	
 	programRequest.onreadystatechange=function()	
@@ -25,7 +23,16 @@ function getProgram()
 			if (programRequest.readyState==4 && programRequest.status==200)
 			{
 				//TODO Load the courses for the program into the listbox
-				document.write(programRequest.responseText);
+				//document.write(programRequest.responseText);
+				var courses = JSON.parse(programRequest.responseText);
+
+				for (var i=0; i<courses.length; i++)
+				{
+					var newopt = document.createElement("option");
+					newopt.value = courses[i][0];
+					newopt.text = courses[i][0];
+					listbox.add(newopt);
+				}
 			}
 		}
 	

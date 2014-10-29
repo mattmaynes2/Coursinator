@@ -6,12 +6,24 @@
 	}
 	
 	require_once('lib/db.php');
-	require_once('lib/Program.php');
+
 	$r = ['e' => 0,
 	];
 	
 	$requested_program = $_GET['program'];
-	$r['program_xml'] = Program.sql_from(Program.fetch($requested_program))->to_xml();
+	$response = '';
+	
+	$q = new Query("program_elements");
+	$q->select("course_code");
+	$q->where("program_id = ?", [$requested_program]);
+	$rows = $q->executeFetchAll();
+	
+	foreach($rows as $course)
+	{
+		$response .= $course[0].',';
+	}
+	
+	trim($response, ',');
 	
 	header("Content-Type", "application/javascript; charset=utf-8");
-	echo json_encode($r);
+	echo json_encode($rows);
