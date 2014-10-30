@@ -60,6 +60,14 @@
 	 *
 	 */
 	class Query {
+		/** Return a list of placeholders.
+		 *
+		 * Example: Query::valuelistsql([1,2,3]) == '(?,?,?)'
+		 */
+		static function valuelistsql($values) {
+			return '('.implode(',', array_fill(0, count($values), '?')).')';
+		}
+		
 		private $select = '';
 		private $from = NULL;
 		private $where = '';
@@ -163,7 +171,7 @@
 				return $this; // Can't do an empty array.
 			}
 			
-			$sql = $col.' IN ('.implode(',', array_fill(0, count($arr), '?')).')';
+			$sql = $col.' IN '.self::valuelistsql($arr);
 			
 			if (!$in)
 				$sql = "NOT $sql";

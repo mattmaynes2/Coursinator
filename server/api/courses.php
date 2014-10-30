@@ -43,11 +43,15 @@
 		// Filter where dependancies are satisfied.
 		if (isset($_GET['qualified'])) {
 			$completed = isset($_GET['completed']) ? $_GET['completed'] : [];
-			foreach ($completed as &$c) {
+			$taking    = isset($_GET['taking'])    ? $_GET['taking']    : [];
+			foreach ($completed as &$c)
 				$c = strtoupper($c);
-			}
+			foreach ($taking as &$c)
+				$c = strtoupper($c);
 			
-			$preqquery = Course::query_prerequisites(Course::code, $completed);
+			$preqquery = Course::query_prerequisites(Course::code,
+			                                         $completed,
+			                                         $taking);
 			$q->where_exists($preqquery, false);
 		}
 		

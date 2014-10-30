@@ -131,6 +131,11 @@
 					$c = $c->getcode();
 				}
 			}
+			foreach ($taking as &$c) {
+				if (is_a($c, 'Course')) {
+					$c = $c->getcode();
+				}
+			}
 			
 			// Warning: Dragons Ahead!  This is a complex query. With a lot
 			// of parts.
@@ -144,7 +149,14 @@
 			$haspreq->join('coursegroup_courses elgc', 'elgc.id = elg.id');
 			
 			// Where the course is in the completed group.
-			$haspreq->where_in('elgc.course_code', $completed);
+			// Or it can be taken concurrently and it is in the taking group.
+			$haspreq->where('(
+				elgc.course_code IN '.Query::valuelistsql($completed).'
+				OR (
+					elgc.course_code IN '.Query::valuelistsql($taking).'
+					AND elgc.concurrent
+				)
+			)', array_merge($completed, $taking));
 			// And it is not one of the courses that is excluded.
 			$haspreq->where('NOT EXISTS (
 				SELECT course_code
