@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<htmL>
+	<head>
+		<title>Coursinator</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="description" content="Coursinator allows students to input their courses and their program to get an auto generated schedule that encapsulates all of their courses for the coming term" />
+		<script type="text/javascript" src="js/previous-courses.js"></script>
+	</head>
+	<body>
+		<header>
+			<nav>
+				<div>
+					Coursinator
+				</div>
+			</nav>
+		</header>
+		<br />
+		<section>
+			<form action="api/courses.php">
+				<input type="hidden" name="qualified"/>
+				<table>
+					<tr>
+						<td>
+							<div>Program:
+								<select name="program_select" id="program_select" onchange="getProgram()">
+									<option value="0">Software</option>
+									<option value="1">Science</option>
+									<option value="2">Mechanical</option>
+								</select>
+							</div>
+						</td>
+						<td>
+					</tr>
+					<tr>
+						<td>
+							<div>
+								<label>
+									<input type="radio" name="pattern" id="onpattern" value="onpattern" checked="true" onclick="hideProgram()"></input>On Pattern <br />
+								</label>
+								<label>
+									<input type="radio" name="pattern" id="offpattern" value="offpattern" onclick="getProgram()"></input>Off Pattern <br />
+								</label>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<table id="off_pattern_options" style="display: none">
+							<td style="width:200px;">
+								<select multiple name="course_select" id="course_select" size="20" style="width:100%; height:100%">
+								</select>
+							</td>
+							<td style="width:20px">
+								<button type="button" id="add_course_button" onclick="addCourseSelection()" style="margin-bottom:10px">></input>
+								<button type="button" id="remove_course_button" onclick="removeCourseSelection()"><</input>
+							</td>
+							<td style="width:200px">
+								<select multiple name="completed[]" id="courses_taken" size="20" style="width:100%; height:100%">
+								</select>
+							</td>
+						</table>
+					</tr>
+					<tr>
+						<td>
+							<table id="on_pattern_options">
+								<tr>
+									<td>
+										<div>Year status:
+											<select name="year_select">
+												<option value="1">First Year</option>
+												<option value="2">Second Year</option>
+												<option value="3">Third Year</option>
+												<option value="4">Fourth Year</option>
+											</select>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<input type="submit" value="Get Course Suggestions"/>
+			</form>
+		</section>
+	</body>
+
+</html>

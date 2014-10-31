@@ -1,0 +1,23 @@
+<prerequisites>
+	<course code="SYSC2006">
+		<prerequsite code="SYSC1005"/>
+	</course>
+	<course code="SYSC2001">
+		<prerequsite code="SYSC2006" concurrent="true"/>
+	</course>
+	<course code="SYSC2004">
+		<prerequsite code="SYSC2006"/>
+		<prerequsite code="SYSC2001"/>
+	</course>
+	<!--<course code="SYSC2003">
+		<prerequsite code="SYSC2001"/>
+		<prerequsite code="SYSC2006"/>
+	</course>-->
+	<!-- <course code="SYSC2100"> -->
+	<!-- 	<prerequsite code="SYSC2006"/> -->
+	<!-- </course> -->
+	<!-- <course code="SYSC4001"> -->
+	<!-- 	<prerequsite code="SYSC2003"/> -->
+	<!-- 	<prerequsite code="SYSC2100"/> -->
+	<!-- </course> -->
+</prerequisites>

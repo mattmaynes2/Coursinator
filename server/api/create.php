@@ -3,29 +3,31 @@
 	
 	switch ($_SERVER['REQUEST_METHOD']) {
 	case 'POST':
-		$type = $db->getAttribute(PDO::ATTR_DRIVER_NAME);
-		
-		switch ($type){
+		switch ($db->getAttribute(PDO::ATTR_DRIVER_NAME)){
 		case 'sqlite':
-			$autoincrement = 'AUTOINCREMENT';
+			$autoincrement = 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL';
 			break;
 		case 'mysql':
-			$autoincrement = 'AUTO_INCREMENT';
+			$autoincrement = 'INTEGER PRIMARY KEY AUTO_INCREMENT';
+			break;
+		case 'pgsql':
+			$autoincrement = 'SERIAL PRIMARY KEY NOT NULL';
 			break;
 		default:
-			$autoincrement = '';
+			$autoincrement = 'NEED AUTOINCREMT SYNTAX';
 		}
-		
 		
 		$db->beginTransaction();
 		
 		if (isset($_GET['force'])) {
 			$db->exec("
-				DROP TABLE courses;
-				DROP TABLE prerequisites;
-				DROP TABLE course_offerings;
-				DROP TABLE programs;
-				DROP TABLE program_elements;
+				DROP TABLE IF EXISTS program_elements;
+				DROP TABLE IF EXISTS programs;
+				DROP TABLE IF EXISTS course_offerings;
+				DROP TABLE IF EXISTS prerequisites;
+				DROP TABLE IF EXISTS coursegroup_courses;
+				DROP TABLE IF EXISTS coursegroups;
+				DROP TABLE IF EXISTS courses;
 			");
 		}
 		
@@ -41,29 +43,56 @@
 				-- The level of the course.
 				-- 0: Undergraduate.
 				-- 1: Graduate.
-				level TINYINT NOT NULL
+				level INTEGER NOT NULL
+			);
+			
+			CREATE TABLE IF NOT EXISTS coursegroups (
+				id $autoincrement,
+				name VARCHAR(255)
+			);
+			
+			INSERT INTO coursegroups(name) VALUES ('Empty');
+			
+			CREATE TABLE IF NOT EXISTS coursegroup_courses (
+				id INTEGER
+					NOT NULL
+					REFERENCES coursegroups(id)
+						ON DELETE CASCADE
+				,
+				course_code VARCHAR(15),
+				
+				-- If the prerequsite can be taken concurrently.
+				concurrent BOOLEAN NOT NULL DEFAULT TRUE,
+				PRIMARY KEY (id, course_code)
 			);
 			
 			CREATE TABLE IF NOT EXISTS prerequisites (
-				id INTEGER PRIMARY KEY $autoincrement NOT NULL,
-				
 				course_code VARCHAR(15)
 					NOT NULL
-					REFERENCES course(code)
+					REFERENCES courses(code)
 						ON DELETE CASCADE
 				,
-				allow_concurrent BOOLEAN NOT NULL,
-				required_credits FLOAT NULL,
-				course_group VARCHAR(255) NULL
+				eligible INTEGER
+					NOT NULL
+					REFERENCES coursegroups(id)
+						ON DELETE CASCADE
+				,
+				excluded INTEGER
+					NOT NULL DEFAULT 1 -- The empty group.
+					REFERENCES coursegroups(id)
+						ON DELETE CASCADE
+				,
+				credits INTEGER NOT NULL,
+				PRIMARY KEY (course_code, eligible, excluded)
 			);
 			
 			
 			CREATE TABLE IF NOT EXISTS course_offerings (
 				-- The CRN.
-				id INTEGER PRIMARY KEY $autoincrement NOT NULL,
+				id $autoincrement NOT NULL,
 				course_code VARCHAR(15)
 					NOT NULL
-					REFERENCES course(code)
+					REFERENCES courses(code)
 						ON DELETE CASCADE
 				,
 				year INTEGER NOT NULL,
@@ -76,7 +105,7 @@
 				-- 0: Fall
 				-- 1: Winter
 				-- 2: Summer
-				term TINYINT NOT NULL,
+				term INTEGER NOT NULL,
 				
 				-- A set of days that this course is offered.
 				--
@@ -92,12 +121,12 @@
 				-- 0: Lecture.
 				-- 1: Lab.
 				-- 2: Tutorial.
-				type TINYINT NOT NULL
+				type INTEGER NOT NULL
 			);
 			
 			
 			CREATE TABLE IF NOT EXISTS programs (
-				id INTEGER PRIMARY KEY $autoincrement NOT NULL,
+				id $autoincrement NOT NULL,
 				
 				-- The year the program starts.
 				year INTEGER NOT NULL,
@@ -109,12 +138,12 @@
 			CREATE TABLE IF NOT EXISTS program_elements (
 				program_id INTEGER
 					NOT NULL
-					REFERENCES program(id)
+					REFERENCES programs(id)
 						ON DELETE CASCADE
 				,
 				course_code VARCHAR(15)
 					NOT NULL
-					REFERENCES course(code)
+					REFERENCES courses(code)
 						ON DELETE CASCADE
 				,
 				
@@ -122,7 +151,7 @@
 				-- - 0: Regular.
 				-- - 1: Complementary Studies.
 				-- - 2: Related Elective.
-				credit_type TINYINT NOT NULL,
+				credit_type INTEGER NOT NULL,
 				
 				term INTEGER NOT NULL,
 				
@@ -133,11 +162,11 @@
 		
 		$db->commit();
 		
-		header("Content-Type", "application/javascript; charset=utf-8");
-		echo '{"e":0}';
+		header('Content-Type: text/xml; charset=utf-8');
+		echo '<response e="0"/>';
 		break;
 	default:
-		header("Content-Type", "application/javascript; charset=utf-8");
 		http_response_code(405);
-		echo '{"e":1,"msg":"Method must be POST."}';
+		header('Content-Type: text/xml; charset=utf-8');
+		echo '<response e="1" msg="Method must be POST."/>';
 	}

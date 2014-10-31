@@ -6,9 +6,27 @@
 	}
 	
 	require_once('lib/db.php');
-	
+
 	$r = ['e' => 0,
 	];
 	
-	header("Content-Type", "application/javascript; charset=utf-8");
-	echo json_encode($r);
+	$requested_program = $_GET['program'];
+	$response = '';
+	
+	$q = new Query("program_elements");
+	$q->select("course_code");
+	$q->where("program_id = ?", [$requested_program]);
+	$rows = $q->executeFetchAll();
+	
+	$response = '<program>';
+	
+	foreach ($rows as $course)
+	{
+		$code = $course[0];
+		$response .= "<course>$code</course>";
+	}
+	
+	$response .= "</program>";
+	
+	header("Content-Type", "application/xml; charset=utf-8");
+	echo $response;

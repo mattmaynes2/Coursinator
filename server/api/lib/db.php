@@ -2,9 +2,26 @@
 	$dsn = getenv('COURSINATOR_DB');
 	$user = getenv('COURSINATOR_USER');
 	$pass = getenv('COURSINATOR_PASS');
-	$db = new PDO($dsn, $user, $pass);
+	if ($user)
+		$db = new PDO($dsn, $user, $pass);
+	else
+		$db = new PDO($dsn);
 	
-	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	switch ($db->getAttribute(PDO::ATTR_DRIVER_NAME)) {
+	case 'sqlite':
+		$db->exec('PRAGMA foreign_keys=ON');
+		break;
+	}
+	
+	function db_exec($sql, $values) {
+		global $db;
+		
+		$r = $db->prepare($sql);
+		$r->execute($values);
+		
+		return $r;
+	}
 	
 	/** A SQL query wrapper.
 	 *
@@ -21,7 +38,7 @@
 	 *
 	 * Example usage:
 	 *     $q = new Query('Song');
-	 *     $q->select('Song');
+	 *     $q->select_object('Song');
 	 *     $q->filter(Song::title . ' like ?', ['Piano M']);
 	 *     $q->execute();
 	 *     while ($row = $q->fetch())
@@ -39,10 +56,18 @@
 	 * }
 	 *
 	 * It is also recomended to provide constants corrisponding to the name of
-	 * fields so that users can use them in select_field() and where() clauses.
+	 * fields so that users can use them in select() and where() clauses.
 	 *
 	 */
 	class Query {
+		/** Return a list of placeholders.
+		 *
+		 * Example: Query::valuelistsql([1,2,3]) == '(?,?,?)'
+		 */
+		static function valuelistsql($values) {
+			return '('.implode(',', array_fill(0, count($values), '?')).')';
+		}
+		
 		private $select = '';
 		private $from = NULL;
 		private $where = '';
@@ -58,22 +83,25 @@
 		 * \param $from The class to select from.
 		 */
 		function __construct($from){
-			$this->from    = ' FROM '.$from::sql_table;
+			if (class_exists($from))
+				$from = $from::sql_table;
+			
+			$this->from    = ' FROM '.$from;
 			$this->classes = [];
 			$this->values  = [];
 		}
 		
-		/** Select values.
+		/** Select and convert to object.
 		 *
 		 * This determines what to return from the query.
 		 *
 		 * \param $class The name of the class.
 		 *
 		 * Example:
-		 *     $q->select('Song'); // Each row will contain a Song object.
-		 *     $q->select('Artist'); // And an Artist.
+		 *     $q->select_object('Song'); // Each row will contain a Song object.
+		 *     $q->select_object('Artist'); // And an Artist.
 		 */
-		function select($class){
+		function select_object($class){
 			if (!$this->select) $this->select  = 'SELECT ';
 			else                $this->select .= ', ';
 			
@@ -82,15 +110,12 @@
 			return $this;
 		}
 		
-		/** Select individual fields.
-		 *
-		 * Like select() but returns the value of the field rather then an
-		 * object.
+		/** Select from the database.
 		 *
 		 * Example:
-		 *     $q->select_field(Song::title); // Fetch just the string title.
+		 *     $q->select(Song::title); // Fetch just the string title.
 		 */
-		function select_field($field){
+		function select($field){
 			if (!$this->select) $this->select  = 'SELECT ';
 			else                $this->select .= ', ';
 			
@@ -98,10 +123,15 @@
 			$this->classes[] = NULL;
 		}
 		
-		/** TODO Join another table.
+		/** Join another table.
 		 */
-		function join($class, $on){
+		function join($what, $on){
+			if (class_exists($what))
+				$what = $what::sql_table;
 			
+			$this->join .= "\nJOIN $what ON $on";
+			
+			return $this;
 		}
 		
 		/** Filter the results.
@@ -109,12 +139,12 @@
 		 * \param $expr The filter expression.
 		 * \param $vals The values corrisponding to '?' in the expression.
 		 */
-		function where($expr, $vals){
+		function where($expr, $vals = []){
 			if (!$this->where) $this->where  = "\nWHERE ";
 			else               $this->where .= ' AND ';
 			
 			$this->where  .= $expr;
-			$this->values += $vals;
+			$this->values = array_merge($this->values, $vals);
 			
 			return $this;
 		}
@@ -131,12 +161,41 @@
 			return $this->where("? <= $col AND $col < ?", [$str, ++$str]);
 		}
 		
+		/** Filter where the given column value is in provided array.
+		 */
+		function where_in($col, $arr, $in = TRUE) {
+			if (!$arr) {
+				if ($in) // Never true.
+					$this->where('1=0');
+				
+				return $this; // Can't do an empty array.
+			}
+			
+			$sql = $col.' IN '.self::valuelistsql($arr);
+			
+			if (!$in)
+				$sql = "NOT $sql";
+			
+			return $this->where($sql, $arr);
+		}
+		
+		/** Filter where the given query would return rows.
+		 */
+		function where_exists($query, $existsp = TRUE) {
+			$sql = 'EXISTS ('.$query->sql().')';
+			
+			if (!$existsp)
+				$sql = "NOT $sql";
+			
+			return $this->where($sql, $query->values());
+		}
+		
 		/** Get the SQL representation of the query.
 		 *
 		 * The string may be multiple lines and ends with a newline.
 		 */
 		function sql(){
-			return $this->select.$this->from.$this->join.$this->where.";\n";
+			return $this->select.$this->from.$this->join.$this->where."\n";
 		}
 		
 		/** Get the values to interpolate into the expression.
@@ -147,13 +206,18 @@
 		
 		/** Execute the query.
 		 */
-		function execute(){
-			global $db;
-			
-			$this->result = $db->prepare($this->sql());
-			$this->result->execute($this->values);
-			
+		function execute() {
+			$this->result = db_exec($this->sql(), $this->values);
 			return $this;
+		}
+		
+		/** Execute and return all rows.
+		 */
+		function executeFetchAll(){
+			$this->execute();
+			$r = $this->fetchAll();
+			$this->closeCursor();
+			return $r;
 		}
 		
 		/** Execute and fetch one row.
@@ -255,5 +319,12 @@
 				}
 			}
 			return $r;
+		}
+		
+		function __debuginfo() {
+			return [
+				'sql'    => $this->sql(),
+				'values' => $this->values(),
+			];
 		}
 	}
