@@ -20,7 +20,7 @@ public class TestRunner{
 		tests.add(new TestCRXML());
 	
 		for(Test t: tests){
-			if(!t.runTest()){
+			if(!t.runTests()){
 				System.out.println("Test Failed: " + t.getName() );
 				System.exit(0);
 			}

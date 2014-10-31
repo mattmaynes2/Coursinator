@@ -9,8 +9,10 @@
  *
  */
  
-package tests; 
+package tests;
+ 
 import cr.*;
+import java.io.File;
 
 public class TestCRXML implements Test{
 	
@@ -20,14 +22,14 @@ public class TestCRXML implements Test{
 			File xml = new File("cr_test_1.xml");
 			File xsd = new File("program.xsd");
 			Program p = new Program();
-			p.validate(xsd, xml);
+			p.validateXML(xsd, xml);
 		} catch(Exception e){
-			System.out.println(e.message);
+			System.out.println(e.getMessage());
 		}
 		return true;
 	}	
 						
-	public boolean runTest(){
+	public boolean runTests(){
 		
 		
 		return testValidation();	

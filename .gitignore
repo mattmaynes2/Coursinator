@@ -1,5 +1,12 @@
 *.bak
 
-# Mac OS X Hidden Files
-.DS_Store
-.localized
+# Hidden Files
+.*
+
+# Autosaves
+*~
+\#*\#
+
+# Java
+*.class
+*.jar
