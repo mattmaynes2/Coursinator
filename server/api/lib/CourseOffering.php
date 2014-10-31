@@ -28,7 +28,7 @@
 		const room        = 'course_offerings.room';
 		const type        = 'course_offerings.type';
 		
-		const sql_fields = [
+		public static $sql_fields = [
 			self::id,
 			self::course_code,
 			self::year,

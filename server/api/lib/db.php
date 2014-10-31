@@ -49,7 +49,7 @@
 	 * the following.
 	 *
 	 * const sql_table = 'tablename';
-	 * const sql_fields = ['tablename.columname', ...];
+	 * public static $sql_fields = ['tablename.columname', ...];
 	 * static function sql_from($row) {
 	 *     // $row is an array of values corrisponding to sql_fields.
 	 *     // Must return an object corrisponding to the values.
@@ -105,7 +105,7 @@
 			if (!$this->select) $this->select  = 'SELECT ';
 			else                $this->select .= ', ';
 			
-			$this->select .= join(',', $class::sql_fields);
+			$this->select .= join(',', $class::$sql_fields);
 			$this->classes[] = $class;
 			return $this;
 		}
@@ -313,7 +313,7 @@
 				if (!$c) {
 					$r[] = $row[$off++];
 				} else {
-					$num = count($c::sql_fields);
+					$num = count($c::$sql_fields);
 					$r[] = $c::sql_from(array_slice($row, $off, $num));
 					$off += $num;
 				}

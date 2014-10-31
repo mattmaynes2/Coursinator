@@ -13,7 +13,7 @@
 		const year = 'programs.year';
 		const name = 'programs.name';
 		
-		const sql_fields = [
+		public static $sql_fields = [
 			self::id,
 			self::year,
 			self::name,

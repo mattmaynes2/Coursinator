@@ -43,7 +43,7 @@
 		const desc  = 'courses.description';
 		const level = 'courses.level';
 		
-		const sql_fields = [
+		public static $sql_fields = [
 			self::code,
 			self::title,
 			self::level,
