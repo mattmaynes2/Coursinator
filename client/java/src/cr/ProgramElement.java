@@ -62,6 +62,13 @@ public class ProgramElement{
 		this.year = year;
 	}
 	
+	public String serialize(){
+		StringBuffer buffer = new StringBuffer();
+		
+		
+		return buffer.toString();
+	}
+	
 	@Override
 	public String toString(){
 		return "<ProgramElement> Year: " + this.year + " Term: " + this.term + "{Course: " + this.course.toString() + "}";

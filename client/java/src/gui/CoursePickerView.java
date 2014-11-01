@@ -28,8 +28,6 @@ public class CoursePickerView extends JFrame
 	
 		add(courses,BorderLayout.EAST);
 		
-		setVisible(true);
-		
 		Program testProgram = new Program("../../../xml/software_eng.xml");
 		courses.loadCourses(testProgram.getElements());
 		pack();
