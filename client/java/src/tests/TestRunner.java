@@ -9,11 +9,15 @@
  */
 package tests;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
+
+
 
 //import java.util.ArrayList;
 import cr.*;
@@ -42,7 +46,15 @@ public class TestRunner{
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
-		
+//		
+//		try{
+//			Course[] courses = Course.read(new FileInputStream(new File("test.xml")));
+//			for(Course c : courses){
+//				System.out.println(c);
+//			}
+//		} catch (IOException | ParserConfigurationException | SAXException e) {
+//			e.printStackTrace();
+//		}
 		
 		
 	}

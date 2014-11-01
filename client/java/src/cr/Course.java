@@ -3,10 +3,14 @@ package cr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -235,7 +239,6 @@ public class Course{
 			buffer.append("<" + element.getKey() + ">" + element.getValue() + "</" + element.getKey() + ">");
 		}
 		
-		
 		buffer.append("</" + SCHEMA_IDENTIFIER + ">");
 		return buffer.toString();
 	}	
@@ -255,26 +258,83 @@ public class Course{
 		return this.serialize();
 	}
 	
+	
+	/**
+	 * Given an XML list of nodes that comply to Course objects in the Coursinator schema, 
+	 * parse each node and build an array of courses
+	 * 
+	 * @param courses A list of course object nodes
+	 * 
+	 * @return An array of course objects that represent the given XML data
+	 * 
+	 * @since November 1, 2014
+	 * @author Matthew Maynes
+	 */
+	public static Course[] read(NodeList nodes){
+		ArrayList<Course> courses = new ArrayList<Course>();
+		for(int i = 0; i < nodes.getLength(); i++){
+			courses.add(Course.buildCourse((Element)nodes.item(i)));
+		}
+		return courses.toArray(new Course[0]);
+	}
+	
 	/**
 	 * Given XML data in an input stream, buffer and deserialize it to create a course objects.
+	 * 
+	 * @param stream The stream to read form and deserialize
+	 * 
+	 * @return An array of courses parsed from the XML data
 	 * 
 	 * @throws ParserConfigurationException If the input XML is malformed
 	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
 	 * @throws IOException 					If there is an error with the input stream. 
 	 *
+	 * @since November 1, 2014
+	 * @author Matthew Maynes
 	 */
 	public static Course[] read(InputStream stream) throws ParserConfigurationException, SAXException, IOException{
-		ArrayList<Course> courses = new ArrayList<Course>();
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc 			= builder.parse(stream);
 		NodeList nodes 			= doc.getElementsByTagName(SCHEMA_IDENTIFIER);
-		
-		
-		for(int i = 0; i < nodes.getLength(); i++){
-			System.out.println(nodes.item(i));
-			courses.add(Course.buildCourse((Element)nodes.item(i)));
-		}
-		return courses.toArray(new Course[0]);
+		return Course.read(nodes);
+	}
+	
+	/**
+	 * Reads the given file and parses it using the Coursinator XML schema to generate an array of
+	 * Course objects.
+	 * 
+	 * @param file The XML file to read
+	 * 
+	 * @return An array of courses parsed from the XML data
+	 * 
+	 * @throws ParserConfigurationException If the input XML is malformed
+	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
+	 * @throws IOException 					If there is an error with the input stream. 
+	 *
+	 * @since November 1, 2014
+	 * @author Matthew Maynes
+	 */
+	public static Course[] read(File file) throws ParserConfigurationException, SAXException, IOException{
+		return Course.read(new FileInputStream(file));
+	}
+	
+	/**
+	 * Reads the given string and parses it using the Coursinator XML schema to generate an array of
+	 * Course objects.
+	 * 
+	 * @param data An XML string of course data that complies with the Coursinator XML schema
+	 * 
+	 * @return An array of courses parsed from the XML data
+	 * 
+	 * @throws ParserConfigurationException If the input XML is malformed
+	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
+	 * @throws IOException 					If there is an error with the input stream. 
+	 *
+	 * @since November 1, 2014
+	 * @author Matthew Maynes
+	 */
+	public static Course[] read(String data) throws ParserConfigurationException, SAXException, IOException{
+		return Course.read(new InputSource(new StringReader(data)).getByteStream());
 	}
 	
 	/**
@@ -287,24 +347,30 @@ public class Course{
 	 * @since October 6, 2014
 	 * @author Matthew Maynes
 	 */
-	public static Course buildCourse(Element node){
+	private static Course buildCourse(Element node){
 		Course course = new Course();
 		NodeList nodes;
 	
 		nodes = node.getElementsByTagName("code");
-		if(nodes.getLength() > 0 && nodes.item(0).getNodeValue() != null) course.setCode(nodes.item(0).getNodeValue());
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null)
+			course.setCode(nodes.item(0).getTextContent());
+		
 		
 		nodes = node.getElementsByTagName("title");
-		if(nodes.getLength() > 0 && nodes.item(0).getNodeValue() != null) course.setTitle(nodes.item(0).getNodeValue());
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+			course.setTitle(nodes.item(0).getTextContent());
 		
 		nodes = node.getElementsByTagName("term-span");
-		if(nodes.getLength() > 0 && nodes.item(0).getNodeValue() != null) course.setSpan(Integer.parseInt(nodes.item(0).getNodeValue()));
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+			course.setSpan(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		nodes = node.getElementsByTagName("level");
-		if(nodes.getLength() > 0 && nodes.item(0).getNodeValue() != null) course.setLevel(nodes.item(0).getNodeValue());
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+			course.setLevel(nodes.item(0).getTextContent());
 		
 		nodes = node.getElementsByTagName("desc");
-		if(nodes.getLength() > 0 && nodes.item(0).getNodeValue() != null) course.setDescription(nodes.item(0).getNodeValue());
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+			course.setDescription(nodes.item(0).getTextContent());
 		
 		return course;	
 	}

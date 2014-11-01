@@ -206,7 +206,7 @@ public class Request{
 	 * @author Matthew Maynes
 	 * @since October 31, 2014
 	 */
-	public String bufferResponse(InputStream responseStream) throws IOException{
+	public String bufferStream(InputStream responseStream) throws IOException{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
 		StringBuffer response = new StringBuffer();
 		String line;

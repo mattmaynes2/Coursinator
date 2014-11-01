@@ -80,7 +80,10 @@ public class ProgramElement{
 		NodeList nodes;
 		
 		nodes = node.getElementsByTagName("course");
-		if(nodes.getLength() > 0) elem.setCourse(Course.buildCourse((Element)nodes.item(0)));
+		if(nodes.getLength() > 0){
+			Course[] courses = Course.read(nodes);
+			if(courses.length > 0) elem.setCourse(courses[0]);
+		}
 		
 		nodes = node.getElementsByTagName("term");
 		if(nodes.getLength() > 0) elem.setTerm(Integer.parseInt(nodes.item(0).getNodeValue()));
