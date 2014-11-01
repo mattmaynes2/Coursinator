@@ -5,7 +5,7 @@
  * for their future courses.
  *
  * @version 0.0.0
- * @date October 6, 2014
+ * @since October 6, 2014
  * @author Matthew Maynes, Cameron Blanchard and Kevin Cox
  */
 

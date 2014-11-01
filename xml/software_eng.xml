@@ -22,7 +22,7 @@
 	<element>
 		<course>
 			<code>PHYS1003</code>
-			<title>Intro Mechanics & Thermodynamics</title>
+			<title>Intro Mechanics &amp; Thermodynamics</title>
 			<term_span>1</term_span>
 		</course>
 		<term>1</term>
