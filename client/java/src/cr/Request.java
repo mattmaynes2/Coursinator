@@ -1,7 +1,7 @@
 package cr;
 
 import java.util.HashMap;
-import java.util.Entry;
+import java.util.Map.Entry;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -32,6 +32,16 @@ public class Request{
 	 * @since October 30, 2014
 	 */
 	private URL server;
+	
+	/**
+	 * Constructs an empty request
+	 * 
+	 * @author Matthew Maynes
+	 * @since November 1, 2014
+	 */
+	public Request(){
+		this(null);
+	}
 	
 	/**
 	 * Constructs a request object that points to the given server
@@ -76,7 +86,7 @@ public class Request{
 	 * @param route The path to the function call on this server 
 	 * @param params The GET parameters for this request
 	 *
-	 * @return Returns the result of the GET request or null
+	 * @return Returns the input stream from the server
 	 *
 	 * @throws MalformedURLException If the URL is invalid
 	 * @throws IOException If the connection could not be made or there was an error in the communication
@@ -84,8 +94,8 @@ public class Request{
 	 * @author Matthew Maynes
 	 * @since October 31, 2014
 	 */
-	public String sendGetRequest(String route, HashMap<String, String> params) throws MalformedURLException, IOException{
-		this.sendGetRequest(route, this.joinParameters(params));
+	public InputStream sendGetRequest(String route, HashMap<String, String> params) throws MalformedURLException, IOException{
+		return this.sendGetRequest(route, this.joinParameters(params));
 	}
 	
 	/**
@@ -95,7 +105,7 @@ public class Request{
 	 * @param route The path to the function call on this server 
 	 * @param params The GET parameters for this request in a URL format
 	 *
-	 * @return Returns the result of the GET request or null
+	 * @return Returns the input stream from the server
 	 *
 	 * @throws MalformedURLException If the URL is invalid
 	 * @throws IOException If the connection could not be made or there was an error in the communication
@@ -103,14 +113,14 @@ public class Request{
 	 * @author Matthew Maynes
 	 * @since October 31, 2014
 	 */
-	public String sendGetRequest(String route, String params) throws MalformedURLException, IOException{
+	public InputStream sendGetRequest(String route, String params) throws MalformedURLException, IOException{
 		String buffer = route + '?' + params;
 		URL request = new URL(this.server, buffer);
 		HttpURLConnection connection = (HttpURLConnection)request.openConnection();
 		connection.setRequestMethod("GET");
 		connection.setDoInput(true);
 		
-		return bufferResponse(connection.getInputStream());
+		return connection.getInputStream();
 		
 	}
 
@@ -121,7 +131,7 @@ public class Request{
 	 * @param route The path to the function call on this server
 	 * @param params The POST parameters for this request
 	 *
-	 * @return Returns the result of the POST request or null
+	 * @return Returns the input stream from the server
 	 *
 	 * @throws MalformedURLException If the URL is invalid
 	 * @throws IOException If the connection could not be made or there was an error in the communication
@@ -129,8 +139,8 @@ public class Request{
 	 * @author Matthew Maynes
 	 * @since October 31, 2014
 	 */
-	public String sendPostRequest(String route, HashMap<String, String> params) throws MalformedURLException, IOException{
-		this.sendPostRequest(route, this.joinParameters(params));
+	public InputStream sendPostRequest(String route, HashMap<String, String> params) throws MalformedURLException, IOException{
+		return this.sendPostRequest(route, this.joinParameters(params));
 	}
 
 	/**
@@ -148,7 +158,7 @@ public class Request{
 	 * @author Matthew Maynes
 	 * @since October 31, 2014
 	 */
-	public String sendPostRequest(String route, String params) throws MalformedURLException, IOException{
+	public InputStream sendPostRequest(String route, String params) throws MalformedURLException, IOException{
 		URL request = new URL(this.server, route);
 		HttpURLConnection connection = (HttpURLConnection)request.openConnection();
 		connection.setRequestMethod("POST");
@@ -157,11 +167,11 @@ public class Request{
 		
 		// Send the request
 		DataOutputStream stream = new DataOutputStream (connection.getOutputStream());
-		wr.writeBytes (params);
-		wr.flush ();
-		wr.close ();
+		stream.writeBytes (params);
+		stream.flush ();
+		stream.close ();
 		
-		return bufferResponse(connection.getInputStream());
+		return connection.getInputStream();
 	}
 
 	/**
@@ -178,16 +188,16 @@ public class Request{
 	public String joinParameters(HashMap<String, String> params){
 		StringBuffer list = new StringBuffer();
 		for(Entry<String, String> entry : params.entrySet()){
-			list.append(entry.getKey() + (params.getValue() == null ? '' : '=' + params.getValue());
+			list.append(entry.getKey() + (entry.getValue() == null ? "" : "=" + entry.getValue()));
 			list.append('&');
 		}
-		return list.length > 0 ? list.deleteCharAt(list.length - 1).toString() : "";
+		return list.length() > 0 ? list.deleteCharAt(list.length() - 1).toString() : "";
 	}
 
 	/**
 	 * Given an input stream from a HTTP response, buffer the input into a single
 	 * string and return. Throws an IO exception if the response stream is invalid
-	 * or closed.
+	 * or closed. Note: This operation closes the input stream.
 	 *
 	 * @param responseStream The input stream from the HTTP response
 	 * 
@@ -196,7 +206,7 @@ public class Request{
 	 * @author Matthew Maynes
 	 * @since October 31, 2014
 	 */
-	private String bufferResponse(InputStream responseStream) throws IOException{
+	public String bufferResponse(InputStream responseStream) throws IOException{
 		BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
 		StringBuffer response = new StringBuffer();
 		String line;
@@ -206,7 +216,7 @@ public class Request{
 			response.append('\n');
 		}
 		reader.close();
-		return response;
+		return response.toString();
 	}
 
 

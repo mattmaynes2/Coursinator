@@ -16,7 +16,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
  
-import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.XMLConstants;
 
@@ -32,7 +31,6 @@ import org.xml.sax.SAXException;
 
 import java.io.File; 
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
 
 
@@ -51,7 +49,7 @@ public class Program{
 	/**
 	 * The file containing the XML schema for validating input data
 	 *
-	 * @see read
+	 * @see #read(File)
 	 */
 	private File xsd;
 	
@@ -117,12 +115,35 @@ public class Program{
 	}
 	
 	/**
+	 * Returns the title of this program 
+	 * 
+	 * @return This programs title
+	 * 
+	 * @author Matthew Maynes
+	 * @since November 1, 2014
+	 */
+	public String getTitle(){
+		return this.title;
+	}
+	
+	/**
 	 * Sets the path to the xsd file
 	 */
 	public void setXSD(String path){
 		this.xsd = new File(path);
 	}
 	
+	/**
+	 * Sets the title of this program
+	 * 
+	 * @param title - The new title of this program
+	 * 
+	 * @author Matthew Maynes
+	 * @since November 1, 2014
+	 */
+	public void setTitle(String title){
+		this.title = title;
+	}
 	
 	/**
 	 * Reads an entire stream into memory to be parsed. The input
@@ -132,11 +153,11 @@ public class Program{
 	 *
 	 * @param file - The input file to read in an buffer
 	 *
-	 * @throws ParserConfigurationException - If the input XML is malformed
-	 * @throws IllegalArgumentException 	- If the Source is an XML artifact that the implementation cannot validate (for example, a processing instruction).
-	 * @throws SAXException 				- If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
-	 * @throws IOException 					- If the validator is processing a SAXSource and the underlying XMLReader throws an IOException.
-	 * @throws NullPointerException 		- If file is null.
+	 * @throws ParserConfigurationException If the input XML is malformed
+	 * @throws IllegalArgumentException 	If the Source is an XML artifact that the implementation cannot validate (for example, a processing instruction).
+	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
+	 * @throws IOException 					If the validator is processing a SAXSource and the underlying XMLReader throws an IOException.
+	 * @throws NullPointerException 		If file is null.
 	 */
 	public void read(File file) throws IllegalArgumentException, SAXException, IOException, NullPointerException, ParserConfigurationException {
 		this.validateXML(this.xsd, file);

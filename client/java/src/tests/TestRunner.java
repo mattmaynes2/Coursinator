@@ -9,23 +9,41 @@
  */
 package tests;
 
-import java.util.ArrayList;
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+//import java.util.ArrayList;
+import cr.*;
 
 public class TestRunner{
 
 	
 
 	public static void main(String[] args){
-		ArrayList<Test> tests = new ArrayList<Test>();
-		tests.add(new TestCRXML());
-	
-		for(Test t: tests){
-			if(!t.runTests()){
-				System.out.println("Test Failed: " + t.getName() );
-				System.exit(0);
+//		ArrayList<Test> tests = new ArrayList<Test>();
+//		tests.add(new TestCRXML());
+//	
+//		for(Test t: tests){
+//			if(!t.runTests()){
+//				System.out.println("Test Failed: " + t.getName() );
+//				System.exit(0);
+//			}
+//		}
+//		System.out.println("All tests passed");
+		CRRequest req = new CRRequest();
+		try {
+			Course[] courses = req.getCourses("SYSC");
+			for(Course c : courses){
+				System.out.println(c);
 			}
+		} catch (IOException | ParserConfigurationException | SAXException e) {
+			e.printStackTrace();
 		}
-		System.out.println("All tests passed");
+		
+		
 		
 	}
 

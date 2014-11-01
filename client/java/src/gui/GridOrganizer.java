@@ -1,3 +1,5 @@
+package gui;
+
 import java.util.*;
 
 public class  GridOrganizer<T>
@@ -55,7 +57,7 @@ public class  GridOrganizer<T>
 	
 	public void printRows()
 	{
-		for (Map.Entry col : grid.entrySet())
+		for (Map.Entry<Integer, HashMap<Integer, T>> col : grid.entrySet())
 		{
 			System.out.print("Column" + col.getKey() + ": ");
 			System.out.print(col.getValue());

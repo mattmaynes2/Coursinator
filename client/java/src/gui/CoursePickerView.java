@@ -2,11 +2,14 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.UIManager;
 import cr.*;
 
 public class CoursePickerView extends JFrame
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -641740008745242043L;
 	private StudentInfoPanel studentInfo;
 	private CourseGrid courses;
 	

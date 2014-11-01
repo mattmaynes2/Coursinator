@@ -8,6 +8,11 @@ import cr.*;
 public class CourseGrid extends JPanel
 {
 		
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1809847793779415302L;
+	
 	private ArrayList<CourseToggle> toggles;
 	
 	public CourseGrid()

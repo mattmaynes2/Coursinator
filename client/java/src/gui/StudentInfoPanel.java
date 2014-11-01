@@ -2,10 +2,13 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import gui.*;
 
 public class StudentInfoPanel extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2620222548256086599L;
 	private JRadioButton onPattern;
 	private JRadioButton offPattern;
 	private JButton submit;
