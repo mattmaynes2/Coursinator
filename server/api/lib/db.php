@@ -16,7 +16,7 @@
 	
 	function db_exec($sql, $values) {
 		global $db;
-		
+
 		$r = $db->prepare($sql);
 		$r->execute($values);
 		
