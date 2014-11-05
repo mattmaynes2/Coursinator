@@ -207,18 +207,18 @@
 		}
 		
 		function to_xml(){
-			$r = '<course-offering';
-			$r .= ' id="'.htmlspecialchars($this->id).'"';
-			$r .= ' course="'.htmlspecialchars($this->course_code).'"';
-			$r .= ' year="'.htmlspecialchars($this->year).'"';
-			$r .= ' section="'.htmlspecialchars($this->section).'"';
-			$r .= ' term="'.htmlspecialchars($this->term).'"';
-			$r .= ' days="'.htmlspecialchars($this->days).'"';
-			$r .= ' enrolled="'.htmlspecialchars($this->enrolled).'"';
-			$r .= ' capacity="'.htmlspecialchars($this->capacity).'"';
-			$r .= ' room="'.htmlspecialchars($this->room).'"';
-			$r .= ' type="'.htmlspecialchars($this->type).'"';
-			$r .= '/>';
+			$r = '<course-offering>';
+			$r .= '<id>'.htmlspecialchars($this->id).'</id>';
+			$r .= '<code>'.htmlspecialchars($this->course_code).'</code>';
+			$r .= '<year>'.htmlspecialchars($this->year).'</year>';
+			$r .= '<section>'.htmlspecialchars($this->section).'</section>';
+			$r .= '<term>'.htmlspecialchars($this->term).'</term>';
+			$r .= '<days>'.htmlspecialchars($this->days).'</days>';
+			$r .= '<enrolled>'.htmlspecialchars($this->enrolled).'</enrolled>';
+			$r .= '<capacity>'.htmlspecialchars($this->capacity).'</capacity>';
+			$r .= '<room>'.htmlspecialchars($this->room).'</room>';
+			$r .= '<type>'.htmlspecialchars($this->type).'</type>';
+			$r .= '</course-offering>';
 			return $r;
 		}
 	}

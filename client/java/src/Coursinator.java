@@ -23,7 +23,7 @@ public class Coursinator{
 			ex.printStackTrace();
 		}
 		CoursePickerView view = new CoursePickerView();
-	
+		view.setVisible(true);
 	}
 	
 }
