@@ -33,7 +33,6 @@ function getProgram()
 				var parser = new DOMParser();
 				var doc = parser.parseFromString(programRequest.responseText, "application/xml");
 				var courses = doc.getElementsByTagName("course");
-				
 				for (var i=0; i<courses.length; i++)
 				{
 					var newopt = document.createElement("option");
