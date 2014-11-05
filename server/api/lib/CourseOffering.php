@@ -210,7 +210,7 @@
 			$r = '<course-offering>';
 			$r .= '<id>'.htmlspecialchars($this->id).'</id>';
 			$r .= '<code>'.htmlspecialchars($this->course_code).'</code>';
-			$r .= '<year>"'.htmlspecialchars($this->year).'</year>';
+			$r .= '<year>'.htmlspecialchars($this->year).'</year>';
 			$r .= '<section>'.htmlspecialchars($this->section).'</section>';
 			$r .= '<term>'.htmlspecialchars($this->term).'</term>';
 			$r .= '<days>'.htmlspecialchars($this->days).'</days>';
