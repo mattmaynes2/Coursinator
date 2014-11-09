@@ -35,16 +35,26 @@ public class TestRunner{
 //			}
 //		}
 //		System.out.println("All tests passed");
+//		CRRequest req = new CRRequest();
+//		try {
+//			Course[] courses = Course.cast(req.getCourses("SYSC"));
+//			for(Course c : courses){
+//				System.out.println(c);
+//			}
+//		} catch (IOException | ParserConfigurationException | SAXException e) {
+//			e.printStackTrace();
+//		}
+//		
 		CRRequest req = new CRRequest();
 		try {
-			Course[] courses = req.getCourses("SYSC");
-			for(Course c : courses){
+			CourseOffering[] courses = req.getCourseOfferings("SYSC");
+			for(CourseOffering c : courses){
 				System.out.println(c);
 			}
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
-//		
+		
 //		try{
 //			Course[] courses = Course.read(new FileInputStream(new File("test.xml")));
 //			for(Course c : courses){

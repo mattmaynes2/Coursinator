@@ -1,33 +1,17 @@
 package cr;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Course
  *
  * Defines a course object following the Coursinator schema
  * 
- * @version 0.0.0
+ * @version 0.1.0
  * @since October 6, 2014
  */
-public class Course{
+public class Course extends XMLObject{
 
 	/**
 	 * The Coursinator XML identifier tag
@@ -35,7 +19,7 @@ public class Course{
 	 * @since November 1, 2014
 	 * @author Matthew Maynes
 	 */
-	private static final String SCHEMA_IDENTIFIER = "course";
+	public static final String SCHEMA_IDENTIFIER = "course";
 
 	/**
 	 * The code of this course in normalized form (ex. SYSC4504)
@@ -236,144 +220,14 @@ public class Course{
 		// Build the XML output
 		buffer.append("<" + SCHEMA_IDENTIFIER + ">");
 		for(Entry<String, String> element : schema.entrySet()){
-			buffer.append("<" + element.getKey() + ">" + element.getValue() + "</" + element.getKey() + ">");
+			if(element.getValue() != null){
+				buffer.append("<" + element.getKey() + ">" + element.getValue() + "</" + element.getKey() + ">");
+			}
 		}
 		
 		buffer.append("</" + SCHEMA_IDENTIFIER + ">");
 		return buffer.toString();
 	}	
-		
-	/**
-	 * Returns a serialized version of this course object following the Coursinator schema.
-	 * 
-	 * @return A XML serialized version of this course
-	 *
-	 * @see #serialize()
-	 *
-	 * @since October 6, 2014
-	 * @author Matthew Maynes
-	 */
-	@Override
-	public String toString(){
-		return this.serialize();
-	}
-	
-	
-	/**
-	 * Given an XML list of nodes that comply to Course objects in the Coursinator schema, 
-	 * parse each node and build an array of courses
-	 * 
-	 * @param courses A list of course object nodes
-	 * 
-	 * @return An array of course objects that represent the given XML data
-	 * 
-	 * @since November 1, 2014
-	 * @author Matthew Maynes
-	 */
-	public static Course[] read(NodeList nodes){
-		ArrayList<Course> courses = new ArrayList<Course>();
-		for(int i = 0; i < nodes.getLength(); i++){
-			courses.add(Course.buildCourse((Element)nodes.item(i)));
-		}
-		return courses.toArray(new Course[0]);
-	}
-	
-	/**
-	 * Given XML data in an input stream, buffer and deserialize it to create a course objects.
-	 * 
-	 * @param stream The stream to read form and deserialize
-	 * 
-	 * @return An array of courses parsed from the XML data
-	 * 
-	 * @throws ParserConfigurationException If the input XML is malformed
-	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
-	 * @throws IOException 					If there is an error with the input stream. 
-	 *
-	 * @since November 1, 2014
-	 * @author Matthew Maynes
-	 */
-	public static Course[] read(InputStream stream) throws ParserConfigurationException, SAXException, IOException{
-		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document doc 			= builder.parse(stream);
-		NodeList nodes 			= doc.getElementsByTagName(SCHEMA_IDENTIFIER);
-		return Course.read(nodes);
-	}
-	
-	/**
-	 * Reads the given file and parses it using the Coursinator XML schema to generate an array of
-	 * Course objects.
-	 * 
-	 * @param file The XML file to read
-	 * 
-	 * @return An array of courses parsed from the XML data
-	 * 
-	 * @throws ParserConfigurationException If the input XML is malformed
-	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
-	 * @throws IOException 					If there is an error with the input stream. 
-	 *
-	 * @since November 1, 2014
-	 * @author Matthew Maynes
-	 */
-	public static Course[] read(File file) throws ParserConfigurationException, SAXException, IOException{
-		return Course.read(new FileInputStream(file));
-	}
-	
-	/**
-	 * Reads the given string and parses it using the Coursinator XML schema to generate an array of
-	 * Course objects.
-	 * 
-	 * @param data An XML string of course data that complies with the Coursinator XML schema
-	 * 
-	 * @return An array of courses parsed from the XML data
-	 * 
-	 * @throws ParserConfigurationException If the input XML is malformed
-	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
-	 * @throws IOException 					If there is an error with the input stream. 
-	 *
-	 * @since November 1, 2014
-	 * @author Matthew Maynes
-	 */
-	public static Course[] read(String data) throws ParserConfigurationException, SAXException, IOException{
-		return Course.read(new InputSource(new StringReader(data)).getByteStream());
-	}
-	
-	/**
-	 * Builds a course given the data in the passed node
-	 *
-	 * @param node - The node to parse
-	 *
-	 * @return A new course that represents the data in the given node
-	 *
-	 * @since October 6, 2014
-	 * @author Matthew Maynes
-	 */
-	private static Course buildCourse(Element node){
-		Course course = new Course();
-		NodeList nodes;
-	
-		nodes = node.getElementsByTagName("code");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null)
-			course.setCode(nodes.item(0).getTextContent());
-		
-		
-		nodes = node.getElementsByTagName("title");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
-			course.setTitle(nodes.item(0).getTextContent());
-		
-		nodes = node.getElementsByTagName("term-span");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
-			course.setSpan(Integer.parseInt(nodes.item(0).getTextContent()));
-		
-		nodes = node.getElementsByTagName("level");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
-			course.setLevel(nodes.item(0).getTextContent());
-		
-		nodes = node.getElementsByTagName("desc");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
-			course.setDescription(nodes.item(0).getTextContent());
-		
-		return course;	
-	}
-	
+
 	
 }

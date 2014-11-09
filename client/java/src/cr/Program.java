@@ -3,22 +3,6 @@ package cr;
 import java.util.List;
 import java.util.ArrayList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-
 /**
  * Program
  *
@@ -27,7 +11,7 @@ import java.io.StringReader;
  * @version 0.0.1
  * @since October 6, 2014
  */
-public class Program{
+public class Program extends XMLObject{
 
 	/**
 	 * The Coursinator XML identifier tag
@@ -35,7 +19,7 @@ public class Program{
 	 * @since November 1, 2014
 	 * @author Matthew Maynes
 	 */
-	private static final String SCHEMA_IDENTIFIER = "program";
+	public static final String SCHEMA_IDENTIFIER = "program";
 	
 	/**
 	 * Stores all of the elements that are part of this program
@@ -158,73 +142,5 @@ public class Program{
 		return buffer.toString();
 	}
 	
-	/**
-	 * Returns a serialized version of this program object following the Coursinator schema.
-	 * 
-	 * @return A XML serialized version of this program
-	 *
-	 * @see #serialize()
-	 *
-	 * @since November 1, 2014
-	 * @author Matthew Maynes
-	 */
-	@Override
-	public String toString(){
-		return this.serialize();
-	}
-	
-	/**
-	 * Reads and parses the given input stream to create a program object. The input stream must 
-	 * be in the XML format as defined by the Coursinator schema
-	 *
-	 * @param stream The input stream to parse
-	 *
-	 * @throws ParserConfigurationException If the input XML is malformed
-	 * @throws IllegalArgumentException 	If the Source is an XML artifact that the implementation cannot validate (for example, a processing instruction).
-	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
-	 * @throws IOException 					If the validator is processing a SAXSource and the underlying XMLReader throws an IOException.
-	 */
-	public static Program read(InputStream stream) throws IllegalArgumentException, SAXException, IOException, ParserConfigurationException {
-		Program program = new Program();
-		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document doc = builder.parse(stream);
-		NodeList nodes = doc.getElementsByTagName("element");
-		
-		
-		for(int i = 0; i < nodes.getLength(); i++){
-			program.addElement(ProgramElement.buildElement((Element)nodes.item(i)));
-		}
-		return program;
-	}
-	
-	/**
-	 * Reads an entire file into memory to be parsed. The input file must be in the XML format as 
-	 * defined by the Coursinator schema
-	 *
-	 * @param file The input file to read into a buffer and parse
-	 *
-	 * @throws ParserConfigurationException If the input XML is malformed
-	 * @throws IllegalArgumentException 	If the Source is an XML artifact that the implementation cannot validate (for example, a processing instruction).
-	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
-	 * @throws IOException 					If the validator is processing a SAXSource and the underlying XMLReader throws an IOException.
-	 */
-	public static Program read(File file) throws IllegalArgumentException, SAXException, IOException, ParserConfigurationException {
-		return Program.read(new FileInputStream(file));
-	}
-		
-	/**
-	 * Reads an entire string into memory to be parsed. The input string must be in the XML format as 
-	 * defined by the Coursinator schema
-	 *
-	 * @param string The input string to parse
-	 *
-	 * @throws ParserConfigurationException If the input XML is malformed
-	 * @throws IllegalArgumentException 	If the Source is an XML artifact that the implementation cannot validate (for example, a processing instruction).
-	 * @throws SAXException 				If the ErrorHandler throws a SAXException or if a fatal error is found and the ErrorHandler returns normally.	
-	 * @throws IOException 					If the validator is processing a SAXSource and the underlying XMLReader throws an IOException.
-	 */
-	public static Program read(String string) throws IllegalArgumentException, SAXException, IOException, ParserConfigurationException {
-		return Program.read(new InputSource(new StringReader(string)).getByteStream());
-	}
 
 }

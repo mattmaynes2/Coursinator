@@ -1,20 +1,25 @@
 package cr;
+
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 /**
- * ProgramElement
- *
- * Defines a program element 
+ * Defines a program element object and its attributes. This class is a serializable object representing a 
+ * program element in the Coursinator schema
  * 
- * @version 0.0.0
- * @date October 6, 2014
- * @author Matthew Maynes
+ * @version 0.0.1
+ * @since October 6, 2014
  */
+public class ProgramElement extends XMLObject{
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-
-public class ProgramElement{
-
+	/**
+	 * The Coursinator XML identifier tag
+	 *
+	 * @since November 1, 2014
+	 * @author Matthew Maynes
+	 */
+	public static final String SCHEMA_IDENTIFIER = "course";
+	
 	/**
 	 * Stores the course data for this program element
 	 */
@@ -62,43 +67,32 @@ public class ProgramElement{
 		this.year = year;
 	}
 	
+	/**
+	 * Serializes this object into an xml form following the Coursinator schema
+	 * 
+	 * @author Matthew Maynes
+	 * @since October 6, 2014
+	 */
+	@Override
 	public String serialize(){
 		StringBuffer buffer = new StringBuffer();
+		HashMap<String, String> schema = new HashMap<String, String>();
+		schema.put("year", Integer.toString(this.getYear()));
+		schema.put("term", Integer.toString(this.getTerm()));
+		schema.put("course", this.getCourse().serialize());
 		
+		buffer.append("<" + SCHEMA_IDENTIFIER + ">");
+		for(Entry<String, String> element : schema.entrySet()){
+			if(element.getValue() != null){
+				buffer.append("<" + element.getKey() + ">" + element.getValue() + "</" + element.getKey() + ">");
+			}
+		}
+		
+		buffer.append("</" + SCHEMA_IDENTIFIER + ">");
 		
 		return buffer.toString();
 	}
 	
-	@Override
-	public String toString(){
-		return "<ProgramElement> Year: " + this.year + " Term: " + this.term + "{Course: " + this.course.toString() + "}";
-	}
-	
-	/**
-	 * Builds a program element using the data contained in 
-	 * the given xml node
-	 *
-	 * @param node - An XML node that contains the required information about this program
-	 *
-	 * @return a new program element representing the data in the given node
-	 */
-	public static ProgramElement buildElement(Element node){
-		ProgramElement elem = new ProgramElement();
-		NodeList nodes;
-		
-		nodes = node.getElementsByTagName("course");
-		if(nodes.getLength() > 0){
-			Course[] courses = Course.read(nodes);
-			if(courses.length > 0) elem.setCourse(courses[0]);
-		}
-		
-		nodes = node.getElementsByTagName("term");
-		if(nodes.getLength() > 0) elem.setTerm(Integer.parseInt(nodes.item(0).getNodeValue()));
-		
-		nodes = node.getElementsByTagName("year");
-		if(nodes.getLength() > 0) elem.setYear(Integer.parseInt(nodes.item(0).getNodeValue()));
-		
-		return elem;
-	}
+
 
 }

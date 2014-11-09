@@ -26,6 +26,13 @@ public class CRRequest extends Request{
 	 * @since October 31, 2014
 	 */
 	private static final String crServer = "http://localhost";
+	
+	/**
+	 * Defines the root location on the crServer where the api can be found
+	 * 
+	 * @since November 9, 2014
+	 */
+	private static final String crRoot = "/server";
 
 	/**
 	 * Creates a Coursinator server request object
@@ -60,10 +67,36 @@ public class CRRequest extends Request{
 	 * @since October 31, 2014
 	 */
 	public Course[] getCourses(String pattern) throws MalformedURLException, IOException, ParserConfigurationException, SAXException{
-		String route = "/server/api/courses.php";
+		String route = crRoot +  "/api/courses.php";
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("code", pattern);
-		return Course.read(this.sendGetRequest(route, params));
+		CourseBuilder builder = new CourseBuilder();
+		return builder.read(this.sendGetRequest(route, params));
 	}
 
+	/**
+	 * Returns a list of courses that match the given pattern
+	 *
+	 * Routes to /server/api/courses.php
+	 *
+	 * @param pattern The course pattern to match against
+	 *
+	 * @return An array of courses that meet the given criteria or an empty array
+	 *
+	 * @throws MalformedURLException If there is an issue with the end point for this server
+	 * @throws IOException If the HTTP connection is closed or hangs
+	 * @throws SAXException If there is an issue with the XML input stream
+	 * @throws ParserConfigurationException If the XML data is malformed
+	 *
+	 * @author Matthew Maynes
+	 * @since October 31, 2014
+	 */
+	public CourseOffering[] getCourseOfferings(String pattern) throws MalformedURLException, IOException, ParserConfigurationException, SAXException{
+		String route = crRoot + "/api/courseofferings.php";
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("code", pattern);
+		CourseOfferingBuilder builder = new CourseOfferingBuilder();
+		return builder.read(this.sendGetRequest(route, params));
+	}
+	
 }
