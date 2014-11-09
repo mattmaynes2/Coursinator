@@ -1,7 +1,10 @@
 package gui;
 
 import javax.swing.*;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class StudentInfoPanel extends JPanel
 {
@@ -31,6 +34,7 @@ public class StudentInfoPanel extends JPanel
 		bg = new ButtonGroup();
 		instructions = new JLabel("<html>Please select your program, <br/> year status, and the courses<br/> that you have completed</html>");
 		
+		submit.addActionListener(submitListener());
 		//Set up panel
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -57,5 +61,18 @@ public class StudentInfoPanel extends JPanel
 
 		setPreferredSize(new Dimension(200,120));
 		setMaximumSize(new Dimension(200,120));
+	}
+	
+	public ActionListener submitListener(){
+		return new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if(onPattern.isSelected()){
+					// TODO implement
+				}
+				else{
+					// TODO implement
+				}
+			}
+		};		
 	}
 }
