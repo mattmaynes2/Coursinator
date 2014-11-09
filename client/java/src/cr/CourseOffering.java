@@ -3,6 +3,8 @@ package cr;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import xml.XMLObject;
+
 /**
  * Course
  *
@@ -103,6 +105,26 @@ public class CourseOffering extends XMLObject{
 	 */
 	private int type;
 
+	
+	/**
+	 * Constructs an empty course offering 
+	 * 
+	 * @since November 9, 2014
+	 * @author Matthew Maynes
+	 */
+	public CourseOffering(){
+		this.id = -1;
+		this.year = -1;
+		this.term = -1;
+		this.enrolled = -1;
+		this.capacity = -1;
+		this.type = -1;
+		this.code = "";
+		this.days = "";
+		this.room = "";		
+	}
+	
+	
 	/**
 	 * @return the id
 	 */
@@ -181,10 +203,20 @@ public class CourseOffering extends XMLObject{
 	}
 
 	/**
-	 * @param code the code to set
+	 * Sets the course code for this course and normalizes any invalid whitespace
+	 *
+	 * @param code The new code for this course
+	 *
+	 * @since November 9, 2014
+	 * @author Matthew Maynes
 	 */
-	public void setCode(String code) {
-		this.code = code;
+	public void setCode(String code){
+		if(code != null && code.contains(" ")){
+			this.code = code.replace(" ", "");	
+		}
+		else { 
+			this.code = code;
+		}
 	}
 
 	/**
@@ -248,21 +280,22 @@ public class CourseOffering extends XMLObject{
 	public String serialize() {
 		StringBuffer buffer = new StringBuffer();
 		HashMap<String, String> schema = new HashMap<String, String>();
-		schema.put("id", Integer.toString(this.getId()));
 		schema.put("code", this.getCode());
-		schema.put("year", Integer.toString(this.getYear()));
 		schema.put("section", this.getSection());
-		schema.put("term", Integer.toString(this.getTerm()));
 		schema.put("days", this.getDays());
-		schema.put("enrolled",  Integer.toString(this.getEnrolled()));
-		schema.put("capacity",  Integer.toString(this.getCapacity()));
 		schema.put("room", this.getRoom());
-		schema.put("type",  Integer.toString(this.getType()));
+		
+		if(this.getId() >= 0) schema.put("id", Integer.toString(this.getId()));
+		if(this.getYear() >= 0) schema.put("year", Integer.toString(this.getYear()));
+		if(this.getTerm() >= 0) schema.put("term", Integer.toString(this.getTerm()));
+		if(this.getType() >= 0) schema.put("type",  Integer.toString(this.getType()));
+		if(this.getEnrolled() >= 0) schema.put("enrolled",  Integer.toString(this.getEnrolled()));
+		if(this.getCapacity() >= 0) schema.put("capacity",  Integer.toString(this.getCapacity()));
 		
 		// Build the XML output
 		buffer.append("<" + SCHEMA_IDENTIFIER + ">");
 		for(Entry<String, String> element : schema.entrySet()){
-			if(element.getValue() != null){
+			if(element.getValue() != null && element.getValue() != ""){
 				buffer.append("<" + element.getKey() + ">" + element.getValue() + "</" + element.getKey() + ">");
 			}
 		}

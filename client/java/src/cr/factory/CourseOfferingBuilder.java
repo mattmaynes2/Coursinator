@@ -1,7 +1,10 @@
-package cr;
+package cr.factory;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import cr.CourseOffering;
+import xml.XMLBuilder;
 
 /**
  * CourseOfferingBuilder is a factory class that builds CourseOfferings out of XML data that follows the Coursinator schema

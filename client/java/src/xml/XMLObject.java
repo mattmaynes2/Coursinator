@@ -1,4 +1,4 @@
-package cr;
+package xml;
 
 /**
  * XMLObjects represent data objects that can be serialized into valid XML.

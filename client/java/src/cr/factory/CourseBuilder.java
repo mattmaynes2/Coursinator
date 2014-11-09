@@ -1,8 +1,17 @@
-package cr;
+package cr.factory;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import cr.Course;
+import xml.XMLBuilder;
+
+/**
+ * CourseBuilder is a factory class that builds Courses out of XML data that follows the Coursinator schema
+ * 
+ * @since November 9, 2014
+ * @version 0.1.0
+ */
 public class CourseBuilder extends XMLBuilder<Course>{
 
 	/**

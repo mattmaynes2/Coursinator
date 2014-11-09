@@ -1,12 +1,11 @@
 package cr;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
-
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,7 +23,7 @@ import java.io.IOException;
  * @version 0.0.1
  */
 public class Request{
-	
+
 	/**
 	 * The URL of the server root.
 	 *
@@ -219,5 +218,35 @@ public class Request{
 		return response.toString();
 	}
 
+	/**
+	 * Given a parameter map, append the parameter array using the given key identifier. This method uses the toString
+	 * of each object in the array to generate a string representation to be added to the parameter map. The array will 
+	 * be added as a key to the map to avoid duplications.
+	 * 
+	 * @param key The key to use for all of the elements in the object array
+	 * @param array The array to encode into the parameter map
+	 * 
+	 * @return A map that contains an encoded version of given array as a key
+	 * 
+	 * @author Matthew Maynes
+	 * @since November 9, 2014
+	 */
+	public Map<String, String> encodeArrayParameter(String key, Object[] array){
+		HashMap<String, String> params = new HashMap<String, String>();
+		StringBuffer buffer = new StringBuffer();
+		
+		for(Object o : array){
+			buffer.append("&"); 
+			buffer.append(key  + "[]=");
+			buffer.append(o.toString()); 
+		}		
+		
+		if(buffer.length() > 0)
+			params.put(buffer.substring(1), "");		
+		
+		return params;
+	}
+	
 
+	
 }

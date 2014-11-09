@@ -1,7 +1,11 @@
-package cr;
+package cr.factory;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import cr.Course;
+import cr.ProgramElement;
+import xml.XMLBuilder;
 
 /**
  * ProgramElementBuilder is a factory class that builds ProgramElements out of XML data that follows the Coursinator schema
@@ -17,6 +21,9 @@ public class ProgramElementBuilder extends XMLBuilder<ProgramElement> {
 	 * @param node An XML node that contains the required information about this program
 	 *
 	 * @return a new program element representing the data in the given node
+	 * 
+	 * @author Matthew Maynes
+	 * @since November 9, 2014
 	 */
 	@Override
 	public ProgramElement buildObject(Element node){

@@ -3,6 +3,8 @@ package cr;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import xml.XMLObject;
+
 /**
  * Defines a program element object and its attributes. This class is a serializable object representing a 
  * program element in the Coursinator schema

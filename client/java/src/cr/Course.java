@@ -3,6 +3,8 @@ package cr;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import xml.XMLObject;
+
 /**
  * Course
  *
@@ -72,7 +74,7 @@ public class Course extends XMLObject{
 		this.title = "";
 		this.level = "";
 		this.description = "";
-		this.span = 0;
+		this.span = -1;
 	}
 	
 	/**
@@ -212,15 +214,16 @@ public class Course extends XMLObject{
 		StringBuffer buffer = new StringBuffer();
 		HashMap<String, String> schema = new HashMap<String, String>();
 		schema.put("code", this.getCode());
-		schema.put("title", this.getTitle());
-		schema.put("term-span", Integer.toString(this.getSpan()));
+		schema.put("title", this.getTitle());		
 		schema.put("level", this.getLevel());
 		schema.put("desc", this.getDescription());
+		
+		if(this.getSpan() >= 0) schema.put("term-span", Integer.toString(this.getSpan()));
 		
 		// Build the XML output
 		buffer.append("<" + SCHEMA_IDENTIFIER + ">");
 		for(Entry<String, String> element : schema.entrySet()){
-			if(element.getValue() != null){
+			if(element.getValue() != null && element.getValue() != ""){
 				buffer.append("<" + element.getKey() + ">" + element.getValue() + "</" + element.getKey() + ">");
 			}
 		}

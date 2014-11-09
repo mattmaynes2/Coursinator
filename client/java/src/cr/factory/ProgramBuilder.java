@@ -1,7 +1,10 @@
-package cr;
+package cr.factory;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import cr.Program;
+import xml.XMLBuilder;
 
 /**
  * ProgramBuilder is a factory class that builds Programs out of XML data that follows the Coursinator schema
