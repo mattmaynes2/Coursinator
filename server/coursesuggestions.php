@@ -45,6 +45,7 @@
 	$q = new Query("courses c");
 
 	$q->select("code");
+	$q->select("title");	
 	$q->where(" EXISTS (SELECT o.course_code FROM course_offerings o WHERE c.code = o.course_code) 
 				AND NOT c.code IN ".Query::valuelistsql($completed)."
 				AND c.code IN (SELECT course_code FROM program_elements WHERE program_id = ".$_GET['program_select'].")", $completed);
@@ -57,6 +58,7 @@
 	foreach ($rows as $course) {
 		$r = '<course>';
 		$r .= '<code>'.htmlspecialchars($course[0]).'</code>';
+		$r .= '<title>'.htmlspecialchars($course[1]).'</title>';
 		$r .= '</course>';
 		echo $r;
 	}
