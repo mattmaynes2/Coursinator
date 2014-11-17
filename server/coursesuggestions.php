@@ -53,14 +53,26 @@
 	$rows = $q->executeFetchAll();
 	
 	header('Content-Type: text/xml; charset=utf-8');
+	
 	echo '<response e="0"><courses>';
 	
-	foreach ($rows as $course) {
-		$r = '<course>';
-		$r .= '<code>'.htmlspecialchars($course[0]).'</code>';
-		$r .= '<title>'.htmlspecialchars($course[1]).'</title>';
-		$r .= '</course>';
-		echo $r;
+	$completed_as_courses = array();
+	foreach ($completed as $c)
+	{
+		array_push($completed_as_courses, Course::fetch($c));
+	}
+
+	foreach ($rows as $course) 
+	{
+		$c = Course::fetch($course[0]);
+		if (count($c->unsatisfied_prerequisites($completed_as_courses)) == 0)
+		{
+			$r = '<course>';
+			$r .= '<code>'.htmlspecialchars($course[0]).'</code>';
+			$r .= '<title>'.htmlspecialchars($course[1]).'</title>';
+			$r .= '</course>';
+			echo $r;
+		}
 	}
 	
 	echo '</courses></response>';
