@@ -180,7 +180,7 @@
 		
 		/** Check if preprequsites are satisfied by the given courses.
 		 */
-		function unsatisfied_prerequisites($completed, $taking=[]) {
+		function unsatisfied_prerequisites($completed, $taking=['']) {
 			$q = self::query_prerequisites('?', $completed, $taking, [$this->code]);
 			return $q->executeFetchAll();
 		}
