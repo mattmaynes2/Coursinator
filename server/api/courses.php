@@ -35,7 +35,7 @@
 		
 		$q = new Query('Course');
 		$q->select_object('Course');
-
+		
 		// Filter based on course code (or prefix thereof)
 		if (isset($_GET['code']))
 			$q->where_startswith(Course::code, strtoupper($_GET['code']));

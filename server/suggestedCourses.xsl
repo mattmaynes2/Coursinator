@@ -6,7 +6,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template match="/">
   <html>
   <body>
-    <h2>Courses you can take:</h2>
+    <h2>Core courses available in the selected term:</h2>
 	<form>
 		<table>
 			<xsl:for-each select="response/courses/course">

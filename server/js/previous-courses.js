@@ -5,6 +5,33 @@ function hideProgram()
 	document.getElementById("on_pattern_options").style.display = "block";
 }
 
+//Gets the terms available for registration from the server
+function getAvailableTerms()
+{
+	termRequest = new XMLHttpRequest();
+	termRequest.onreadystatechange=function()	
+		{
+			if (termRequest.readyState==4 && termRequest.status==200)
+			{
+				var parser = new DOMParser();
+				var doc = parser.parseFromString(termRequest.responseText, "application/xml");
+				var terms = doc.getElementsByTagName("term");
+				var termselector = document.getElementById("termselect");
+				console.log(terms);
+				for (var i=0; i<terms.length; i++)
+				{
+					var newopt = document.createElement("option");
+					newopt.value = terms[i].childNodes[0].nodeValue;
+					newopt.text = terms[i].childNodes[0].nodeValue;
+					termselector.add(newopt);
+				}
+			}
+		}
+	
+	termRequest.open("GET", "api/availableterms.php", true);
+	termRequest.send();
+}
+
 //Fills the program courses list with programs for the selected courses
 function getProgram()
 {
