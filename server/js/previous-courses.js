@@ -5,6 +5,12 @@ function hideProgram()
 	document.getElementById("on_pattern_options").style.display = "block";
 }
 
+function loadTasks()
+{
+	getAvailableTerms();
+	getProgram();
+}
+
 //Gets the terms available for registration from the server
 function getAvailableTerms()
 {
@@ -36,7 +42,6 @@ function getAvailableTerms()
 function getProgram()
 {
 	var programRequest;
-	
 	var listbox = document.getElementById("course_select");
 	var selected_courses = document.getElementById("courses_taken");
 	var selectedProgram = document.getElementById("program_select").options[document.getElementById("program_select").selectedIndex].value;
@@ -78,21 +83,20 @@ function addCourseSelection()
 {
 	var course_list = document.getElementById("course_select");
 	var taken_list = document.getElementById("courses_taken");
-	var add = true;
+	var options = course_list && course_list.options;
+	var selected = [];
 	
-	if (course_list.selectedIndex == -1)
-		return;
-	
-	for(i=0; i<taken_list.options.length; i++)
+	for (var i=0; i<options.length; i++)
 	{
-		if (taken_list.options[i].value === course_list.options[course_list.selectedIndex].value)
+		if (options[i].selected)
 		{
-			add = false;
+			selected.push(options[i]);
 		}
 	}
-	if (add)
+	
+	for (var i=0; i<selected.length; i++)
 	{
-		taken_list.add(course_list.options[course_list.selectedIndex]);
+		taken_list.add(selected[i],0);
 	}
 }
 
@@ -101,9 +105,19 @@ function removeCourseSelection()
 	var taken_list = document.getElementById("courses_taken");
 	var course_list = document.getElementById("course_select");
 	
-	if (taken_list.selectedIndex == -1)
-	return;
-		
+	var options = taken_list && taken_list.options;
+	var selected = [];
 	
-	course_list.add(taken_list.options[taken_list.selectedIndex]);
+	for (var i=0; i<options.length; i++)
+	{
+		if (options[i].selected)
+		{
+			selected.push(options[i]);
+		}
+	}
+	
+	for (var i=0; i<selected.length; i++)
+	{
+		course_list.add(selected[i],0);
+	}
 }

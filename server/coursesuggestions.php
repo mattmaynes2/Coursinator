@@ -12,13 +12,17 @@
 	*/
 	if(!isset($_GET['pattern']))
 	{
-		echo '<response>Invalid Submission</response>';
+		echo '<response>Invalid Submission: no pattern selected</response>';
 		exit;
 	}
 	
 	if(isset($_GET['completed']))
 	{
 		$completed = $_GET['completed'];
+	}
+	else if ($_GET['pattern'] == 'offpattern')
+	{
+		$completed = array();
 	}
 	else if ($_GET['pattern'] == 'onpattern' and isset($_GET['year_select']))
 	{
@@ -34,7 +38,7 @@
 	}
 	else
 	{
-		echo "<response>Invalid Submission</response>";
+		echo "<response>Invalid Submission: completed not set, not on pattern and no year selected</response>";
 		exit;
 	}
 

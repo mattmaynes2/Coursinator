@@ -64,6 +64,10 @@
 		 * Example: Query::valuelistsql([1,2,3]) == '(?,?,?)'
 		 */
 		static function valuelistsql($values) {
+			if (count($values) == 0)
+			{
+				return "('')";
+			}
 			return '('.implode(',', array_fill(0, count($values), '?')).')';
 		}
 		
