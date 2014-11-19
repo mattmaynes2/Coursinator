@@ -10,9 +10,9 @@
 	* program_select must be set
 	* year_select must be set if on pattern
 	*/
-	if(!isset($_GET['pattern']))
+	if(!isset($_GET['pattern']) or !isset($_GET['term']))
 	{
-		echo '<response>Invalid Submission: no pattern selected</response>';
+		echo '<response>Invalid Submission</response>';
 		exit;
 	}
 	
@@ -47,12 +47,23 @@
 	* exist as a program element for their program, and are running a section in the upcoming term
 	*/
 	$q = new Query("courses c");
-
+	$t = explode(",",$_GET['term']);
+	$year = $t[1];
+	$session = $t[0];
+	
 	$q->select("code");
 	$q->select("title");	
-	$q->where(" EXISTS (SELECT o.course_code FROM course_offerings o WHERE c.code = o.course_code) 
+	$q->where(" EXISTS 
+				(SELECT o.course_code 
+				FROM course_offerings o 
+				WHERE c.code = o.course_code
+				AND term=$session 
+				AND year=$year) 
 				AND NOT c.code IN ".Query::valuelistsql($completed)."
-				AND c.code IN (SELECT course_code FROM program_elements WHERE program_id = ".$_GET['program_select'].")", $completed);
+				AND c.code IN 
+				(SELECT course_code 
+				FROM program_elements 
+				WHERE program_id = ".$_GET['program_select'].")", $completed);
 	
 	$rows = $q->executeFetchAll();
 	

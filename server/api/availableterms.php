@@ -11,8 +11,8 @@
 	foreach ($rows as $offering)
 	{
 		$year=$offering[1];
-		$term = $offering[0] == 0 ? "Fall" : "Winter";
-		$response .= "<term>$term $year</term>";
+		$term = $offering[0];
+		$response .= "<term which='$term' year='$year'></term>";
 	}
 	$response .= '<terms>';
 	

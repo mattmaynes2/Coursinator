@@ -27,8 +27,9 @@ function getAvailableTerms()
 				for (var i=0; i<terms.length; i++)
 				{
 					var newopt = document.createElement("option");
-					newopt.value = terms[i].childNodes[0].nodeValue;
-					newopt.text = terms[i].childNodes[0].nodeValue;
+					var termText = terms[i].attributes.getNamedItem("which").value == 0 ? "Fall " : "Winter ";
+					newopt.text = termText + terms[i].attributes.getNamedItem("year").value;
+					newopt.value = terms[i].attributes.getNamedItem("which").value + "," + terms[i].attributes.getNamedItem("year").value ;
 					termselector.add(newopt);
 				}
 			}
