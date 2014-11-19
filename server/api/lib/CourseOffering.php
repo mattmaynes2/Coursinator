@@ -185,7 +185,7 @@
 						:days,
 						:enrolled,
 						:capacity,
-						:room,
+							:room,
 						:type
 					);
 				');

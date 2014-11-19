@@ -2,6 +2,7 @@
 <?php //require_once("api/courses.php");
 	require_once("api/lib/db.php");
 	require_once("api/lib/Course.php");
+	require_once("api/scheduler.php");
 	
 	/*
 	* The following must be true or this is an invalid submission
@@ -45,25 +46,28 @@
 	/*
 	* This Query will retrieve all courses that the student has not completed, 
 	* exist as a program element for their program, and are running a section in the upcoming term
+	* The results are ordered by the order in which they are to be completed according to the program pattern
+	* Scheduler will pick the first several of these to attempt to build a schedule
 	*/
-	$q = new Query("courses c");
+	$q = new Query("course_offerings o, program_elements e, courses c");
+	
 	$t = explode(",",$_GET['term']);
+	
 	$year = $t[1];
 	$session = $t[0];
 	
-	$q->select("code");
-	$q->select("title");	
-	$q->where(" EXISTS 
-				(SELECT o.course_code 
-				FROM course_offerings o 
-				WHERE c.code = o.course_code
-				AND term=$session 
-				AND year=$year) 
+	$q->select("DISTINCT c.code");
+	$q->select("c.title");	
+	$q->where(" c.code = e.course_code
+				AND o.course_code = c.code
+				AND o.term=$session 
+				AND o.year=$year
 				AND NOT c.code IN ".Query::valuelistsql($completed)."
 				AND c.code IN 
 				(SELECT course_code 
 				FROM program_elements 
-				WHERE program_id = ".$_GET['program_select'].")", $completed);
+				WHERE program_id = ".$_GET['program_select'].")
+				ORDER BY e.element_year ASC, e.term ASC", $completed);
 	
 	$rows = $q->executeFetchAll();
 	
@@ -72,11 +76,15 @@
 	echo '<response e="0"><courses>';
 	
 	$completed_as_courses = array();
+	
+	
 	foreach ($completed as $c)
 	{
 		array_push($completed_as_courses, Course::fetch($c));
 	}
 
+	$possible_courses = array_slice($rows, 0, 5);
+	
 	foreach ($rows as $course) 
 	{
 		$c = Course::fetch($course[0]);
@@ -90,5 +98,10 @@
 		}
 	}
 	
-	echo '</courses></response>';
+	echo '</courses>';
+	
+	$s = new Schedule();
+	$s->to_xml();
+	echo '</response>';
+	
 ?>
