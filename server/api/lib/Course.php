@@ -83,8 +83,8 @@
 		function settitle($title) {
 			$this->title = $title;
 		}
-		function gettitle($title) {
-			return $this->tilte;
+		function gettitle() {
+			return $this->title;
 		}
 		
 		function setlevel($level) {

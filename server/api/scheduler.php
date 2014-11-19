@@ -126,8 +126,13 @@
 		
 		static function slotToTime($offset)
 		{
-			$hour = $offset/2;
-			$minute = $offset%2 * 30;
+			$hour = floor(($offset+1)/2) + 8;
+			$minute = ($offset+1)%2 * 30;
+			if ($minute ==0)
+			{
+				$minute = '00';
+			}
+			return $hour.':'.$minute;
 		}
 		
 		function to_xml()
@@ -136,7 +141,7 @@
 			
 			for($slot=0; $slot<26; $slot++)
 			{
-				echo "<slot index='$slot'>";
+				echo "<slot index='".Schedule::slotToTime($slot)."'>";
 				foreach($this->timeslots as $name=>$day)
 				{
 					echo "<value day='$name'>".$this->timeslots[$name][$slot].'</value>';

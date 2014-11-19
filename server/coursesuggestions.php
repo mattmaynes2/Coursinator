@@ -84,15 +84,44 @@
 	}
 
 	$possible_courses = array_slice($rows, 0, 5);
-	
+	$taking = array();
+	$unsatisfied_prerequisites = array();
+	$possible_concurrent = array();
+
 	foreach ($rows as $course) 
 	{
 		$c = Course::fetch($course[0]);
-		if (count($c->unsatisfied_prerequisites($completed_as_courses)) == 0)
+		$p = $c->unsatisfied_prerequisites($completed_as_courses);
+		$unsatisfied_prerequisites[$c->getcode()] = $p;
+
+		if (count($p) == 0)
 		{
 			$r = '<course>';
 			$r .= '<code>'.htmlspecialchars($course[0]).'</code>';
 			$r .= '<title>'.htmlspecialchars($course[1]).'</title>';
+			$r .= '</course>';
+			echo $r;
+			array_push($taking, $c);
+		}
+		else
+		{
+			$possible_concurrent[$c->getcode()] = $c;
+		}
+	}
+
+	foreach($possible_concurrent as $code=>$prereq)
+	{
+		$c = Course::fetch($code);
+		if (count($c->unsatisfied_prerequisites($completed_as_courses,$taking) == 0))
+		{
+			$r = '<course>';
+			$r .= '<code>'.htmlspecialchars($c->getcode()).'</code>';
+			$r .= '<title>'.htmlspecialchars($c->gettitle()).'</title>';
+
+			foreach($unsatisfied_prerequisites[$code] as $with)
+			{
+				$r .= '<with>'.$with[0].'</with>';
+			}
 			$r .= '</course>';
 			echo $r;
 		}

@@ -11,7 +11,12 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			<table cellpadding="10" border="1">
 				<xsl:for-each select="response/courses/course">
 					<tr>
-						<td><label><xsl:value-of select="code"/><br /><xsl:value-of select="title"/></label></td>
+						<td>
+						<label><xsl:value-of select="code"/><br /><xsl:value-of select="title"/></label>
+						<xsl:for-each select="with">
+							<br />Concurrently with: <xsl:value-of select="current()"/>
+						</xsl:for-each>
+						</td>
 						<td><input name="selected_courses[]" type="checkbox"/></td>
 					</tr>
 				</xsl:for-each>
