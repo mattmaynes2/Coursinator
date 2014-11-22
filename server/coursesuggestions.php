@@ -4,19 +4,14 @@
 	require_once("api/lib/Course.php");
 	require_once("api/scheduler.php");
 	
-	/*
-	* The following must be true or this is an invalid submission
-	* pattern must be set to either onpattern or offpattern
-	* if completed is not set, pattern must be set to onpattern
-	* program_select must be set
-	* year_select must be set if on pattern
-	*/
+	//Must select a pattern
 	if(!isset($_GET['pattern']) or !isset($_GET['term']))
 	{
 		echo '<response>Invalid Submission</response>';
 		exit;
 	}
 	
+	//Get the list of courses that they have completed
 	if(isset($_GET['completed']))
 	{
 		$completed = $_GET['completed'];
@@ -42,92 +37,98 @@
 		echo "<response>Invalid Submission: completed not set, not on pattern and no year selected</response>";
 		exit;
 	}
-
-	/*
-	* This Query will retrieve all courses that the student has not completed, 
-	* exist as a program element for their program, and are running a section in the upcoming term
-	* The results are ordered by the order in which they are to be completed according to the program pattern
-	* Scheduler will pick the first several of these to attempt to build a schedule
-	*/
-	$q = new Query("course_offerings o, program_elements e, courses c");
-	
-	$t = explode(",",$_GET['term']);
-	
-	$year = $t[1];
-	$session = $t[0];
-	
-	$q->select("DISTINCT c.code");
-	$q->select("c.title");	
-	$q->where(" c.code = e.course_code
-				AND o.course_code = c.code
-				AND o.term=$session 
-				AND o.year=$year
-				AND NOT c.code IN ".Query::valuelistsql($completed)."
-				AND c.code IN 
-				(SELECT course_code 
-				FROM program_elements 
-				WHERE program_id = ".$_GET['program_select'].")
-				ORDER BY e.element_year ASC, e.term ASC", $completed);
-	
-	$rows = $q->executeFetchAll();
 	
 	header('Content-Type: text/xml; charset=utf-8');
 	
 	echo '<response e="0"><courses>';
 	
+	//Get the actual course objects from the database
 	$completed_as_courses = array();
-	
 	
 	foreach ($completed as $c)
 	{
 		array_push($completed_as_courses, Course::fetch($c));
 	}
 
-	$possible_courses = array_slice($rows, 0, 5);
-	$taking = array();
-	$unsatisfied_prerequisites = array();
-	$possible_concurrent = array();
-
-	foreach ($rows as $course) 
+	//Figure out  which term to register for
+	$year = date('Y');
+	$month = date('n');
+	
+	if ($month >= 6 and $month <= 7)
 	{
-		$c = Course::fetch($course[0]);
-		$p = $c->unsatisfied_prerequisites($completed_as_courses);
-		$unsatisfied_prerequisites[$c->getcode()] = $p;
+		$term = 0;
+	}
+	else
+	{
+		$term = 0;
+		$year = 2013 + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
+	}
+	
+	//Get the user's program elements, sorted by the term and year they should take them in
+	//Only select those courses which have a section available in the scheduling term
+	$programQuery = new Query("program_elements e");
+	$programQuery->select("course_code");
+	$programQuery->where("program_id = ?
+						  AND course_code NOT IN
+						  ".Query::valuelistsql($completed).
+						  " AND EXISTS 
+						   (SELECT * FROM course_offerings o
+						   WHERE o.course_code = e.course_code
+						   AND o.year=$year
+						   AND o.term=$term)
+						   ORDER BY element_year ASC, term ASC", array_merge([$_GET['program_select']], $completed));
+						   
+	$pattern = $programQuery->executeFetchAll(); 
 
-		if (count($p) == 0)
+	$found = 0;
+	$discarded = array();
+	$scheduling = array();
+	
+	for($i=0; $i<count($pattern); $i++)
+	{
+		if ($found == 5)
 		{
-			$r = '<course>';
-			$r .= '<code>'.htmlspecialchars($course[0]).'</code>';
-			$r .= '<title>'.htmlspecialchars($course[1]).'</title>';
-			$r .= '</course>';
-			echo $r;
-			array_push($taking, $c);
+			break;
+		}
+		
+		$course = Course::fetch($pattern[$i][0]);
+		if (count($course->unsatisfied_prerequisites($completed_as_courses, $scheduling)) == 0)
+		{
+			array_push($scheduling, $course);
+			$found++;
 		}
 		else
 		{
-			$possible_concurrent[$c->getcode()] = $c;
+			array_push($discarded, $course);
+			continue;
 		}
-	}
-
-	foreach($possible_concurrent as $code=>$prereq)
-	{
-		$c = Course::fetch($code);
-		if (count($c->unsatisfied_prerequisites($completed_as_courses,$taking) == 0))
+		
+		//Check and see if we can fit the discarded courses in now
+		foreach($discarded as $key=>$tryagain)
 		{
-			$r = '<course>';
-			$r .= '<code>'.htmlspecialchars($c->getcode()).'</code>';
-			$r .= '<title>'.htmlspecialchars($c->gettitle()).'</title>';
-
-			foreach($unsatisfied_prerequisites[$code] as $with)
+			if (isset($tryagain))
 			{
-				$r .= '<with>'.$with[0].'</with>';
+				if(count($tryagain->unsatisfied_prerequisites($completed_as_courses), $scheduling) == 0)
+				{
+					array_push($scheduling, $tryagain);
+					$found++;
+					unset($discarded[$key]);
+				}
 			}
-			$r .= '</course>';
-			echo $r;
 		}
 	}
-	
+
+	foreach ($scheduling as $course) 
+	{
+		$r = '<course>';
+		$r .= '<code>'.htmlspecialchars($course->getcode()).'</code>';
+		$r .= '<title>'.htmlspecialchars($course->gettitle()).'</title>';
+		$r .= '</course>';
+		echo $r;
+	}
+	Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
 	echo '</courses>';
+	
 	
 	$s = new Schedule();
 	$s->to_xml();

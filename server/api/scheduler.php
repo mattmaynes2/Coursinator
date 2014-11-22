@@ -18,31 +18,46 @@
 			$this->timeslots['F'] = array_fill(0,26,'NOCOURSE');
 		}
 		
-		static function buildConflictFreeSchedule($course_codes)
+		//This will create a conflict free schedule from the list of course codes given
+		static function buildConflictFreeSchedule($courses, $year, $term)
 		{
 			$offerings = array();
 			$s = new Schedule();
 			
-			if (count($course_codes) <= 0)
+			if (count($courses) <= 0)
 				return null;
 			
-			//Get all of the offerings for the desired courses
-			foreach($course_codes as $code)
+			//Get all of the offerings for each of the desired courses
+			foreach($courses as $course)
 			{
-				array_push($offerings, [Course::fetch($code), array()]);
+				array_push($offerings, [$course->getcode(), array()]);
+				
+				//Get all the lecture sections for a particular course
 				$q = new Query("course_offerings");
 				$q->select_object("CourseOffering");
-				$q->filter(CourseOffering::course_code.'=?', [$code]);
-				$offerings[$code] = $q->fetchAll();
-			}
-			
-			if ($s->scheduleOfferings[$offerings])
-			{
-				return s;
-			}
-			else
-			{
-				return false;
+				$q->where('course_code=?
+							AND term=?
+							AND year=?
+							AND type=0', [$course->getcode(),$term,$year]);
+		
+				$rows = $q->executeFetchAll();
+
+				//For each lecture section get the available lab/tutorial section
+				foreach($rows as $row)
+				{
+					$section = array('attached'=>array());
+					$sub = new Query("course_offerings");
+					$sub->select_object("CourseOffering");
+					$sub->where("course_code=?
+								 AND section LIKE '?%'
+								 AND type <> 0",
+								 [$course->getcode(), $row[0]->getsection()]);
+					$section['id'] = $row[0]->getsection();
+					$section['attached'] = $sub->fetchAll();
+					array_push($offerings[$code],$section);
+				}
+				
+				$offerings[$code][$lectures] = $q->fetchAll();
 			}
 		}
 		
@@ -148,30 +163,6 @@
 				}
 				echo "</slot>";
 			}
-			
-				// foreach($this->timeslots as $name=>$day)
-				// {
-					// echo "<day name='$name'>";
-					// foreach($day as $offset=>$slot)
-					// {
-						// echo "<slot start='".Schedule::slotToTime($offset)."'>";
-						// if ($slot != "NOCOURSE")
-						// {
-							// echo $slot->to_xml();
-							// for($i=0; $i<getLengthForRange($slot->getstarttime(), $slot->getendtime()); $i++)
-							// {
-								// $day->next();
-							// }
-						// }
-						// else
-						// {
-							// echo '<emptyslot>'.'</emptyslot>';
-						// }
-						// echo '</slot>';
-					// }
-					// echo'</day>';
-				// }
-			
 			echo '</schedule>';
 		}
 	}

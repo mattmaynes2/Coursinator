@@ -6,7 +6,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template match="/">
   <html>
 	  <body>
-		<h2>Eligible courses:</h2>
+		<h2>Attempting to schedule:</h2>
 		<form>
 			<table cellpadding="10" border="1">
 				<xsl:for-each select="response/courses/course">
@@ -14,7 +14,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<td>
 						<label><xsl:value-of select="code"/><br /><xsl:value-of select="title"/></label>
 						<xsl:for-each select="with">
-							<br />Concurrently with: <xsl:value-of select="current()"/>
+							<br /><b>Concurrently with: <xsl:value-of select="current()"/></b>
 						</xsl:for-each>
 						</td>
 						<td><input name="selected_courses[]" type="checkbox"/></td>
