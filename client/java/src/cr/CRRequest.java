@@ -105,13 +105,61 @@ public class CRRequest extends Request{
 	
 	
 	/**
-	 * Returns a program structure for each program that matches the given program ID
+	 * Returns a the programs on the server that match the given string
+	 *
+	 * Routes to /api/programs.php
+	 *
+	 * @param program The program name to get from the server
+	 *
+	 * @return Program structures that matches the given program identifier
+	 *
+	 * @throws MalformedURLException If there is an issue with the end point for this server
+	 * @throws IOException If the HTTP connection is closed or hangs
+	 * @throws SAXException If there is an issue with the XML input stream
+	 * @throws ParserConfigurationException If the XML data is malformed
+	 *
+	 * @author Matthew Maynes
+	 * @since November 22, 2014
+	 */
+	public Program[] getPrograms(String program) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
+		String route = crRoot + "/api/programs.php";
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("program", program);
+		ProgramBuilder builder = new ProgramBuilder();
+		return  builder.read(this.sendGetRequest(route, params));
+	}
+	
+	/**
+	 * Returns all of the programs on the server
+	 *
+	 * Routes to /api/programs.php
+	 *
+	 * @param program The program name to get from the server
+	 *
+	 * @return Program structures that matches the given program identifier
+	 *
+	 * @throws MalformedURLException If there is an issue with the end point for this server
+	 * @throws IOException If the HTTP connection is closed or hangs
+	 * @throws SAXException If there is an issue with the XML input stream
+	 * @throws ParserConfigurationException If the XML data is malformed
+	 *
+	 * @author Matthew Maynes
+	 * @since November 22, 2014
+	 */
+	public Program[] getPrograms() throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
+		String route = crRoot + "/api/programs.php";
+		ProgramBuilder builder = new ProgramBuilder();
+		return  builder.read(this.sendGetRequest(route, ""));
+	}
+	
+	/**
+	 * Returns a program element structure for each program that matches the given program ID
 	 *
 	 * Routes to /api/programelements.php
 	 *
-	 * @param program The program to get from the server
+	 * @param program The program elements to get from the server
 	 *
-	 * @return A program structure that matches the given program identifier
+	 * @return An array of program elements related to the given program
 	 *
 	 * @throws MalformedURLException If there is an issue with the end point for this server
 	 * @throws IOException If the HTTP connection is closed or hangs
@@ -121,12 +169,15 @@ public class CRRequest extends Request{
 	 * @author Matthew Maynes
 	 * @since November 9, 2014
 	 */
-	public Program[] getProgram(String program) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
+	public ProgramElement[] getProgramElements(String program) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
 		String route = crRoot + "/api/programelements.php";
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("program", program);
 		ProgramBuilder builder = new ProgramBuilder();
-		return builder.read(this.sendGetRequest(route, params));
+		Program[] programs =  builder.read(this.sendGetRequest(route, params));
+		if(programs.length > 0)
+				return programs[0].getElements().toArray(new ProgramElement[0]);
+		return new ProgramElement[0];
 	}
 
 	

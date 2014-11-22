@@ -121,7 +121,10 @@
 				-- 0: Lecture.
 				-- 1: Lab.
 				-- 2: Tutorial.
-				type INTEGER NOT NULL
+				type INTEGER NOT NULL,
+				
+				start_time VARCHAR(5) NOT NULL,
+				end_time VARCHAR(5) NOT NULL
 			);
 			
 			

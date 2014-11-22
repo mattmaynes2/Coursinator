@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+elementFormDefault="qualified">
+	<xs:element name="program">
+		<xs:complexType>
+				<xs:choice minOccurs="0" maxOccurs="unbounded">
+					<xs:element name="element">
+						<xs:complexType>
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:element name="course">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="code"/>
+											<xs:element name="title"/>
+											<xs:element name="term_span"/>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="term"/>
+								<xs:element name="year"/>
+							</xs:choice>
+						</xs:complexType> 
+					</xs:element>
+				</xs:choice>
+				<xs:attribute name="name" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

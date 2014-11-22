@@ -28,7 +28,22 @@ public class ProgramBuilder extends XMLBuilder<Program> {
 	public Program buildObject(Element node) {
 		Program program = new Program();
 		ProgramElementBuilder builder = new ProgramElementBuilder();
-		NodeList nodes = node.getElementsByTagName("element");;
+		NodeList nodes = node.getElementsByTagName("element");
+		
+		nodes = node.getElementsByTagName("year");
+		if(nodes.getLength() > 0){
+			program.setYear(Integer.parseInt(nodes.item(0).getNodeValue()));
+		}
+		
+		nodes = node.getElementsByTagName("id");
+		if(nodes.getLength() > 0){
+			program.setId(Integer.parseInt(nodes.item(0).getNodeValue()));
+		}
+		
+		nodes = node.getElementsByTagName("name");
+		if(nodes.getLength() > 0){
+			program.setTitle(nodes.item(0).getNodeValue());
+		}
 		
 		for(int i = 0; i < nodes.getLength(); i++){
 			program.addElement(builder.buildObject((Element)nodes.item(i)));
