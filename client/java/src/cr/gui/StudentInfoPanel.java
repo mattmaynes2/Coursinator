@@ -1,10 +1,20 @@
-package gui;
+package cr.gui;
 
-import javax.swing.*;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.BoxLayout;
 
-import java.awt.*;
+import cr.Program;
+
+import java.awt.Dimension;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class StudentInfoPanel extends JPanel
 {
@@ -19,6 +29,7 @@ public class StudentInfoPanel extends JPanel
 	private JComboBox<String> program;
 	private ButtonGroup bg;
 	private JLabel instructions;
+	private ArrayList<SubmitRequestListener> requestListeners;
 	
 	public StudentInfoPanel()
 	{
@@ -33,6 +44,8 @@ public class StudentInfoPanel extends JPanel
 		program = new JComboBox<String>(programOptions);
 		bg = new ButtonGroup();
 		instructions = new JLabel("<html>Please select your program, <br/> year status, and the courses<br/> that you have completed</html>");
+		requestListeners = new ArrayList<SubmitRequestListener>();
+		
 		
 		submit.addActionListener(submitListener());
 		//Set up panel
@@ -63,15 +76,22 @@ public class StudentInfoPanel extends JPanel
 		setMaximumSize(new Dimension(200,120));
 	}
 	
+	public void addSubmitRequestListener(SubmitRequestListener listener){
+		this.requestListeners.add(listener);
+	}
+	
 	public ActionListener submitListener(){
 		return new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-				if(onPattern.isSelected()){
-					// TODO implement
+				SubmitRequest request = new SubmitRequest();
+				Program prog = new Program(program.getSelectedItem().toString());
+				request.setOnPattern(onPattern.isSelected());
+				request.setProgram(prog);
+				request.setYear(Integer.parseInt(yearStatus.getSelectedItem().toString()));
+				for(SubmitRequestListener listener: requestListeners){
+					listener.requestSubmitted(request);
 				}
-				else{
-					// TODO implement
-				}
+				System.out.println("[DEBUG] Requesting: " + request);
 			}
 		};		
 	}

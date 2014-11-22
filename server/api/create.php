@@ -19,7 +19,7 @@
 		
 		$db->beginTransaction();
 		
-		if (isset($_GET['force'])) {
+		if (isset($_POST['force'])) {
 			$db->exec("
 				DROP TABLE IF EXISTS program_elements;
 				DROP TABLE IF EXISTS programs;

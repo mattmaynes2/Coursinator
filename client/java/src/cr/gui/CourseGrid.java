@@ -1,11 +1,17 @@
-package gui;
+package cr.gui;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import cr.*;
+import javax.swing.JPanel;
 
-public class CourseGrid extends JPanel
+import java.awt.GridLayout;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import cr.ProgramElement;
+
+public class CourseGrid extends JPanel implements SubmitRequestListener
 {
 		
 	/**
@@ -23,7 +29,7 @@ public class CourseGrid extends JPanel
 		toggles = new ArrayList<CourseToggle>();
 	}
 	
-	public void loadCourses(java.util.List<ProgramElement> elements)
+	public void loadCourses(List<ProgramElement> elements)
 	{
 		GridBagConstraints gbc = new GridBagConstraints();
 		
@@ -34,6 +40,12 @@ public class CourseGrid extends JPanel
 			gbc.gridx = e.getTerm();
 			this.add(newToggle, gbc);
 		}
+	}
+
+	@Override
+	public void requestSubmitted(SubmitRequest request) {
+		//TODO send request to server
+		
 	}
 }
 
