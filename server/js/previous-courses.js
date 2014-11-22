@@ -74,6 +74,10 @@ function getProgram()
 	var listbox = document.getElementById("course_select");
 	var selected_courses = document.getElementById("courses_taken");
 
+	if (!document.getElementById("program_select").options[document.getElementById("program_select").selectedIndex])
+	{
+		return;
+	}
 	var selectedProgram = document.getElementById("program_select").options[document.getElementById("program_select").selectedIndex].value;
 	
 	if (!document.getElementById("offpattern").checked)
@@ -104,8 +108,8 @@ function getProgram()
 				}
 			}
 		}
-	
-	programRequest.open("GET", "api/programs.php?program="+selectedProgram, true);
+
+	programRequest.open("GET", "api/programelements.php?program="+selectedProgram, true);
 	programRequest.send();
 }
 
