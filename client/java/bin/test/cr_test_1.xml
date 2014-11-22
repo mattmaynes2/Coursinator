@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<program>
+	<element>
+		<course>
+			<code>SYSC1003</code>
+			<title>Introduction to programming</title>
+			<term_span>1</term_span>
+		</course>
+		<term>1</term>
+		<year>1</year>
+	</element>
+</program>
