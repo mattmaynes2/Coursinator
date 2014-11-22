@@ -196,5 +196,13 @@ public class Program extends XMLObject{
 		return buffer.toString();
 	}
 	
+	/**
+	 * Returns a String representation of this object 
+	 */
+	@Override
+	public String toString(){
+		return this.title;
+	}
+	
 
 }
