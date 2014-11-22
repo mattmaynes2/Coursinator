@@ -107,7 +107,7 @@ public class CRRequest extends Request{
 	/**
 	 * Returns a program structure for each program that matches the given program ID
 	 *
-	 * Routes to /api/programs.php
+	 * Routes to /api/programelements.php
 	 *
 	 * @param program The program to get from the server
 	 *
@@ -122,7 +122,7 @@ public class CRRequest extends Request{
 	 * @since November 9, 2014
 	 */
 	public Program[] getProgram(String program) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
-		String route = crRoot + "/api/programs.php";
+		String route = crRoot + "/api/programelements.php";
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("program", program);
 		ProgramBuilder builder = new ProgramBuilder();
