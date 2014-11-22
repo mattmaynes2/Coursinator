@@ -128,6 +128,7 @@ public class CRRequest extends Request{
 		ProgramBuilder builder = new ProgramBuilder();
 		return builder.read(this.sendGetRequest(route, params));
 	}
+
 	
 	/**
 	 * Returns a list of courses that match the given pattern

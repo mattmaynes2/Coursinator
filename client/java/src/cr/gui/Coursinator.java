@@ -1,3 +1,7 @@
+package cr.gui;
+
+import javax.swing.UIManager;
+
 /**
  * Coursinator
  *
@@ -8,18 +12,12 @@
  * @since October 6, 2014
  * @author Matthew Maynes, Cameron Blanchard and Kevin Cox
  */
-
-import gui.*; 
-import javax.swing.*;
-
 public class Coursinator{
 
 	public static void main(String[] args){
-		try
-		{
+		try{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}catch (Exception ex)
-		{
+		}catch (Exception ex){
 			ex.printStackTrace();
 		}
 		CoursePickerView view = new CoursePickerView();

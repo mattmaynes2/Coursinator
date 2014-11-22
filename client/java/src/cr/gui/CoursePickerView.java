@@ -1,20 +1,20 @@
-package gui;
+package cr.gui;
 
-import javax.swing.*;
-import java.awt.*;
-import cr.*;
+import javax.swing.JFrame;
+
+import java.awt.BorderLayout;
+
+import cr.Program;
+
 
 public class CoursePickerView extends JFrame
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -641740008745242043L;
+
+	private static final long serialVersionUID = 1L;
 	private StudentInfoPanel studentInfo;
 	private CourseGrid courses;
 	
-	public CoursePickerView()
-	{
+	public CoursePickerView(){
 		//Initialize components
 		studentInfo = new StudentInfoPanel();
 		courses = new CourseGrid();
@@ -23,6 +23,7 @@ public class CoursePickerView extends JFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		setDefaultLookAndFeelDecorated(false);
+		studentInfo.addSubmitRequestListener(courses);
 		
 		add(studentInfo, BorderLayout.WEST);
 	

@@ -1,7 +1,8 @@
-package gui;
+package cr.gui;
 
-import javax.swing.*;
-import cr.*;
+import javax.swing.JToggleButton;
+
+import cr.ProgramElement;
 
 public class CourseToggle extends JToggleButton
 {

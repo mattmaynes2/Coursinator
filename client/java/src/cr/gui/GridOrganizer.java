@@ -1,6 +1,8 @@
-package gui;
+package cr.gui;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Collections;
+import java.util.Map.Entry;
 
 public class  GridOrganizer<T>
 {
@@ -57,7 +59,7 @@ public class  GridOrganizer<T>
 	
 	public void printRows()
 	{
-		for (Map.Entry<Integer, HashMap<Integer, T>> col : grid.entrySet())
+		for (Entry<Integer, HashMap<Integer, T>> col : grid.entrySet())
 		{
 			System.out.print("Column" + col.getKey() + ": ");
 			System.out.print(col.getValue());
