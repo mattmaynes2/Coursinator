@@ -27,6 +27,8 @@
 		const capacity    = 'course_offerings.capacity';
 		const room        = 'course_offerings.room';
 		const type        = 'course_offerings.type';
+		const start_time = 'course_offerings.start_time';
+		const end_time = 'course_offerings.end_time';
 		
 		public static $sql_fields = [
 			self::id,
@@ -39,6 +41,8 @@
 			self::capacity,
 			self::room,
 			self::type,
+			self::start_time,
+			self::end_time,
 		];
 		
 		private $id          = NULL;
@@ -51,6 +55,8 @@
 		private $capacity    = NULL;
 		private $room        = NULL;
 		private $type        = NULL;
+		private $start_time  = NULL;
+		private $end_time    = NULL;
 		
 		static function sql_from($row){
 			$r = new self();
@@ -69,6 +75,8 @@
 				$this->capacity,
 				$this->room,
 				$this->type,
+				$this->start_time,
+				$this->end_time,
 			) = $row;
 			return $this;
 		}
@@ -161,6 +169,26 @@
 			return $this->type = $type;
 		}
 		
+		function getstarttime()
+		{
+			return $this->start_time;
+		}
+		
+		function setstarttime($t)
+		{
+			$this->start_time = $t;
+		}
+		
+		function getendtime()
+		{
+			return $this->end_time;
+		}
+		
+		function setendtime($t)
+		{
+			$this->end_time = $t;
+		}
+		
 		function save(){
 			static $s = NULL;
 			if (!$s) {
@@ -175,7 +203,9 @@
 						enrolled,
 						capacity,
 						room,
-						type
+						type,
+						start_time,
+						end_time
 					)
 					VALUES (
 						:course_code,
@@ -186,7 +216,9 @@
 						:enrolled,
 						:capacity,
 							:room,
-						:type
+						:type,
+						:start_time,
+						:end_time
 					);
 				');
 			}
@@ -201,6 +233,8 @@
 				"capacity"    => $this->capacity,
 				"room"        => $this->room,
 				"type"        => $this->type,
+				"start_time"  => $this->start_time,
+				"end_time"    => $this->end_time,
 			]);
 			$s->closeCursor();
 			return $s;
@@ -218,6 +252,8 @@
 			$r .= '<capacity>'.htmlspecialchars($this->capacity).'</capacity>';
 			$r .= '<room>'.htmlspecialchars($this->room).'</room>';
 			$r .= '<type>'.htmlspecialchars($this->type).'</type>';
+			$r .= '<start_time>'.htmlspecialchars($this->start_time).'</start_time>';
+			$r .= '<end_time>'.htmlspecialchars($this->end_time).'</end_time>';
 			$r .= '</course-offering>';
 			return $r;
 		}
