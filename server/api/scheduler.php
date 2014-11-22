@@ -42,7 +42,7 @@
 		
 				$rows = $q->executeFetchAll();
 
-				//For each lecture section get the available lab/tutorial section
+				//For each lecture section get the available lab/tutorial sections
 				foreach($rows as $row)
 				{
 					$section = array('attached'=>array());
