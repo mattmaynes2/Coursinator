@@ -126,7 +126,7 @@
 		$r .= '</course>';
 		echo $r;
 	}
-	//Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
+	Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
 	echo '</courses>';
 	
 	

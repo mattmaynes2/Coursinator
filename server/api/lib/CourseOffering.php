@@ -15,6 +15,9 @@
 		const TYPE_LEC = 0;
 		const TYPE_LAB = 1;
 		const TYPE_TUT = 2;
+		const TYPE_GRP = 3;
+		const TYPE_SPECIAL = 4;
+		
 		
 		const sql_table   = 'course_offerings';
 		const id          = 'course_offerings.id';
@@ -151,20 +154,20 @@
 		}
 		function settype($type){
 			switch ($type){
-			case self::TYPE_LAB:
 			case "LAB":
 				$type = self::TYPE_LAB;
 				break;
-			case self::TYPE_LEC:
 			case "LEC":
 				$type = self::TYPE_LEC;
 				break;
-			case self::TYPE_TUT:
 			case "TUT":
 				$type = self::TYPE_TUT;
 				break;
+			case "GRP":
+				$type = self::TYPE_GRP;
+				break;
 			default:
-				throw new Exception("Unknown type '$type'.");
+				$type = self::TYPE_SPECIAL;
 			}
 			return $this->type = $type;
 		}

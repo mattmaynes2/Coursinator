@@ -30,7 +30,7 @@
 			//Get all of the offerings for each of the desired courses
 			foreach($courses as $course)
 			{
-				array_push($offerings, [$course->getcode(), array()]);
+				$offerings[$course->getcode()] = array();
 				
 				//Get all the lecture sections for a particular course
 				$q = new Query("course_offerings");
@@ -47,18 +47,16 @@
 				{
 					$section = array('attached'=>array());
 					$sub = new Query("course_offerings");
-					$sub->select_object("CourseOffering");
+					$sub->select_object('CourseOffering');
 					$sub->where("course_code=?
-								 AND section LIKE '?%'
+								 AND section LIKE CONCAT(?,'%')
 								 AND type <> 0",
 								 [$course->getcode(), $row[0]->getsection()]);
 					$section['id'] = $row[0]->getsection();
-					$section['attached'] = $sub->fetchAll();
-					array_push($offerings[$code],$section);
+					$offerings[$course->getcode()][$row[0]->getsection()] = ['attached' =>$sub->executeFetchAll()];
 				}
-				
-				$offerings[$code][$lectures] = $q->fetchAll();
 			}
+			var_dump($offerings);
 		}
 		
 		function scheduleOfferings($offerings)
