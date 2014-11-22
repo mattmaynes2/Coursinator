@@ -38,10 +38,10 @@ public class ProgramElementBuilder extends XMLBuilder<ProgramElement> {
 		}
 		
 		nodes = node.getElementsByTagName("term");
-		if(nodes.getLength() > 0) elem.setTerm(Integer.parseInt(nodes.item(0).getNodeValue()));
+		if(nodes.getLength() > 0) elem.setTerm(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		nodes = node.getElementsByTagName("year");
-		if(nodes.getLength() > 0) elem.setYear(Integer.parseInt(nodes.item(0).getNodeValue()));
+		if(nodes.getLength() > 0) elem.setYear(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		return elem;
 	}

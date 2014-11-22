@@ -35,15 +35,15 @@
 
 	$rows = $q->executeFetchAll();
 
-	$response = '<programs>';
+	$response = '<response e="0">';
 	foreach($rows as $program){
 		$response .= '<program>';
 		$response .= "<id>$program[0]</id>";
-		$response .= "<year>$$program[1]</year>";
+		$response .= "<year>$program[1]</year>";
 		$response .= "<name>$program[2]</name>";
 		$response .='</program>';
 	}
-	$response .= '</programs>';
+	$response .= '</response>';
 	
 	header("Content-Type", "application/xml; charset=utf-8");
 	echo $response;

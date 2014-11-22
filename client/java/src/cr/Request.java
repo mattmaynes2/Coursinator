@@ -115,11 +115,12 @@ public class Request{
 	public InputStream sendGetRequest(String route, String params) throws MalformedURLException, IOException{
 		String buffer = route + '?' + params;
 		URL request = new URL(this.server, buffer);
+		InputStream stream;
 		HttpURLConnection connection = (HttpURLConnection)request.openConnection();
 		connection.setRequestMethod("GET");
 		connection.setDoInput(true);
-		
-		return connection.getInputStream();
+		stream = connection.getInputStream();
+		return stream;
 		
 	}
 

@@ -7,13 +7,18 @@ import javax.swing.JComboBox;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.BoxLayout;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.xml.sax.SAXException;
+
+import cr.CRRequest;
 import cr.Program;
 
 import java.awt.Dimension;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class StudentInfoPanel extends JPanel
@@ -26,22 +31,23 @@ public class StudentInfoPanel extends JPanel
 	private JRadioButton offPattern;
 	private JButton submit;
 	private JComboBox<Integer> yearStatus;
-	private JComboBox<String> program;
+	private JComboBox<Program> program;
 	private ButtonGroup bg;
 	private JLabel instructions;
 	private ArrayList<SubmitRequestListener> requestListeners;
 	
 	public StudentInfoPanel()
 	{
+		
 		Integer comboBoxOptions[] = {1, 2, 3, 4};
-		String programOptions[] = {"Software Engineering", "Computer Systems Engineering", "Communications Engineering", "Electrical Engineering"};
+		Program programOptions[] = this.getProgramsFromServer();
 		
 		//Initialize components
 		onPattern = new JRadioButton("I am on pattern");
 		offPattern = new JRadioButton("I am off pattern");
 		submit = new JButton("Get Course Suggestions");
 		yearStatus = new JComboBox<Integer>(comboBoxOptions);
-		program = new JComboBox<String>(programOptions);
+		program = new JComboBox<Program>(programOptions);
 		bg = new ButtonGroup();
 		instructions = new JLabel("<html>Please select your program, <br/> year status, and the courses<br/> that you have completed</html>");
 		requestListeners = new ArrayList<SubmitRequestListener>();
@@ -76,6 +82,18 @@ public class StudentInfoPanel extends JPanel
 		setMaximumSize(new Dimension(200,120));
 	}
 	
+	public Program[] getProgramsFromServer(){
+		try {
+			CRRequest request = new CRRequest();
+			Program[] programs = request.getPrograms();
+
+			return programs;
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+		}
+		return new Program[0];
+	}
+	
 	public void addSubmitRequestListener(SubmitRequestListener listener){
 		this.requestListeners.add(listener);
 	}
@@ -84,7 +102,7 @@ public class StudentInfoPanel extends JPanel
 		return new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				SubmitRequest request = new SubmitRequest();
-				Program prog = new Program(program.getSelectedItem().toString());
+				Program prog = (Program)program.getSelectedItem();
 				request.setOnPattern(onPattern.isSelected());
 				request.setProgram(prog);
 				request.setYear(Integer.parseInt(yearStatus.getSelectedItem().toString()));
