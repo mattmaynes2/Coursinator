@@ -1,19 +1,19 @@
-/**
- * /api/programs.php
- *
- * @method GET
- *
- * Returns the programs that are in the database. If the program name is specified
- * then only programs with names like it are returned.
- *
- * @param {optional} program - The name of the program to return
- *
- * @return An XML response containing programs that matched the search
- *
- * @example programs.php - This would return all of the programs
- * @example programs.php?program=Software - This would return all programs with a name like software
- */
 <?php
+	/**
+	 * /api/programs.php
+ 	 *
+ 	 * @method GET
+ 	 *
+ 	 * Returns the programs that are in the database. If the program name is specified
+	 * then only programs with names like it are returned.
+	 *
+	 * @param {optional} program - The name of the program to return
+ 	 *
+ 	 * @return An XML response containing programs that matched the search
+	 *
+	 * @example programs.php - This would return all of the programs
+	 * @example programs.php?program=Software - This would return all programs with a name like software
+	 */
 
 	if($_SERVER['REQUEST_METHOD'] != 'GET'){
 		http_response_code(405);
@@ -25,12 +25,14 @@
 	$has_param = in_array('program', $_GET);
 
 	$q = new Query("programs");
-	$q->select("*");
+	$q->select("id");
+	$q->select("year");
+	$q->select("name");
 	
 	if($has_param){
 		$q->where('name LIKE ?', [$_GET['program']]);
 	}
-	
+
 	$rows = $q->executeFetchAll();
 
 	$response = '<programs>';
