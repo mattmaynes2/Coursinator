@@ -8,7 +8,36 @@ function hideProgram()
 function loadTasks()
 {
 	getAvailableTerms();
+	getPrograms();
 	getProgram();
+}
+
+function getPrograms()
+{
+	programRequest = new XMLHttpRequest();
+	programRequest.onreadystatechange = function()
+	{
+		if (programRequest.readyState == 4 && programRequest.status == 200)
+		{
+			var parser = new DOMParser();
+			var doc = parser.parseFromString(programRequest.responseText, "application/xml");
+			var programs = doc.getElementsByTagName("program");
+			var programselector = document.getElementById("program_select");
+
+			for (var i=0; i<programs.length; i++)
+			{
+				var newopt = document.createElement("option");
+				var programID = programs[i].getElementsByTagName("id")[0].childNodes[0].textContent;
+
+				var programName = programs[i].getElementsByTagName("name")[0].childNodes[0].textContent;
+				newopt.text = programName;
+				newopt.value = programID;
+				programselector.options.add(newopt);
+			}
+		}
+	}
+	programRequest.open("GET", "api/programs.php", true);
+	programRequest.send();
 }
 
 //Gets the terms available for registration from the server
@@ -23,14 +52,13 @@ function getAvailableTerms()
 				var doc = parser.parseFromString(termRequest.responseText, "application/xml");
 				var terms = doc.getElementsByTagName("term");
 				var termselector = document.getElementById("termselect");
-				console.log(terms);
 				for (var i=0; i<terms.length; i++)
 				{
 					var newopt = document.createElement("option");
 					var termText = terms[i].attributes.getNamedItem("which").value == 0 ? "Fall " : "Winter ";
 					newopt.text = termText + terms[i].attributes.getNamedItem("year").value;
 					newopt.value = terms[i].attributes.getNamedItem("which").value + "," + terms[i].attributes.getNamedItem("year").value ;
-					termselector.add(newopt);
+					termselector.options.add(newopt);
 				}
 			}
 		}
@@ -45,6 +73,7 @@ function getProgram()
 	var programRequest;
 	var listbox = document.getElementById("course_select");
 	var selected_courses = document.getElementById("courses_taken");
+
 	var selectedProgram = document.getElementById("program_select").options[document.getElementById("program_select").selectedIndex].value;
 	
 	if (!document.getElementById("offpattern").checked)

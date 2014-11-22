@@ -27,7 +27,7 @@
 		function gcsv($fd){
 			return fgetcsv($fd, 0, ';');
 		}
-		
+
 		$db->beginTransaction();
 		
 		$added = 0;
@@ -41,7 +41,7 @@
 		
 		$fd = fopen("php://input", "r");
 		fgets($fd); // Drop header line.
-		
+
 		while ($e = gcsv($fd)){
 			if (count($e) != 9)
 				die("Got line with ".count($e)."lines!");
@@ -79,6 +79,8 @@
 			$co->setenrolled(0);
 			$co->setcapacity($capacity);
 			$co->setroom("TBD");
+			$co->setstarttime($start);
+			$co->setendtime($end);
 			$co->save();
 		}
 		

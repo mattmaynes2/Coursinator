@@ -41,7 +41,7 @@
 	header('Content-Type: text/xml; charset=utf-8');
 	
 	echo '<response e="0"><courses>';
-	
+
 	//Get the actual course objects from the database
 	$completed_as_courses = array();
 	
@@ -126,7 +126,7 @@
 		$r .= '</course>';
 		echo $r;
 	}
-	Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
+	//Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
 	echo '</courses>';
 	
 	
