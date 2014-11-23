@@ -128,7 +128,9 @@
 	}
 	echo '</courses>';
 	
-	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
+	$to_schedule = [$scheduling[0], $scheduling[1], $scheduling[2], $scheduling[3]];
+
+	$s = Schedule::buildConflictFreeSchedule($to_schedule, $year, $term);
 	$s->to_xml();
 	echo '</response>';
 	

@@ -59,6 +59,7 @@
 				}
 				$i++;
 			}
+
 			$s->scheduleCourses($offerings);
 			return $s;
 		}
@@ -107,7 +108,6 @@
 				}
 				$this->removeCourse($lecture['lecture']);
 			}
-			
 			return false;
 		}
 		
@@ -173,8 +173,21 @@
 		
 		static function timeToSlot($t)
 		{
+			var_dump($t);
 			$hourOffset = ($t['hours'] - 8) * 2;
-			$minuteOffset = ($t['minutes'] == 55 ? 1:0);
+			if ($t['minutes'] == 55)
+			{
+				$minutesOffset = 1;
+			}
+			else if($t['minutes'] == 35)
+			{
+				$minuteOffset = 0;
+			}
+			else
+			{
+				$minuteOffset = -1;
+			}
+			echo $hourOffset + $minuteOffset;
 			return $hourOffset + $minuteOffset;
 		}
 		
