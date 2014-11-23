@@ -126,11 +126,9 @@
 		$r .= '</course>';
 		echo $r;
 	}
-	Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
 	echo '</courses>';
 	
-	
-	$s = new Schedule();
+	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
 	$s->to_xml();
 	echo '</response>';
 	

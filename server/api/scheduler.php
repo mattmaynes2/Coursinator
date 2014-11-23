@@ -27,10 +27,11 @@
 			if (count($courses) <= 0)
 				return null;
 			
+			$i = 0;
 			//Get all of the offerings for each of the desired courses
-			foreach($courses as $course)
+			foreach($courses as $key=>$course)
 			{
-				$offerings[$course->getcode()] = array();
+				$offerings[$i] = array();
 				
 				//Get all the lecture sections for a particular course
 				$q = new Query("course_offerings");
@@ -45,7 +46,6 @@
 				//For each lecture section get the available lab/tutorial sections
 				foreach($rows as $row)
 				{
-					$section = array('attached'=>array());
 					$sub = new Query("course_offerings");
 					$sub->select_object('CourseOffering');
 					$sub->where("course_code=?
@@ -53,88 +53,127 @@
 								 AND type <> 0",
 								 [$course->getcode(), $row[0]->getsection()]);
 					$section['id'] = $row[0]->getsection();
-					$offerings[$course->getcode()][$row[0]->getsection()] = ['attached' =>$sub->executeFetchAll()];
+					array_push($offerings[$i], ['labs' =>$sub->executeFetchAll(), 'lecture' => $row[0]]);
 				}
+				$i++;
 			}
-			var_dump($offerings);
+			$s->scheduleCourses($offerings);
+			return $s;
 		}
 		
-		function scheduleOfferings($offerings)
-		{
-			if(count($offerings) == 0)
-				return true;
-			foreach($offerings[0] as $offering)
+		
+		function scheduleCourses($offerings)
+		{	
+			if (count($offerings) == 0)
 			{
-				if (!hasConflict($offering))
+				return true;
+			}
+			//For each lecture section of the course
+			foreach($offerings[0] as $lecture)
+			{
+				//Add this lecture to the schedule if the slot is free
+				if ($this->isTimeFree($lecture['lecture']))
 				{
-					setCourseAt($offering);
-					if (scheduleOfferings(array_slice($offerings,1)))
+					$this->setCourseAt($lecture['lecture']);
+				}
+				else
+				{
+					continue;
+				}
+				if (count($lecture['labs']) == 0)
+				{
+					if ($this->scheduleCourses(array_slice($offerings, 1)))
 					{
 						return true;
 					}
-					else
+				}
+				foreach($lecture['labs'] as $lab)
+				{
+					//Add this lab to the schedule if the slot is free
+					if ($this->isTimeFree($lab[0]))
 					{
-						removeCourse($offering);
+						$this->setCourseAt($lab[0]);
+						if ($this->scheduleCourses(array_slice($offerings, 1)))
+						{
+							return true;
+						}
+						else
+						{
+							$this->removeCourse($lab[0]);
+						}
 					}
 				}
+				$this->removeCourse($lecture['lecture']);
 			}
+			
 			return false;
 		}
 		
-		function hasConflict($offering)
-		{
-		}
-		
 		static function getLengthForRange($startTime, $endTime)
-		{
-			$time1 = explode(':', $timeSlot);
-			$time2 = explode(':', $timeSlot);
-			$halfHours1= $time1[0] * 2 + ($time1[1] == '30' ? 1:0);
-			$halfHours2 = $time2[0] * 2 + ($time2[1] == '30' ? 1:0);
-			return $halfHours2 - $halfHours1;
+		{	
+			$halfHours1 = ($endTime['hours'] - $startTime['hours']) * 2 ;
+			$halfHours2 = ($endTime['minutes'] - $startTime['minutes']) == 20 ? 1:0;
+			return $halfHours2 + $halfHours1;
 		}
 		
-		//TIME FORMATS MUST USE 24-HOUR FORMAT
-		static function getIndexForTime($timeSlot)
+		static function getTimeFromTimestamp($t)
 		{
-			$time = explode(':', $timeSlot);
-			$halfHours = $time[0] * 2 + ($time[1] == '30' ? 1:0);
-			$offset = $halfHours;		
+			if (strlen($t) == 3)
+			{
+				$t = '0'.$t;
+			}
+
+			$r = array();
+			$r['minutes'] = substr($t,strlen($t)-2, 2);
+			$r['hours'] = substr($t,0, 2);
+
+			return $r;
 		}
 		
 		function removeCourse($offering)
 		{
-			foreach(str_split($offerings[$course_codes[0]]->getdays()) as $day)
+			foreach(str_split($offering->getdays()) as $day)
 			{
-				for ($i=0; i<getLengthForRange($offering); $i++)
+				$this->getLengthForRange(Schedule::getTimeFromTimestamp($offering->getstarttime()), Schedule::getTimeFromTimestamp($offering->getendtime()));
+				for ($i=0; $i<$this->getLengthForRange(Schedule::getTimeFromTimestamp($offering->getstarttime()), Schedule::getTimeFromTimestamp($offering->getendtime())); $i++)
 				{
-					$timeslots[$day][$$offerings->getstarttime()+$i] = 'NOCOURSE';
+					$this->timeslots[$day][Schedule::timeToSlot(Schedule::getTimeFromTimestamp($offering->getstarttime()))+$i] = 'NOCOURSE';
 				}
 			}
 		}
 		
 		function setCourseAt($offering)
 		{
-		
-			foreach(str_split($offerings[$course_codes[0]]->getdays()) as $day)
+			foreach(str_split($offering->getdays()) as $day)
 			{
-				for ($i=0; i<getLengthForRange($offering); $i++)
+				for ($i=0; $i<$this->getLengthForRange(Schedule::getTimeFromTimestamp($offering->getstarttime()), Schedule::getTimeFromTimestamp($offering->getendtime())); $i++)
 				{
-					$timeslots[$day][$$offerings->getstarttime()+$i] = $offering;
+					$this->timeslots[$day][Schedule::timeToSlot(Schedule::getTimeFromTimestamp($offering->getstarttime()))+$i] = $offering;
 				}
 			}
 		}
 		
-		function isTimeFree($day, $startTime, $endTime)
+		function isTimeFree($offering)
 		{
-			for ($i=0; $i < getIndexForTime($endTime)-getIndexForTime($startTime); $i++)
+			foreach(str_split($offering->getdays()) as $day)
 			{
-				if ($timeslots[$day][getIndexForTime($startTime)+$i] != 'NOCOURSE')
+				$this->getLengthForRange(Schedule::getTimeFromTimestamp($offering->getstarttime()), Schedule::getTimeFromTimestamp($offering->getendtime()));
+				for ($i=0; $i<$this->getLengthForRange(Schedule::getTimeFromTimestamp($offering->getstarttime()), Schedule::getTimeFromTimestamp($offering->getendtime())); $i++)
 				{
-					return false;
+					if ($this->timeslots[$day][Schedule::timeToSlot(Schedule::getTimeFromTimestamp($offering->getstarttime()))+$i] != 'NOCOURSE')
+					{
+						return false;
+					}
 				}
 			}
 			return true;
+		}
+		
+		static function timeToSlot($t)
+		{
+			$hourOffset = ($t['hours'] - 8) * 2;
+			$minuteOffset = ($t['minutes'] == 55 ? 1:0);
+			return $hourOffset + $minuteOffset;
 		}
 		
 		static function slotToTime($offset)
@@ -151,13 +190,19 @@
 		function to_xml()
 		{
 			echo '<schedule>';
-			
 			for($slot=0; $slot<26; $slot++)
 			{
 				echo "<slot index='".Schedule::slotToTime($slot)."'>";
 				foreach($this->timeslots as $name=>$day)
 				{
-					echo "<value day='$name'>".$this->timeslots[$name][$slot].'</value>';
+					if ($this->timeslots[$name][$slot] != 'NOCOURSE')
+					{
+						echo "<value day='$name'>".$this->timeslots[$name][$slot]->getcourse()->getcode().' '.$this->timeslots[$name][$slot]->getsection().'</value>';
+					}
+					else
+					{
+						echo "<value day='$name'></value>";
+					}
 				}
 				echo "</slot>";
 			}
