@@ -213,13 +213,27 @@
 				echo "<slot index='".Schedule::slotToTime($slot)."'>";
 				foreach($this->timeslots as $name=>$day)
 				{
-					if ($this->timeslots[$name][$slot] != 'NOCOURSE')
+					if ($this->timeslots[$name][$slot] == 'NOCOURSE')
 					{
-						echo "<value day='$name'>".$this->timeslots[$name][$slot]->getcourse()->getcode().' '.$this->timeslots[$name][$slot]->getsection().'</value>';
+						echo "<value day='$name'></value>";
 					}
 					else
 					{
-						echo "<value day='$name'></value>";
+						$firstCourse = $this->timeslots[$name][$slot]->getcourse()->getcode().' '.$this->timeslots[$name][$slot]->getsection();
+						$span = 1;
+						do
+						{
+							if ($this->timeslots[$name][$slot+$span] != 'NOCOURSE')
+							{
+								$toCheck = $this->timeslots[$name][$slot+$span]->getcourse()->getcode().' '.$this->timeslots[$name][$slot+$span]->getsection();
+							}
+							else
+							{
+								$toCheck = null;
+							}
+							$span++;
+						}while($toCheck != null and $toCheck == $firstCourse);
+						echo "<value day='$name' span='$span'>".$this->timeslots[$name][$slot]->getcourse()->getcode().' '.$this->timeslots[$name][$slot]->getsection().'</value>';
 					}
 				}
 				echo "</slot>";

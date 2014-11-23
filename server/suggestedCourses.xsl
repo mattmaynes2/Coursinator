@@ -6,7 +6,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 <xsl:template match="/">
   <html>
 	  <body>
-		<h2>Attempting to schedule:</h2>
+		<!-- <h2>Attempting to schedule:</h2>
 		<form>
 			<table cellpadding="10" border="1">
 				<xsl:for-each select="response/courses/course">
@@ -23,20 +23,23 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			</table>
 			<br />
 			<input type="submit"/>
-		</form> 
+		</form>  -->
 		<h2>Schedule suggestion</h2>
-		<table cellpadding="10" border="1">
-			<th>Time</th>
-			<th>Monday</th>
-			<th>Tuesday</th>
-			<th>Wednesday</th>
-			<th>Thursday</th>
-			<th>Friday</th>
+		<table cellpadding="10" border="1" style='border-style: solid; border-bottom: none'>
+			<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Time</th>
+			<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Monday</th>
+			<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Tuesday</th>
+			<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Wednesday</th>
+			<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Thursday</th>
+			<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Friday</th>
 			<xsl:for-each select="response/schedule/slot">
 				<tr>
 					<td><xsl:value-of select="@index"/></td>
 					<xsl:for-each select="value">
-						<td><xsl:value-of select="current()"/></td>
+						<td>
+							<xsl::attribute  name="rowspan" select="@span"/>
+							<xsl:value-of select="current()"/>
+						</td>
 					</xsl:for-each>
 				</tr>
 			</xsl:for-each>
