@@ -15,7 +15,7 @@
 	
 	$q = new Query("program_elements");
 	$q->select("course_code");
-	$q->where("program_id = ?", [$requested_program]);
+	$q->where("program_id = ? and credit_type = 0", [$requested_program]);
 	$rows = $q->executeFetchAll();
 	
 	$response = '<program>';

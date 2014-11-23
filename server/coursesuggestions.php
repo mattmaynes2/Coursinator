@@ -3,9 +3,10 @@
 	require_once("api/lib/db.php");
 	require_once("api/lib/Course.php");
 	require_once("api/scheduler.php");
+	require_once("api/electives.php");
 	
 	//Must select a pattern
-	if(!isset($_GET['pattern']) or !isset($_GET['term']))
+	if(!isset($_GET['pattern']))
 	{
 		echo '<response>Invalid Submission</response>';
 		exit;
@@ -22,9 +23,10 @@
 	}
 	else if ($_GET['pattern'] == 'onpattern' and isset($_GET['year_select']))
 	{
+		$completed_year = $_GET['year_select'];
 		$completedQuery = new Query('program_elements');
 		$completedQuery->select('course_code');
-		$completedQuery->where("element_year <".$_GET['year_select']);
+		$completedQuery->where("element_year <".$completed_year);
 		$completedRows = $completedQuery->executeFetchAll();
 		$completed = [];
 		foreach($completedRows as $row)
@@ -64,27 +66,72 @@
 		$year = 2013 + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
 	}
 	
+	//IF THEY ARE ON PATTERN ASSUME ELECTIVES ARE FULFILLED UP TO THIS TERM
 	//Get the user's program elements, sorted by the term and year they should take them in
 	//Only select those courses which have a section available in the scheduling term
-	$programQuery = new Query("program_elements e");
-	$programQuery->select("course_code");
-	$programQuery->select("credit_type");
-	$programQuery->select("elective_note");
-	$programQuery->where("program_id = ?
-						  AND (credit_type <> 0 OR course_code NOT IN
-						  ".Query::valuelistsql($completed).
-						  ") AND 
-						  ((EXISTS 
-						   (SELECT * FROM course_offerings o
-						   WHERE o.course_code = e.course_code
-						   AND o.year=$year
-						   AND o.term=$term))
-						   OR
-						   (credit_type <> 0))
-						   
-						   ORDER BY element_year ASC, term ASC, credit_type DESC", array_merge([$_GET['program_select']], $completed));
-						   
-	$pattern = $programQuery->executeFetchAll(); 
+	if ($_GET['pattern'] == 'onpattern')
+	{
+		$programQuery = new Query("program_elements e");
+		$programQuery->select("course_code");
+		$programQuery->select("credit_type");
+		$programQuery->select("elective_note");
+		$programQuery->select("term");
+		$programQuery->select("element_year");
+
+		$programQuery->where("program_id = ?
+							  AND ((credit_type <> 0 AND e.element_year>=$completed_year AND e.term >= $term) OR course_code NOT IN
+							  ".Query::valuelistsql($completed).
+							  ") AND 
+							  ((EXISTS 
+							   (SELECT * FROM course_offerings o
+							   WHERE o.course_code = e.course_code
+							   AND o.year=$year
+							   AND o.term=$term))
+							   OR
+							   (credit_type <> 0))
+							   ORDER BY element_year ASC, term ASC, credit_type DESC", array_merge([$_GET['program_select']], $completed));
+		$pattern = $programQuery->executeFetchAll(); 
+	}
+	else
+	{
+		$programQuery = new Query("program_elements e");
+		$programQuery->select("course_code");
+		$programQuery->select("credit_type");
+		$programQuery->select("elective_note");
+		$programQuery->select("term");
+		$programQuery->select("element_year");
+
+		$programQuery->where("program_id = ?
+							  AND ((credit_type <> 0) OR course_code NOT IN
+							  ".Query::valuelistsql($completed).
+							  ") AND 
+							  ((EXISTS 
+							   (SELECT * FROM course_offerings o
+							   WHERE o.course_code = e.course_code
+							   AND o.year=$year
+							   AND o.term=$term))
+							   OR
+							   (credit_type <> 0))
+							   ORDER BY element_year ASC, term ASC, credit_type DESC", array_merge([$_GET['program_select']], $completed));
+		$pattern = $programQuery->executeFetchAll(); 
+		
+		//See which of their electives they have fulfilled and remove them from consideration in the pattern
+		foreach ($pattern as $key=>$course)
+		{
+			if ($course[1] != '0')
+			{
+				foreach($completed as $considering)
+				{
+					if (Elective::isElective($_GET['program_select'],$considering[0], $course[1], $course[2]))
+					{
+						unset($pattern[$key]);
+					}
+				}
+			}
+		}
+	}
+
+
 	$found = 0;
 	$discarded = array();
 	$scheduling = array();
@@ -96,9 +143,9 @@
 			break;
 		}
 		
-		if ($pattern[$i][1] <> 0)
+		if ($pattern[$i][1] != '0')
 		{
-			echo "here";
+			$found++;
 			continue;
 		}
 		
@@ -119,7 +166,7 @@
 		{
 			if (isset($tryagain))
 			{
-				if(count($tryagain->unsatisfied_prerequisites($completed_as_courses), $scheduling) == 0)
+				if(count($tryagain->unsatisfied_prerequisites($completed_as_courses, $scheduling)) == 0)
 				{
 					array_push($scheduling, $tryagain);
 					$found++;
@@ -138,9 +185,6 @@
 		echo $r;
 	}
 	echo '</courses>';
-
-	$to_schedule = [$scheduling[0], $scheduling[1], $scheduling[2], $scheduling[3]];
-
 	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
 	$s->to_xml();
 	echo '</response>';

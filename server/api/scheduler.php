@@ -52,7 +52,7 @@
 					$sub->where("course_code=?
 								 AND (section LIKE CONCAT(?,'%')
 								 OR section LIKE ('L%'))
-								 AND (capacity-enrolled) > 0 
+								 AND (((capacity-enrolled) > 0) OR (capacity=0))
 								 AND type <> 0",
 								 [$course->getcode(), $row[0]->getsection()]);
 					array_push($offerings[$i], ['labs' =>$sub->executeFetchAll(), 'lecture' => $row[0]]);
@@ -92,6 +92,11 @@
 				}
 				foreach($lecture['labs'] as $lab)
 				{
+					//This lab doesn't have a time 
+					if (($lab[0]->getstarttime() == '' and $lab[0]->getendtime() == ''))
+					{
+						return true;
+					}
 					//Add this lab to the schedule if the slot is free
 					if ($this->isTimeFree($lab[0]))
 					{
