@@ -173,7 +173,6 @@
 		
 		static function timeToSlot($t)
 		{
-			var_dump($t);
 			$hourOffset = ($t['hours'] - 8) * 2;
 			if ($t['minutes'] == 55)
 			{
@@ -187,7 +186,6 @@
 			{
 				$minuteOffset = -1;
 			}
-			echo $hourOffset + $minuteOffset;
 			return $hourOffset + $minuteOffset;
 		}
 		

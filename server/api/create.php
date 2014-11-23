@@ -28,6 +28,7 @@
 				DROP TABLE IF EXISTS coursegroup_courses;
 				DROP TABLE IF EXISTS coursegroups;
 				DROP TABLE IF EXISTS courses;
+				DROP TABLE IF EXISTS electives;
 			");
 		}
 		
@@ -153,13 +154,43 @@
 				-- The credit type.
 				-- - 0: Regular.
 				-- - 1: Complementary Studies.
-				-- - 2: Related Elective.
+				-- - 2: Engineering Elective.
+				-- - 3: Basic Science Elective.
 				credit_type INTEGER NOT NULL,
 				
 				term INTEGER NOT NULL,
 				
 				-- The year this course should be taken.
-				element_year INTEGER NOT NULL
+				element_year INTEGER NOT NULL,
+				
+				-- Used to group electives
+				elective_note VARCHAR(4)
+			);
+			
+			CREATE TABLE IF NOT EXISTS electives
+			(
+				program_id INTEGER
+					NOT NULL
+					REFERENCES programs(id)
+						ON DELETE CASCADE
+				,
+				
+				course_code VARCHAR(15)
+					NOT NULL
+					REFERENCES courses(code)
+						ON DELETE CASCADE
+				,
+				
+				-- The type of elective
+				-- -1: Complementary Studies.
+				-- -2: Engineering Elective.
+				-- -3: Basic Science Elective.
+				elective_type INTEGER NOT NULL,
+				
+				-- Optional field, can be used to group electives 
+				note VARCHAR(4),
+				
+				PRIMARY KEY (program_id, course_code, elective_type)
 			);
 		");
 		

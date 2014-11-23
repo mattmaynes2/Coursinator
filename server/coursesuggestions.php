@@ -68,18 +68,23 @@
 	//Only select those courses which have a section available in the scheduling term
 	$programQuery = new Query("program_elements e");
 	$programQuery->select("course_code");
+	$programQuery->select("credit_type");
+	$programQuery->select("elective_note");
 	$programQuery->where("program_id = ?
-						  AND course_code NOT IN
+						  AND (credit_type <> 0 OR course_code NOT IN
 						  ".Query::valuelistsql($completed).
-						  " AND EXISTS 
+						  ") AND 
+						  ((EXISTS 
 						   (SELECT * FROM course_offerings o
 						   WHERE o.course_code = e.course_code
 						   AND o.year=$year
-						   AND o.term=$term)
-						   ORDER BY element_year ASC, term ASC", array_merge([$_GET['program_select']], $completed));
+						   AND o.term=$term))
+						   OR
+						   (credit_type <> 0))
+						   
+						   ORDER BY element_year ASC, term ASC, credit_type DESC", array_merge([$_GET['program_select']], $completed));
 						   
 	$pattern = $programQuery->executeFetchAll(); 
-
 	$found = 0;
 	$discarded = array();
 	$scheduling = array();
@@ -89,6 +94,12 @@
 		if ($found == 5)
 		{
 			break;
+		}
+		
+		if ($pattern[$i][1] <> 0)
+		{
+			echo "here";
+			continue;
 		}
 		
 		$course = Course::fetch($pattern[$i][0]);
@@ -127,10 +138,10 @@
 		echo $r;
 	}
 	echo '</courses>';
-	
+
 	$to_schedule = [$scheduling[0], $scheduling[1], $scheduling[2], $scheduling[3]];
 
-	$s = Schedule::buildConflictFreeSchedule($to_schedule, $year, $term);
+	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
 	$s->to_xml();
 	echo '</response>';
 	

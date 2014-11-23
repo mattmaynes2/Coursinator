@@ -26,11 +26,27 @@
 						AND year = ?", [$name,$year]);
 	$id = $programQuery->executeFetchAll();
 
+	//insert the program elements
 	while (!feof($file))
 	{
 		$insert = "INSERT INTO `coursinator`.`program_elements` 
-				VALUES (?,?,?,?,?)";
-		$newline =  explode(',', trim(fgets($file)));
+				VALUES (?,?,?,?,?,?)";
+		$line = trim(fgets($file));
+		if ($line == 'ELECTIVES')
+		{
+			break;
+		}
+		$newline =  explode(',', $line);
+		$newline[0] = $id[0][0];
+		db_exec($insert, $newline);
+	}
+	
+	//insert the electives
+	while (!feof($file))
+	{
+		$insert = "INSERT INTO `coursinator`.`electives` 
+					VALUES (?,?,?,?)";
+		$newline = explode(',', trim(fgets($file)));
 		$newline[0] = $id[0][0];
 		db_exec($insert, $newline);
 	}

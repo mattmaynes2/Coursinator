@@ -12,9 +12,12 @@
 		 */
 		static function code_normalize($code) {
 			$code = strtoupper($code);
-			$code = preg_replace('/[^A-Z0-9]/', '', $code);
+			if (!preg_match('/^########$/', $code))
+			{
+				$code = preg_replace('/[^A-Z0-9]/', '', $code);
+			}
 			
-			if (preg_match('/^[A-Z]{1,8}[0-9]{4}$/', $code))
+			if (preg_match('/^[A-Z]{1,8}[0-9]{4}$/', $code) || preg_match('/^########$/', $code))
 				return $code;
 			else
 				return NULL;
