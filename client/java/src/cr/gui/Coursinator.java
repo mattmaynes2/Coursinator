@@ -20,7 +20,7 @@ public class Coursinator{
 		}catch (Exception ex){
 			ex.printStackTrace();
 		}
-		CoursePickerView view = new CoursePickerView();
+		Main view = new Main();
 		view.setVisible(true);
 	}
 	

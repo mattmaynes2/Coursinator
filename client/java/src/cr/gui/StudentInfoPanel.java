@@ -18,6 +18,8 @@ import java.awt.Dimension;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -35,6 +37,7 @@ public class StudentInfoPanel extends JPanel
 	private ButtonGroup bg;
 	private JLabel instructions;
 	private ArrayList<SubmitRequestListener> requestListeners;
+	private CoursePicker coursePicker;
 	
 	public StudentInfoPanel()
 	{
@@ -51,7 +54,8 @@ public class StudentInfoPanel extends JPanel
 		bg = new ButtonGroup();
 		instructions = new JLabel("<html>Please select your program, <br/> year status, and the courses<br/> that you have completed</html>");
 		requestListeners = new ArrayList<SubmitRequestListener>();
-		
+		coursePicker = new CoursePicker();
+		coursePicker.setVisible(false);
 		
 		submit.addActionListener(submitListener());
 		//Set up panel
@@ -62,6 +66,12 @@ public class StudentInfoPanel extends JPanel
 		offPattern.setAlignmentX(Component.LEFT_ALIGNMENT);
 		onPattern.setAlignmentX(Component.LEFT_ALIGNMENT);
 		yearStatus.setAlignmentX(Component.LEFT_ALIGNMENT);
+		coursePicker.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
+		program.addItemListener(programListener());
+		onPattern.addActionListener(this.hideCoursePickerListener());
+		offPattern.addActionListener(this.showCoursePickerListener());
+		
 		
 		//Add components
 		add(instructions);
@@ -74,12 +84,45 @@ public class StudentInfoPanel extends JPanel
 		add(offPattern);
 		bg.add(offPattern);
 	
+		add(coursePicker);
 		add(yearStatus);
 		add(submit);
 	
 
-		setPreferredSize(new Dimension(200,120));
-		setMaximumSize(new Dimension(200,120));
+		setPreferredSize(new Dimension(250,120));
+		setMaximumSize(new Dimension(250,120));
+	}
+	
+	public ActionListener showCoursePickerListener(){
+		return new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				coursePicker.setVisible(true);
+				coursePicker.setSelectedProgramId(((Program)program.getSelectedItem()).getId());
+				coursePicker.refeshList();
+				repaint();
+			}
+		};
+	}
+	
+	public ActionListener hideCoursePickerListener(){
+		return new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				coursePicker.setVisible(false);
+				repaint();
+			}
+		};
+	}
+	
+	public ItemListener programListener(){
+		return new ItemListener(){
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				coursePicker.setSelectedProgramId(((Program)program.getSelectedItem()).getId());
+				coursePicker.refeshList();
+			}
+			
+		};
 	}
 	
 	public Program[] getProgramsFromServer(){
@@ -109,7 +152,6 @@ public class StudentInfoPanel extends JPanel
 				for(SubmitRequestListener listener: requestListeners){
 					listener.requestSubmitted(request);
 				}
-				System.out.println("[DEBUG] Requesting: " + request);
 			}
 		};		
 	}

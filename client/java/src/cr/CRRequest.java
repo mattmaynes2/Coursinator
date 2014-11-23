@@ -169,15 +169,12 @@ public class CRRequest extends Request{
 	 * @author Matthew Maynes
 	 * @since November 9, 2014
 	 */
-	public ProgramElement[] getProgramElements(String program) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
+	public Course[] getProgramElements(String program) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
 		String route = crRoot + "/api/programelements.php";
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("program", program);
-		ProgramBuilder builder = new ProgramBuilder();
-		Program[] programs =  builder.read(this.sendGetRequest(route, params));
-		if(programs.length > 0)
-				return programs[0].getElements().toArray(new ProgramElement[0]);
-		return new ProgramElement[0];
+		CourseBuilder builder = new CourseBuilder();
+		return builder.read(this.sendGetRequest(route, params));
 	}
 
 	

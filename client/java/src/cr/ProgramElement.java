@@ -20,7 +20,7 @@ public class ProgramElement extends XMLObject{
 	 * @since November 1, 2014
 	 * @author Matthew Maynes
 	 */
-	public static final String SCHEMA_IDENTIFIER = "course";
+	public static final String SCHEMA_IDENTIFIER = "program";
 	
 	/**
 	 * Stores the course data for this program element
@@ -95,6 +95,13 @@ public class ProgramElement extends XMLObject{
 		return buffer.toString();
 	}
 	
-
+	
+	/**
+	 * Returns a String representation of this object
+	 */
+	@Override
+	public String toString(){
+		return this.course.toString();
+	}
 
 }
