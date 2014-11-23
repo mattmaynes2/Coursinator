@@ -1,4 +1,4 @@
-<?xml-stylesheet type="text/xsl" href="suggestedCourses.xsl"?>
+	<?xml-stylesheet type="text/xsl" href="suggestedCourses.xsl"?>
 <?php //require_once("api/courses.php");
 	require_once("api/lib/db.php");
 	require_once("api/lib/Course.php");

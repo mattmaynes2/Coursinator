@@ -5,6 +5,24 @@ function hideProgram()
 	document.getElementById("on_pattern_options").style.display = "block";
 }
 
+function addOther()
+{
+	var code = document.getElementById("othercode").value;
+	if (code.match('^[A-Z]{1,8}[0-9]{4}$') == null)
+	{
+		document.getElementById("errormessage").innerHTML = "Invalid course code";
+	}
+	else
+	{
+		document.getElementById("errormessage").innerHTML = "";
+		var taken_list = document.getElementById("courses_taken");
+		var newopt = document.createElement("option");
+		newopt.value = code;
+		newopt.text = code;
+		taken_list.add(newopt);
+	}
+}
+
 function loadTasks()
 {
 	getAvailableTerms();
