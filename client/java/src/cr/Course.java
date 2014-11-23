@@ -230,7 +230,14 @@ public class Course extends XMLObject{
 		
 		buffer.append("</" + SCHEMA_IDENTIFIER + ">");
 		return buffer.toString();
-	}	
+	}
+	
+	/**
+	 * Returns a String description of this course
+	 */
+	public String toString(){
+		return this.code;
+	}
 
 	
 }

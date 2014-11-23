@@ -17,6 +17,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+
 /**
  * An XMLBuilder is a factory class that constructs an object using XML data from an XMLElement
  * that corresponds to this objects schema. Objects are built using the template method pattern 
@@ -65,8 +66,11 @@ public abstract class XMLBuilder<E extends XMLObject>{
 	 */
 	public E[] read(InputStream stream) throws ParserConfigurationException, SAXException, IOException{
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document doc 			= builder.parse(stream);
+		Document doc 			= builder.parse(new InputSource(stream));
 		NodeList nodes 			= doc.getElementsByTagName(this.getSchemaIdentifier());
+		if(nodes.getLength() == 0)
+			nodes = doc.getChildNodes();
+		
 		return read(nodes);
 	}
 	

@@ -48,6 +48,10 @@ public class CourseBuilder extends XMLBuilder<Course>{
 		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
 			course.setDescription(nodes.item(0).getTextContent());
 		
+		if(course.getCode() == null || course.getCode().length() == 0){
+			course.setCode(node.getTextContent());
+		}
+		
 		return course;	
 	}
 	
