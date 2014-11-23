@@ -49,10 +49,10 @@
 					$sub = new Query("course_offerings");
 					$sub->select_object('CourseOffering');
 					$sub->where("course_code=?
-								 AND section LIKE CONCAT(?,'%')
+								 AND (section LIKE CONCAT(?,'%')
+								 OR section LIKE ('L%'))
 								 AND type <> 0",
 								 [$course->getcode(), $row[0]->getsection()]);
-					$section['id'] = $row[0]->getsection();
 					array_push($offerings[$i], ['labs' =>$sub->executeFetchAll(), 'lecture' => $row[0]]);
 				}
 				$i++;
