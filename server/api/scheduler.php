@@ -39,6 +39,7 @@
 				$q->where('course_code=?
 							AND term=?
 							AND year=?
+							AND (capacity - enrolled) > 0 
 							AND type=0', [$course->getcode(),$term,$year]);
 		
 				$rows = $q->executeFetchAll();
@@ -51,6 +52,7 @@
 					$sub->where("course_code=?
 								 AND (section LIKE CONCAT(?,'%')
 								 OR section LIKE ('L%'))
+								 AND (capacity-enrolled) > 0 
 								 AND type <> 0",
 								 [$course->getcode(), $row[0]->getsection()]);
 					array_push($offerings[$i], ['labs' =>$sub->executeFetchAll(), 'lecture' => $row[0]]);
