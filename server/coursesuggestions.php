@@ -135,6 +135,7 @@
 	$found = 0;
 	$discarded = array();
 	$scheduling = array();
+	$electives = array();
 	
 	for($i=0; $i<count($pattern); $i++)
 	{
@@ -145,6 +146,7 @@
 		
 		if ($pattern[$i][1] != '0')
 		{
+			array_push($electives, $pattern[$i]);
 			$found++;
 			continue;
 		}
@@ -186,7 +188,29 @@
 	}
 	echo '</courses>';
 	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
+	
+	$iter = count($scheduling) - 1;
+	
+	while($s == null and $iter < count($scheduling))
+	{
+		$s = Schedule::buildConflictFreeSchedule(array_slice($scheduling, $iter), $year, $term);
+		$iter++;
+	}
+	
 	$s->to_xml();
+
+	echo '<electives>';
+	foreach($electives as $elective)
+	{
+		echo '<elective>';
+		foreach(Elective::getElectives($_GET['program_select'], $elective[1], $elective[2]) as $option)
+		{
+			echo "<option>".$option[0]."</option>";
+		}
+		echo '</elective>';
+	}
+	echo '</electives>';
+	
 	echo '</response>';
 	
 ?>
