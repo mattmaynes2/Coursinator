@@ -25,7 +25,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			<input type="submit"/>
 		</form>  -->
 		<h2>Schedule suggestion</h2>
-		<form>
+		<form action="api/register.php" method="POST">
 			<table cellpadding="10" border="1" style='border-style: solid; border-bottom: none'>
 				<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Time</th>
 				<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Monday</th>
@@ -38,7 +38,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<td><xsl:value-of select="@index"/></td>
 						<xsl:for-each select="value">
 							<td>
-								<xsl::attribute  name="rowspan" select="@span"/>
+								<xsl:attribute  name="rowspan" select="@span"/>
 								<xsl:value-of select="current()"/>
 							</td>
 						</xsl:for-each>
@@ -63,7 +63,25 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<br />
 			</xsl:for-each>
 			<br /><br />
-			<input type="submit"/>
+			<h2>By pressing Confirm you will be enrolled in the following sections</h2>
+			<table border="1">
+				<xsl:for-each select="response/sections/section">
+					<tr>
+						<td>
+						<label>
+							<xsl:value-of select="concat(course-offering/code,course-offering/section)"/>
+								<input checked="true" name="enroll[]" type="checkbox">
+									<xsl:attribute  name="value">
+										<xsl:value-of select="concat(course-offering/code,course-offering/section)"/>
+									</xsl:attribute>
+								</input>
+							</label>
+						</td>
+					</tr>
+				</xsl:for-each>
+			</table>
+			<br />
+			<input type="submit" value="Confirm Selections"></input>
 		</form>
 	  </body>
   </html>

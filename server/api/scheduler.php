@@ -7,7 +7,8 @@
 	class Schedule
 	{
 		private $timeslots;
-
+		private $registeredSections;
+		
 		function __construct()
 		{
 			$this->timeslots = array();
@@ -16,6 +17,7 @@
 			$this->timeslots['W'] = array_fill(0,26,'NOCOURSE');
 			$this->timeslots['R'] = array_fill(0,26,'NOCOURSE');
 			$this->timeslots['F'] = array_fill(0,26,'NOCOURSE');
+			$this->registeredSections = array();
 		}
 		
 		//This will create a conflict free schedule from the list of course codes given
@@ -87,6 +89,8 @@
 				{
 					if ($this->scheduleCourses(array_slice($offerings, 1)))
 					{
+						array_push($this->registeredSections, $lecture['lecture']);
+						array_push($this->registeredSections, $lab[0]);
 						return true;
 					}
 				}
@@ -95,6 +99,8 @@
 					//This lab doesn't have a time 
 					if (($lab[0]->getstarttime() == '' and $lab[0]->getendtime() == ''))
 					{
+						array_push($this->registeredSections, $lecture['lecture']);
+						array_push($this->registeredSections, $lab[0]);
 						return true;
 					}
 					//Add this lab to the schedule if the slot is free
@@ -103,6 +109,8 @@
 						$this->setCourseAt($lab[0]);
 						if ($this->scheduleCourses(array_slice($offerings, 1)))
 						{
+							array_push($this->registeredSections, $lecture['lecture']);
+							array_push($this->registeredSections, $lab[0]);
 							return true;
 						}
 						else
@@ -239,5 +247,11 @@
 				echo "</slot>";
 			}
 			echo '</schedule>';
+			echo '<sections>';
+			foreach($this->registeredSections as $section)
+			{
+				echo '<section>'.$section->to_xml().'</section>';
+			}
+			echo '</sections>';
 		}
 	}
