@@ -202,8 +202,8 @@
 	echo '<electives>';
 	foreach($electives as $elective)
 	{
-		echo '<elective>';
-		echo $elective[2];
+		echo '<elective group="'.$elective[2].'">';
+
 		foreach(Elective::getElectives($_GET['program_select'], $elective[1], $elective[2]) as $option)
 		{
 			echo "<option>".$option[0]."</option>";

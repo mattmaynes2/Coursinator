@@ -1,7 +1,16 @@
 <?xml version="1.0"?>
 
 <xsl:stylesheet version="1.0"
-xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+xmlns:my="http://my.com" exclude-result-prefixes="my">
+
+<my:colorarray>
+	<color>red</color>
+	<color>blue</color>
+	<color>orange</color>
+	<color>purple</color>
+	<color>green</color>
+</my:colorarray>
 
 <xsl:template match="/">
   <html>
@@ -25,6 +34,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 			<input type="submit"/>
 		</form>  -->
 		<h2>Schedule suggestion</h2>
+		
 		<form action="api/register.php" method="POST">
 			<table cellpadding="10" border="1" style='border-style: solid; border-bottom: none'>
 				<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Time</th>
@@ -38,7 +48,6 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<td><xsl:value-of select="@index"/></td>
 						<xsl:for-each select="value">
 							<td>
-								<xsl:attribute  name="rowspan" select="@span"/>
 								<xsl:value-of select="current()"/>
 							</td>
 						</xsl:for-each>
@@ -49,7 +58,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<h2>Elective Selection</h2>
 			</xsl:if>
 			<xsl:for-each select="response/electives/elective">
-				Select one elective:
+				Select one elective from group <xsl:value-of select="@group"/>:  
 				<select type="select" name="electives[]">
 					<xsl:for-each select="option">
 						<option>

@@ -23,6 +23,15 @@ function addOther()
 	}
 }
 
+function setUpSubmission()
+{
+	var submissionList = document.getElementById("courses_taken");
+	for(var i=0; i<submissionList.options.length; i++)
+	{
+		submissionList.options[i].selected = true;
+	}
+}
+
 function loadTasks()
 {
 	getAvailableTerms();
