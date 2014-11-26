@@ -46,6 +46,25 @@
 		exit;
 	}
 	
+	//Figure out the registration year and term
+	$year = date('Y');
+	$month = date('n');
+	
+	if ($month >= 6 and $month <= 7)
+	{
+		$term = 0;
+	}
+	else
+	{
+		$term = 1;
+		if ($month > 7)
+		{
+			$year = $year + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
+		}
+		$term = 0;
+		$year = $year-1;
+	}
+
 	//Get the list of courses that they have completed.
 	//If on pattern query their pattern in the database
 	if(isset($_GET['completed']))
@@ -61,7 +80,8 @@
 		$completed_year = $_GET['year_select'];
 		$completedQuery = new Query('program_elements');
 		$completedQuery->select('course_code');
-		$completedQuery->where("element_year <".$completed_year);
+		$completedQuery->where("element_year <".$completed_year."
+								 OR (element_year=$completed_year AND term=0 AND $term=1)");
 		$completedRows = $completedQuery->executeFetchAll();
 		$completed = [];
 		foreach($completedRows as $row)
@@ -78,7 +98,7 @@
 	header('Content-Type: text/xml; charset=utf-8');
 	
 	echo '<response e="0">';
-
+	echo $year.' '.$term;
 	//Get the actual course objects from the database
 	$completed_as_courses = array();
 	
@@ -86,21 +106,7 @@
 	{
 		array_push($completed_as_courses, Course::fetch($c));
 	}
-
-	//Figure out  which term to register for
-	$year = date('Y');
-	$month = date('n');
 	
-	if ($month >= 6 and $month <= 7)
-	{
-		$term = 0;
-	}
-	else
-	{
-		$term = 1;
-		$year = $year;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
-	}
-	echo $term.' '.$year;
 	//IF THEY ARE ON PATTERN ASSUME ELECTIVES ARE FULFILLED UP TO THIS TERM
 	//Get the user's program elements, sorted by the term and year they should take them in
 	//Only select those courses which have a section available in the scheduling term
