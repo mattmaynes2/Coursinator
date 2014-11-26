@@ -19,16 +19,18 @@
 		
 		$db->beginTransaction();
 		
-		if (isset($_POST['force'])) {
+		if (isset($_GET['force'])) {
+			// Keep in reverse order of creation below as not to break
+			// foreign key references.
 			$db->exec("
+				DROP TABLE IF EXISTS electives;
 				DROP TABLE IF EXISTS program_elements;
 				DROP TABLE IF EXISTS programs;
 				DROP TABLE IF EXISTS course_offerings;
 				DROP TABLE IF EXISTS prerequisites;
-				DROP TABLE IF EXISTS coursegroup_courses;
+				DROP TABLE IF EXISTS coursegroups_courses;
 				DROP TABLE IF EXISTS coursegroups;
 				DROP TABLE IF EXISTS courses;
-				DROP TABLE IF EXISTS electives;
 			");
 		}
 		
