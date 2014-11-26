@@ -87,6 +87,11 @@
 		function __construct(){
 		}
 		
+		function getid()
+		{
+			return $this->id;
+		}
+		
 		function getcourse(){
 			return new Course($this->course_code);
 		}

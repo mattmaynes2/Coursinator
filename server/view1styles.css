@@ -1,0 +1,18 @@
+input {
+	font-size:90%;
+}
+
+body{
+	background-color:#DDDDDD;
+}
+
+td {
+	padding-top:10px;
+}
+
+.multiselectbutton
+{
+	width:3em;
+	height:3em;
+}
+
