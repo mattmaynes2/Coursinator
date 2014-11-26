@@ -1,5 +1,39 @@
 <?xml-stylesheet type="text/xsl" href="suggestedCourses.xsl"?>
-<?php //require_once("api/courses.php");
+<?php 
+	/*
+		RESPONSE FORMAT
+		
+		If there is an error, the response format will be:
+		<response>
+			<errormessage>The Message</errormessage>
+		</response>
+		
+		If there is no submission error, but no conflict-free schedule could be generated, the response format is:
+		<response>
+			<noschedulemessage>The Message</noschedulemessage>
+		</response>
+		
+		If the conflict-free schedule could be generated, the response format is:
+		
+		<reponse>
+			<schedule>
+				<slot index='courseTime'> <!-- A schedule contains a list of half-hour long time slots, if added to a table in html/gridlayout ordering (row by row) they form the correct schedule (doesn't look fancy though)
+					<value day="dayofweek"></value> <!-- If there is no course in this time slot -->
+					<value dat="dayofweek">CourseCode&SectionNumber</value>
+				</slot>
+				<sections><!-- This is a summary of the sections sceduled. You may or may not use this, depending on how you want to display the schedule
+					<section>
+						Contains a CourseOffering object. See CourseOffering.php for description of this format 
+					</section>
+				</sections>
+			</schedule>
+			<electives>
+				<elective group="elecive group">
+					<option>One for each option</option>
+				</elective>
+			</electives>
+		</response>
+	*/
 	require_once("api/lib/db.php");
 	require_once("api/lib/Course.php");
 	require_once("api/scheduler.php");
@@ -42,7 +76,7 @@
 	
 	header('Content-Type: text/xml; charset=utf-8');
 	
-	echo '<response e="0"><courses>';
+	echo '<response e="0">';
 
 	//Get the actual course objects from the database
 	$completed_as_courses = array();
@@ -179,17 +213,7 @@
 		}
 		$endIndex = $i;
 	}
-
-	foreach ($scheduling as $course) 
-	{
-		$r = '<course>';
-		$r .= '<code>'.htmlspecialchars($course->getcode()).'</code>';
-		$r .= '<title>'.htmlspecialchars($course->gettitle()).'</title>';
-		$r .= '</course>';
-		echo $r;
-	}
-	echo '</courses>';
-	//$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
+	
 	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, array_slice($pattern, $endIndex+1));
 
 	if ($s == null && count($electives) == 0)
