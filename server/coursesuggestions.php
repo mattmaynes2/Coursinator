@@ -8,7 +8,7 @@
 	//Must select a pattern
 	if(!isset($_GET['pattern']))
 	{
-		echo '<response>Invalid Submission</response>';
+		echo '<response><errormessage>Invalid Submission</errormessage></response>';
 		exit;
 	}
 	
@@ -36,7 +36,7 @@
 	}
 	else
 	{
-		echo "<response>Invalid Submission: completed not set, not on pattern and no year selected</response>";
+		echo "<response><erromessage>Invalid Submission</errormessage></response>";
 		exit;
 	}
 	

@@ -18,7 +18,7 @@
 			return false;
 		}
 		
-		static function getElectives($program, $elective_type, $elective_group)
+		static function getElectives($program, $elective_type, $elective_group, $exclude=[])
 		{
 			$results = array();
 			foreach(explode("|",$elective_group) as $group)
@@ -27,7 +27,8 @@
 				$q->select("course_code");
 				$q->where("program_id=?
 							AND elective_type=?
-							AND note=?", [$program,$elective_type, $group]);
+							AND note=?
+							AND course_code NOT IN ".Query::valuelistsql($exclude), array_merge([$program,$elective_type, $group], $exclude));
 				$results = array_merge($results, $q->executeFetchAll());
 			}
 			return $results;
