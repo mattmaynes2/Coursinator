@@ -46,7 +46,8 @@
 		exit;
 	}
 	
-	//Get the list of courses that they have completed
+	//Get the list of courses that they have completed.
+	//If on pattern query their pattern in the database
 	if(isset($_GET['completed']))
 	{
 		$completed = $_GET['completed'];
@@ -96,10 +97,10 @@
 	}
 	else
 	{
-		$term = 0;
-		$year = 2013 + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
+		$term = 1;
+		$year = $year;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
 	}
-	
+	echo $term.' '.$year;
 	//IF THEY ARE ON PATTERN ASSUME ELECTIVES ARE FULFILLED UP TO THIS TERM
 	//Get the user's program elements, sorted by the term and year they should take them in
 	//Only select those courses which have a section available in the scheduling term
@@ -170,15 +171,15 @@
 	$discarded = array();
 	$scheduling = array();
 	$electives = array();
+	$alternatives = array();
 	$endIndex = 0;
 	
 	for($i=0; $i<count($pattern); $i++)
 	{
-		if ($found == 5)
-		{
+	
+		if ($found ==5)
 			break;
-		}
-		
+			
 		if ($pattern[$i][1] != '0')
 		{
 			array_push($electives, $pattern[$i]);
@@ -214,7 +215,7 @@
 		$endIndex = $i;
 	}
 	
-	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, array_slice($pattern, $endIndex+1));
+	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
 
 	if ($s == null && count($electives) == 0)
 	{
