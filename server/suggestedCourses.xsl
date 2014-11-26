@@ -35,6 +35,15 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 		</form>  -->
 		<h2>Schedule suggestion</h2>
 		
+		<xsl:choose>
+			<xsl:when test="response/noschedulemessage">
+				<p>
+					No conflict-free schedule could be generated for this term <br />
+					Either the courses you have left to complete in your pattern are not offered this term<br />
+					Or you have no courses left to complete
+				</p>
+			</xsl:when>
+			<xsl:otherwise>
 		<form action="api/register.php" method="POST">
 			<table cellpadding="10" border="1" style='border-style: solid; border-bottom: none'>
 				<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Time</th>
@@ -92,6 +101,8 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 			<br />
 			<input type="submit" value="Confirm Selections"></input>
 		</form>
+			</xsl:otherwise>
+		</xsl:choose>
 	  </body>
   </html>
 </xsl:template>

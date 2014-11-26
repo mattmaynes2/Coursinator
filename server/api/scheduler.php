@@ -8,6 +8,8 @@
 	{
 		private $timeslots;
 		private $registeredSections;
+		private $term;
+		private $year;
 		
 		function __construct()
 		{
@@ -20,11 +22,23 @@
 			$this->registeredSections = array();
 		}
 		
+		function setTerm($term)
+		{
+			$this->term = $term;
+		}
+		
+		function setYear($year)
+		{
+			$this->year = $year;
+		}
+		
 		//This will create a conflict free schedule from the list of course codes given
-		static function buildConflictFreeSchedule($courses, $year, $term)
+		static function buildConflictFreeSchedule($courses, $year, $term, $alternates)
 		{
 			$offerings = array();
 			$s = new Schedule();
+			$s->setTerm($term);
+			$s->setYear($year);
 			
 			if (count($courses) <= 0)
 				return null;
@@ -62,12 +76,12 @@
 				$i++;
 			}
 
-			$s->scheduleCourses($offerings,0);
+			$s->scheduleCourses($offerings,0,$alternates);
 			return $s;
 		}
 		
 		//If all lab sections for this course are full the algorithm assumes this is normal/university needs to deal with it, and allows the course to be added to the schedule
-		function scheduleCourses($offerings, $depth)
+		function scheduleCourses($offerings, $depth, $alternates = [])
 		{	
 			if (count($offerings) == 0)
 			{
@@ -120,7 +134,46 @@
 				}
 				$this->removeCourse($lecture['lecture']);
 			}
-			return false;
+			//Try and replace this one with alternate courses to satisfy the schedule
+			$result = false;
+			while(isset($alternatives[0]))
+			{
+				$offerings[0] = $this->getOfferingInfo(array_shift($alternates)[0]);
+				$result = $this->scheduleCourses($offerings,$depth,$alternates);
+				
+			}
+			return $result;
+		}
+		
+		function getOfferingInfo($course_code)
+		{
+				$offerings = array();
+				
+				//Get all the lecture sections for a particular course
+				$q = new Query("course_offerings");
+				$q->select_object("CourseOffering");
+				$q->where('course_code=?
+							AND term=?
+							AND year=?
+							AND (capacity - enrolled) > 0 
+							AND type=0', [$course_code,$this->term,$this->year]);
+		
+				$rows = $q->executeFetchAll();
+
+				//For each lecture section get the available lab/tutorial sections
+				foreach($rows as $row)
+				{
+					$sub = new Query("course_offerings");
+					$sub->select_object('CourseOffering');
+					$sub->where("course_code=?
+								 AND (section LIKE CONCAT(?,'%')
+								 OR section LIKE ('L%'))
+								 AND (((capacity-enrolled) > 0) OR (capacity=0))
+								 AND type <> 0",
+								 [$course_code, $row[0]->getsection()]);
+					array_push($offerings, ['labs' =>$sub->executeFetchAll(), 'lecture' => $row[0]]);
+				}
+				return $offerings;
 		}
 		
 		static function getLengthForRange($startTime, $endTime)

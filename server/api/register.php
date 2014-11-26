@@ -18,7 +18,7 @@ require_once("lib/CourseOffering.php");
 
 	if (!isset($_POST['enroll']))
 	{
-		echo "<h2>No courses selected for registration</h2>";
+		echo "<h2>Registration completed</h2>";
 	}
 	else
 	{
@@ -66,5 +66,6 @@ require_once("lib/CourseOffering.php");
 				echo '<p style="color:red">Section '.$sectioncode.' is now full. Continued registration in remaining courses</p>';
 			}
 		}
+		echo '<h2>Registration completed</h2>';
 	}
 ?>

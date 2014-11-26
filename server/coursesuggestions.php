@@ -136,6 +136,7 @@
 	$discarded = array();
 	$scheduling = array();
 	$electives = array();
+	$endIndex = 0;
 	
 	for($i=0; $i<count($pattern); $i++)
 	{
@@ -176,6 +177,7 @@
 				}
 			}
 		}
+		$endIndex = $i;
 	}
 
 	foreach ($scheduling as $course) 
@@ -187,30 +189,40 @@
 		echo $r;
 	}
 	echo '</courses>';
-	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
-	
-	$iter = count($scheduling) - 1;
-	
-	while($s == null and $iter < count($scheduling))
-	{
-		$s = Schedule::buildConflictFreeSchedule(array_slice($scheduling, $iter), $year, $term);
-		$iter++;
-	}
-	
-	$s->to_xml();
+	//$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term);
+	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, array_slice($pattern, $endIndex+1));
 
-	echo '<electives>';
-	foreach($electives as $elective)
+	if ($s == null && count($electives) == 0)
 	{
-		echo '<elective group="'.$elective[2].'">';
-
-		foreach(Elective::getElectives($_GET['program_select'], $elective[1], $elective[2]) as $option)
+		$iter = 0;
+		while ($iter < count($scheduling) && $s==null)
 		{
-			echo "<option>".$option[0]."</option>";
+				$s = Schedule::buildConflictFreeSchedule(array_slice($scheduling,$iter), $year, $term, array_slice($pattern, $endIndex+1));
+				$iter++;
 		}
-		echo '</elective>';
+		echo '<noschedulemessage> Could not generate a conflict free schedule</noschedulemessage>';
 	}
-	echo '</electives>';
+	else
+	{
+		if ($s == null)
+		{
+			$s = new Schedule();
+		}
+		$s->to_xml();
+		
+		echo '<electives>';
+		foreach($electives as $elective)
+		{
+			echo '<elective group="'.$elective[2].'">';
+
+			foreach(Elective::getElectives($_GET['program_select'], $elective[1], $elective[2]) as $option)
+			{
+				echo "<option>".$option[0]."</option>";
+			}
+			echo '</elective>';
+		}
+		echo '</electives>';
+	}
 	
 	echo '</response>';
 	
