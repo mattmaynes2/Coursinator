@@ -10,6 +10,7 @@
 		private $registeredSections;
 		private $term;
 		private $year;
+		private $schedules;
 		
 		function __construct()
 		{
@@ -20,6 +21,12 @@
 			$this->timeslots['R'] = array_fill(0,26,'NOCOURSE');
 			$this->timeslots['F'] = array_fill(0,26,'NOCOURSE');
 			$this->registeredSections = array();
+			$this->schedules = array();
+		}
+		
+		function getSchedules()
+		{
+			return $this->schedules;
 		}
 		
 		function setTerm($term)
@@ -77,13 +84,13 @@
 				}
 				$i++;
 			}
-
-			$s->scheduleCourses($offerings,0,$alternates);
+			$list = [];
+			$s->scheduleCourses($offerings,0,$alternates, $list);
 			return $s;
 		}
 		
 		//If all lab sections for this course are full the algorithm assumes this is normal/university needs to deal with it, and allows the course to be added to the schedule
-		function scheduleCourses($offerings, $depth, $alternates = [])
+		function scheduleCourses($offerings, $depth, $alternates = [], $list=[], $numGenerated = 0)
 		{	
 			if (count($offerings) == 0)
 			{
@@ -103,9 +110,14 @@
 				}
 				if (count($lecture['labs']) == 0)
 				{
-					if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1))
+					if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1,$list,$numGenerated))
 					{
 						$this->registeredSections[$lecture['lecture']->getcourse()->getcode().$lecture['lecture']->getsection()] = ['depth'=>$depth,$lecture['lecture']];
+						if ($depth == 0)
+						{
+							array_push($this->schedules, clone $this);
+							$numGenerated++;
+						}
 						return true;
 					}
 				}
@@ -117,16 +129,25 @@
 						$this->registeredSections[$lecture['lecture']->getcourse()->getcode().$lecture['lecture']->getsection()] = ['depth'=>$depth,$lecture['lecture']];
 						$this->registeredSections[$lab[0]->getcourse()->getcode().$lab[0]->getsection()] = ['depth'=>$depth,$lab[0]];
 						
+						if ($depth == 0)
+						{
+							array_push($this->schedules, clone $this);
+							$numGenerated++;
+						}
 						return true;
 					}
 					//Add this lab to the schedule if the slot is free
 					if ($this->isTimeFree($lab[0]))
 					{
 						$this->setCourseAt($lab[0]);
-						if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1))
+						if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1,$list,$numGenerated))
 						{
 							$this->registeredSections[$lecture['lecture']->getcourse()->getcode().$lecture['lecture']->getsection()] = ['depth'=>$depth,$lecture['lecture']];
 							$this->registeredSections[$lab[0]->getcourse()->getcode().$lab[0]->getsection()] = ['depth'=>$depth,$lab[0]];
+							if ($depth == 0)
+							{
+								array_push($this->schedules, clone $this);
+							}
 							return true;
 						}
 						else

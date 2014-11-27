@@ -98,7 +98,7 @@
 	header('Content-Type: text/xml; charset=utf-8');
 	
 	echo '<response e="0">';
-	echo $year.' '.$term;
+
 	//Get the actual course objects from the database
 	$completed_as_courses = array();
 	
@@ -254,7 +254,6 @@
 		}
 		echo '</electives>';
 	}
-	
 	echo '</response>';
 	
 ?>
