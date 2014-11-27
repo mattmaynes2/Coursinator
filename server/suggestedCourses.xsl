@@ -98,25 +98,25 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 							</xsl:for-each>
 						</select>
 						<br />
+						<br /><br />
+						<h2>By pressing Confirm you will be enrolled in the following sections</h2>
+						<table border="1">
+							<xsl:for-each select="section">
+								<tr>
+									<td>
+									<label>
+										<xsl:value-of select="concat(course-offering/code,course-offering/section)"/>
+											<input checked="true" name="enroll[]" type="checkbox">
+												<xsl:attribute  name="value">
+													<xsl:value-of select="concat(course-offering/code,course-offering/section)"/>
+												</xsl:attribute>
+											</input>
+										</label>
+									</td>
+								</tr>
+							</xsl:for-each>
+						</table>
 					</xsl:for-each>
-					<br /><br />
-					<h2>By pressing Confirm you will be enrolled in the following sections</h2>
-					<table border="1">
-						<xsl:for-each select="response/sections/section">
-							<tr>
-								<td>
-								<label>
-									<xsl:value-of select="concat(course-offering/code,course-offering/section)"/>
-										<input checked="true" name="enroll[]" type="checkbox">
-											<xsl:attribute  name="value">
-												<xsl:value-of select="concat(course-offering/code,course-offering/section)"/>
-											</xsl:attribute>
-										</input>
-									</label>
-								</td>
-							</tr>
-						</xsl:for-each>
-					</table>
 					<br />
 					<input type="submit" value="Confirm Selections"></input>
 				</form>

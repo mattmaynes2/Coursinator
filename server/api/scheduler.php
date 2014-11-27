@@ -323,7 +323,6 @@
 				}
 				echo "</slot>";
 			}
-			echo '</schedule>';
 			echo '<sections>';
 			foreach($this->registeredSections as $section)
 			{
@@ -331,5 +330,6 @@
 					echo '<section>'.$section[0]->to_xml().'</section>';
 			}
 			echo '</sections>';
+			echo '</schedule>';
 		}
 	}
