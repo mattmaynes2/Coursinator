@@ -14,7 +14,9 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 
 <xsl:template match="/">
   <html>
-	  <body>
+		<img src="logo.png"/>
+		<div style="background-color:#CC0033; width:100%;"><xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text></div>
+	<body style="background-color:#DDDDDD">
 		<xsl:for-each select="response/errormessage">
 			<xsl:message terminate="yes" style="color:red"><xsl:value-of select="current()"/></xsl:message>
 		</xsl:for-each>
@@ -41,7 +43,40 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 								<td><xsl:value-of select="@index"/></td>
 								<xsl:for-each select="value">
 									<td>
-										<xsl:value-of select="current()"/>
+										<xsl:choose>
+											<xsl:when test="@depth = 2">
+												<xsl:attribute name="style">background-color:red</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@depth  = 1">
+												<xsl:attribute name="style">background-color:blue</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@depth  = 3">
+												<xsl:attribute name="style">background-color:green</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@depth  = 4">
+												<xsl:attribute name="style">background-color:orange</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@depth  = 5">
+												<xsl:attribute name="style">background-color:purple</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@depth  = 0">
+												<xsl:attribute name="style">background-color:aqua</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@depth  = 6">
+												<xsl:attribute name="style">background-color:maroon</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@depth  = 7">
+												<xsl:attribute name="style">background-color:navy</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@depth  = 8">
+												<xsl:attribute name="style">background-color:fuschia</xsl:attribute>
+											</xsl:when>
+											<xsl:when test="@depth  = 9">
+												<xsl:attribute name="style">background-color:white</xsl:attribute>
+											</xsl:when>
+										</xsl:choose>
+										<xsl:value-of select=".">
+										</xsl:value-of>
 									</td>
 								</xsl:for-each>
 							</tr>
