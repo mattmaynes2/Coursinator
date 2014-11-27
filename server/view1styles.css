@@ -2,6 +2,10 @@ input {
 	font-size:90%;
 }
 
+input[type=radio] {
+
+}
+
 body{
 	background-color:#DDDDDD;
 }

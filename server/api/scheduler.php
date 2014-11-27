@@ -115,7 +115,8 @@
 					if (($lab[0]->getstarttime() == '' and $lab[0]->getendtime() == ''))
 					{
 						$this->registeredSections[$lecture['lecture']->getcourse()->getcode().$lecture['lecture']->getsection()] = ['depth'=>$depth,$lecture['lecture']];
-						$this->registeredSections[$lab[0]->getcourse()->getcode().$lab[0]->getsection()] = ['depth'=>$depth+1,$lab[0]];
+						$this->registeredSections[$lab[0]->getcourse()->getcode().$lab[0]->getsection()] = ['depth'=>$depth,$lab[0]];
+						
 						return true;
 					}
 					//Add this lab to the schedule if the slot is free
@@ -125,7 +126,7 @@
 						if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1))
 						{
 							$this->registeredSections[$lecture['lecture']->getcourse()->getcode().$lecture['lecture']->getsection()] = ['depth'=>$depth,$lecture['lecture']];
-							$this->registeredSections[$lab[0]->getcourse()->getcode().$lab[0]->getsection()] = ['depth'=>$depth+1,$lab[0]];
+							$this->registeredSections[$lab[0]->getcourse()->getcode().$lab[0]->getsection()] = ['depth'=>$depth,$lab[0]];
 							return true;
 						}
 						else
@@ -295,8 +296,8 @@
 							}
 							$span++;
 						}while($toCheck != null and $toCheck == $firstCourse);
-						echo "<value day='$name' span='$span'>".$this->timeslots[$name][$slot]->getcourse()->getcode().$this->timeslots[$name][$slot]->getsection().'</value>';
-						echo '<addedorder>'.$this->registeredSections[$this->timeslots[$name][$slot]->getcourse()->getcode().$this->timeslots[$name][$slot]->getsection()]['depth'].'</addedorder>';
+						echo "<value day='$name' span='$span' depth='".$this->registeredSections[$this->timeslots[$name][$slot]->getcourse()->getcode().$this->timeslots[$name][$slot]->getsection()]['depth'] ."'>".$this->timeslots[$name][$slot]->getcourse()->getcode().$this->timeslots[$name][$slot]->getsection();
+						echo '</value>';
 					}
 				}
 				echo "</slot>";
