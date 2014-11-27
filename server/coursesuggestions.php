@@ -143,17 +143,17 @@
 		$programQuery->select("element_year");
 
 		$programQuery->where("program_id = ?
-							  AND ((credit_type <> 0) OR course_code NOT IN
-							  ".Query::valuelistsql($completed).
-							  ") AND 
-							  ((EXISTS 
-							   (SELECT * FROM course_offerings o
-							   WHERE o.course_code = e.course_code
-							   AND o.year=$year
-							   AND o.term=$term))
-							   OR
-							   (credit_type <> 0))
-							   ORDER BY element_year ASC, term ASC, credit_type DESC", array_merge([$_GET['program_select']], $completed));
+		                      AND ((credit_type <> 0) OR course_code NOT IN
+		                      ".Query::valuelistsql($completed).
+		                      ") AND
+		                      ((EXISTS
+		                       (SELECT * FROM course_offerings o
+		                       WHERE o.course_code = e.course_code
+		                       AND o.year=$year
+		                       AND o.term=$term))
+		                       OR
+		                       (credit_type <> 0))
+		                       ORDER BY element_year ASC, term ASC, credit_type DESC", array_merge([$_GET['program_select']], $completed));
 		$pattern = $programQuery->executeFetchAll(); 
 		
 		//See which of their electives they have fulfilled and remove them from consideration in the pattern
