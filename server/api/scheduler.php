@@ -24,6 +24,17 @@
 			$this->schedules = array();
 		}
 		
+		function reinitialize()
+		{
+			$this->timeslots = array();
+			$this->timeslots['M'] = array_fill(0,26,'NOCOURSE');
+			$this->timeslots['T'] = array_fill(0,26,'NOCOURSE');
+			$this->timeslots['W'] = array_fill(0,26,'NOCOURSE');
+			$this->timeslots['R'] = array_fill(0,26,'NOCOURSE');
+			$this->timeslots['F'] = array_fill(0,26,'NOCOURSE');
+			$this->registeredSections = array();
+		}
+		
 		function getSchedules()
 		{
 			return $this->schedules;
@@ -85,13 +96,14 @@
 				$i++;
 			}
 			$list = [];
-			$s->scheduleCourses($offerings,0,$alternates, $list);
+			$s->scheduleCourses($offerings,0,5,$alternates, $list);
 			return $s;
 		}
 		
 		//If all lab sections for this course are full the algorithm assumes this is normal/university needs to deal with it, and allows the course to be added to the schedule
-		function scheduleCourses($offerings, $depth, $alternates = [], $list=[], $numGenerated = 0)
+		function scheduleCourses($offerings, $depth, $scheduleLimit, $alternates = [], & $list=[], $numGenerated = 0)
 		{	
+			$success = false;	
 			if (count($offerings) == 0)
 			{
 				return true;
@@ -110,15 +122,21 @@
 				}
 				if (count($lecture['labs']) == 0)
 				{
-					if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1,$list,$numGenerated))
+					if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1,$scheduleLimit,$list,$numGenerated))
 					{
 						$this->registeredSections[$lecture['lecture']->getcourse()->getcode().$lecture['lecture']->getsection()] = ['depth'=>$depth,$lecture['lecture']];
-						if ($depth == 0)
+						if ($depth == 0 && $numGenerated < $scheduleLimit)
 						{
 							array_push($this->schedules, clone $this);
+							$this->reinitialize();
+							$this->setCourseAt($lecture['lecture']);
+							$success = true;
 							$numGenerated++;
 						}
-						return true;
+						else
+						{
+							return true;
+						}
 					}
 				}
 				foreach($lecture['labs'] as $lab)
@@ -129,26 +147,39 @@
 						$this->registeredSections[$lecture['lecture']->getcourse()->getcode().$lecture['lecture']->getsection()] = ['depth'=>$depth,$lecture['lecture']];
 						$this->registeredSections[$lab[0]->getcourse()->getcode().$lab[0]->getsection()] = ['depth'=>$depth,$lab[0]];
 						
-						if ($depth == 0)
+						if ($depth == 0 && $numGenerated < $scheduleLimit)
 						{
 							array_push($this->schedules, clone $this);
+							$this->reinitialize();
+							$this->setCourseAt($lecture['lecture']);
+							$success = true;
 							$numGenerated++;
 						}
-						return true;
+						else
+						{
+							return true;
+						}
 					}
 					//Add this lab to the schedule if the slot is free
 					if ($this->isTimeFree($lab[0]))
 					{
 						$this->setCourseAt($lab[0]);
-						if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1,$list,$numGenerated))
+						if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1,$scheduleLimit,$list,$numGenerated))
 						{
 							$this->registeredSections[$lecture['lecture']->getcourse()->getcode().$lecture['lecture']->getsection()] = ['depth'=>$depth,$lecture['lecture']];
 							$this->registeredSections[$lab[0]->getcourse()->getcode().$lab[0]->getsection()] = ['depth'=>$depth,$lab[0]];
-							if ($depth == 0)
+							if ($depth == 0 && $numGenerated < $scheduleLimit)
 							{
 								array_push($this->schedules, clone $this);
+								$this->reinitialize();
+								$this->setCourseAt($lecture['lecture']);
+								$numGenerated++;
+								$success = true;
 							}
-							return true;
+							else
+							{
+								return true;
+							}
 						}
 						else
 						{
@@ -228,7 +259,10 @@
 				$this->getLengthForRange(Schedule::getTimeFromTimestamp($offering->getstarttime()), Schedule::getTimeFromTimestamp($offering->getendtime()));
 				for ($i=0; $i<$this->getLengthForRange(Schedule::getTimeFromTimestamp($offering->getstarttime()), Schedule::getTimeFromTimestamp($offering->getendtime())); $i++)
 				{
-					$this->timeslots[$day][Schedule::timeToSlot(Schedule::getTimeFromTimestamp($offering->getstarttime()))+$i] = 'NOCOURSE';
+					if (isset($this->timeslots[$day][Schedule::timeToSlot(Schedule::getTimeFromTimestamp($offering->getstarttime()))+$i]))
+					{
+						$this->timeslots[$day][Schedule::timeToSlot(Schedule::getTimeFromTimestamp($offering->getstarttime()))+$i]= 'NOCOURSE';
+					}
 				}
 			}
 		}

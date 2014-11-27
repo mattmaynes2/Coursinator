@@ -239,7 +239,11 @@
 		{
 			$s = new Schedule();
 		}
-		$s->to_xml();
+		
+		foreach($s->getSchedules() as $sched)
+		{
+			$sched->to_xml();
+		}
 		
 		echo '<electives>';
 		foreach($electives as $elective)
