@@ -65,13 +65,15 @@
 				{
 					$sub = new Query("course_offerings");
 					$sub->select_object('CourseOffering');
-					$sub->where("course_code=?
+					$sub->where("((course_code=?
 								 AND (section LIKE CONCAT(?,'%')
 								 OR section LIKE ('L%'))
-								 AND (((capacity-enrolled) > 0) OR (capacity=0))
-								 AND type <> 0",
+								 AND type <> 0))
+								 AND (((capacity-enrolled) > 0) OR (capacity=0))",
 								 [$course->getcode(), $row[0]->getsection()]);
-					array_push($offerings[$i], ['labs' =>$sub->executeFetchAll(), 'lecture' => $row[0]]);
+					$results = $sub->executeFetchAll();
+
+					array_push($offerings[$i], ['labs' =>$results, 'lecture' => $row[0]]);
 				}
 				$i++;
 			}

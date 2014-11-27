@@ -46,7 +46,27 @@
 		exit;
 	}
 	
-	//Get the list of courses that they have completed
+	//Figure out the registration year and term
+	$year = date('Y');
+	$month = date('n');
+	
+	if ($month >= 6 and $month <= 7)
+	{
+		$term = 0;
+	}
+	else
+	{
+		$term = 1;
+		if ($month > 7)
+		{
+			$year = $year + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
+		}
+		$term = 0;
+		$year = $year-1;
+	}
+
+	//Get the list of courses that they have completed.
+	//If on pattern query their pattern in the database
 	if(isset($_GET['completed']))
 	{
 		$completed = $_GET['completed'];
@@ -60,7 +80,8 @@
 		$completed_year = $_GET['year_select'];
 		$completedQuery = new Query('program_elements');
 		$completedQuery->select('course_code');
-		$completedQuery->where("element_year <".$completed_year);
+		$completedQuery->where("element_year <".$completed_year."
+								 OR (element_year=$completed_year AND term=0 AND $term=1)");
 		$completedRows = $completedQuery->executeFetchAll();
 		$completed = [];
 		foreach($completedRows as $row)
@@ -77,27 +98,13 @@
 	header('Content-Type: text/xml; charset=utf-8');
 	
 	echo '<response e="0">';
-
+	echo $year.' '.$term;
 	//Get the actual course objects from the database
 	$completed_as_courses = array();
 	
 	foreach ($completed as $c)
 	{
 		array_push($completed_as_courses, Course::fetch($c));
-	}
-
-	//Figure out  which term to register for
-	$year = date('Y');
-	$month = date('n');
-	
-	if ($month >= 6 and $month <= 7)
-	{
-		$term = 0;
-	}
-	else
-	{
-		$term = 0;
-		$year = 2013 + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
 	}
 	
 	//IF THEY ARE ON PATTERN ASSUME ELECTIVES ARE FULFILLED UP TO THIS TERM
@@ -170,15 +177,15 @@
 	$discarded = array();
 	$scheduling = array();
 	$electives = array();
+	$alternatives = array();
 	$endIndex = 0;
 	
 	for($i=0; $i<count($pattern); $i++)
 	{
-		if ($found == 5)
-		{
+	
+		if ($found ==5)
 			break;
-		}
-		
+			
 		if ($pattern[$i][1] != '0')
 		{
 			array_push($electives, $pattern[$i]);
@@ -214,7 +221,7 @@
 		$endIndex = $i;
 	}
 	
-	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, array_slice($pattern, $endIndex+1));
+	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
 
 	if ($s == null && count($electives) == 0)
 	{
