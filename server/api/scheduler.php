@@ -106,8 +106,10 @@
 								 AND (section LIKE CONCAT(?,'%')
 								 OR section LIKE ('L%'))
 								 AND type <> 0))
+								 AND term=?
+								 AND year=?
 								 AND (((capacity-enrolled) > 0) OR (capacity=0))",
-								 [$course->getcode(), $row[0]->getsection()]);
+								 [$course->getcode(), $row[0]->getsection(),$term,$year]);
 					$results = $sub->executeFetchAll();
 
 					array_push($offerings[$i], ['labs' =>$results, 'lecture' => $row[0]]);
@@ -253,8 +255,10 @@
 								 AND (section LIKE CONCAT(?,'%')
 								 OR section LIKE ('L%'))
 								 AND (((capacity-enrolled) > 0) OR (capacity=0))
+								 AND term=?
+								 AND year=?
 								 AND type <> 0",
-								 [$course_code, $row[0]->getsection()]);
+								 [$course_code, $row[0]->getsection(),$term,$year]);
 					array_push($offerings, ['labs' =>$sub->executeFetchAll(), 'lecture' => $row[0]]);
 				}
 				return $offerings;

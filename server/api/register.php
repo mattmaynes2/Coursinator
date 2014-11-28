@@ -21,7 +21,7 @@ require_once("lib/CourseOffering.php");
 			$year = $year + 1;
 		}
 	}
-
+	
 	if (!isset($_GET['enroll']))
 	{
 		echo "<h2>Registration completed</h2>";
