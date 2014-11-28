@@ -25,7 +25,7 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 				</p>
 			</xsl:when>
 			<xsl:otherwise>
-				<h2>Timetable suggestion (does not include electives)</h2>
+				<h2>Timetable suggestion</h2>
 				<xsl:for-each select= "response/schedule">
 					<a href="javascript:void(0)">
 						<xsl:attribute name="onclick">showSchedule(<xsl:value-of select="position()"/>)</xsl:attribute>
