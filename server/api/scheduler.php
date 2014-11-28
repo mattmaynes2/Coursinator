@@ -361,7 +361,7 @@
 			foreach($this->registeredSections as $section)
 			{
 				if ($section)
-					echo '<section>'.$section[0]->to_xml().'</section>';
+					echo $section[0]->to_xml();
 			}
 			echo '</sections>';
 			echo '</schedule>';

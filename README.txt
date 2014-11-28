@@ -17,3 +17,11 @@
    server/js - Contains Javascript required for Student Views 1 and 2
 
 6.
+
+7. The code does not implement the year status prerequisites.
+
+   Concurrent Courses
+   The structure of the prerequisites is as follows: Each course may have one or more "course groups" 
+   specified as prerequisites.Each of these course groups may have a "concurrent" flag set, which indicates 
+   that they may be taken concurrently. The SQL queries for prerequisites check this flag.
+   
