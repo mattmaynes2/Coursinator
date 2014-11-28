@@ -40,8 +40,11 @@
 		}
 		
 		$fd = fopen("php://input", "r");
-		fgets($fd); // Drop header line.
-
+		$first = fgets($fd);
+		$firstLine = explode(",",$first); // header line contains term and year (0=fall 1=winter)
+		$term = $firstLine[0];
+		$year = $firstLine[1];
+		
 		while ($e = gcsv($fd)){
 			if (count($e) != 9)
 				die("Got line with ".count($e)."lines!");
@@ -73,8 +76,8 @@
 			$co->setcourse($c);
 			$co->setsection($section);
 			$co->settype($type);
-			$co->setyear(2014);
-			$co->setterm(CourseOffering::TERM_FALL);
+			$co->setyear($year);
+			$co->setterm($term);
 			$co->setdays($days);
 			$co->setenrolled(0);
 			$co->setcapacity($capacity);

@@ -11,6 +11,7 @@
 		private $term;
 		private $year;
 		private $schedules;
+		private $notimes;
 		
 		function __construct()
 		{
@@ -21,11 +22,13 @@
 			$this->timeslots['R'] = array_fill(0,26,'NOCOURSE');
 			$this->timeslots['F'] = array_fill(0,26,'NOCOURSE');
 			$this->registeredSections = array();
+			$this->notimes = array();
 			$this->schedules = array();
 		}
 		
 		function reinitialize()
 		{
+			$this->notimes = array();
 			$this->timeslots = array();
 			$this->timeslots['M'] = array_fill(0,26,'NOCOURSE');
 			$this->timeslots['T'] = array_fill(0,26,'NOCOURSE');
@@ -59,7 +62,7 @@
 			$s->setYear($year);
 			
 			if (count($courses) <= 0)
-				return null;
+				return new Schedule();
 			
 			$i = 0;
 			//Get all of the offerings for each of the desired courses
@@ -73,7 +76,7 @@
 				$q->where('course_code=?
 							AND term=?
 							AND year=?
-							AND (capacity - enrolled) > 0 
+							AND ((capacity - enrolled > 0) OR (capacity=0))
 							AND type=0', [$course->getcode(),$term,$year]);
 		
 				$rows = $q->executeFetchAll();
@@ -115,6 +118,10 @@
 				if ($this->isTimeFree($lecture['lecture']))
 				{
 					$this->setCourseAt($lecture['lecture']);
+					if ($lecture['lecture']->getstarttime() == 0 or $lecture['lecture']->getendtime() == 0)
+					{
+						array_push($this->notimes, $lecture['lecture']);
+					}
 				}
 				else
 				{
@@ -364,6 +371,14 @@
 					echo $section[0]->to_xml();
 			}
 			echo '</sections>';
+			echo '<notimes>';
+			
+			foreach($this->notimes as $notime)
+			{
+				echo $notime->to_xml();
+			}
+			echo '</notimes>';
+			
 			echo '</schedule>';
 		}
 	}
