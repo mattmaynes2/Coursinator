@@ -37,6 +37,7 @@ function loadTasks()
 	getAvailableTerms();
 	getPrograms();
 	getProgram();
+	document.getElementById("onpattern").checked = true;
 }
 
 function getPrograms()
