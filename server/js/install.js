@@ -1,3 +1,26 @@
+function auto_onsubmit(e) {
+	e.preventDefault();
+	
+	var res = document.getElementById("auto_result");
+	
+	var req = new XMLHttpRequest();
+	req.open("POST", "api/autoinstall.php");
+	req.send();
+	
+	res.textContent = "Sending request…";
+	
+	req.onreadystatechange = function auto_onsubmit_res(){
+		if (req.readyState != 4) return;
+		if (200 <= req.status && req.status < 300) {
+			// Success!
+			res.textContent = "Creation Successfull!";
+		} else {
+			// Error!
+			res.textContent = req.statsText + ": " + req.responseText;
+		}
+	};
+}
+
 function create_onsubmit(e) {
 	e.preventDefault();
 	
@@ -5,7 +28,7 @@ function create_onsubmit(e) {
 	var res   = document.getElementById("create_result");
 	
 	var req = new XMLHttpRequest();
-	req.open("POST", "/api/create.php"+(force? "?force" : ""));
+	req.open("POST", "api/create.php"+(force? "?force" : ""));
 	req.send();
 	
 	res.textContent = "Sending request…";
@@ -17,7 +40,7 @@ function create_onsubmit(e) {
 			res.textContent = "Creation Successfull!";
 		} else {
 			// Error!
-			res.textContent = req.statsText + ": " + res.textContent;
+			res.textContent = req.statsText + ": " + req.responseText;
 		}
 	};
 }
@@ -35,20 +58,20 @@ function pre_onsubmit(e) {
 	}
 	
 	var req = new XMLHttpRequest();
-	req.open("POST", "/api/prerequsites.php");
+	req.open("POST", "api/prerequsites.php");
 	req.setRequestHeader("Content-Type", "application/xml");
 	req.send(data);
 	
 	res.textContent = "Sending request…";
 	
-	req.onreadystatechange = function create_onsubmit_res(){
+	req.onreadystatechange = function pre_onsubmit_res(){
 		if (req.readyState != 4) return;
 		if (200 <= req.status && req.status < 300) {
 			// Success!
 			res.textContent = "Creation Successfull!";
 		} else {
 			// Error!
-			res.textContent = req.statsText + ": " + res.textContent;
+			res.textContent = req.statsText + ": " + req.responseText;
 		}
 	};
 }
@@ -66,20 +89,20 @@ function course_onsubmit(e) {
 	}
 	
 	var req = new XMLHttpRequest();
-	req.open("POST", "/api/courseofferings.php");
+	req.open("POST", "api/courseofferings.php");
 	req.setRequestHeader("Content-Type", "application/xml");
 	req.send(data);
 	
 	res.textContent = "Sending request…";
 	
-	req.onreadystatechange = function create_onsubmit_res(){
+	req.onreadystatechange = function course_onsubmit_res(){
 		if (req.readyState != 4) return;
 		if (200 <= req.status && req.status < 300) {
 			// Success!
 			res.textContent = "Creation Successfull!";
 		} else {
 			// Error!
-			res.textContent = req.statsText + ": " + res.textContent;
+			res.textContent = req.statsText + ": " + req.responseText;
 		}
 	};
 }

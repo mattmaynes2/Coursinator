@@ -1,7 +1,21 @@
 <?php
-	$dsn = getenv('COURSINATOR_DB');
-	$user = getenv('COURSINATOR_USER');
-	$pass = getenv('COURSINATOR_PASS');
+	$defaultdsn  = 'mysql:dbname=coursinator';
+	$defaultuser = 'user';
+	$serverdsn = 'mysql:host=localhost';
+	$defaultpass = '';
+	
+	$dsn  = getenv('COURSINATOR_DB')   ?: $defaultdsn;
+	$user = getenv('COURSINATOR_USER') ?: $defaultuser;
+	$pass = getenv('COURSINATOR_PASS') ?: $defaultpass;
+	
+	
+	if ($user)
+		$db_server = new PDO($serverdsn,$user,$pass);
+	else
+		$db_server = new PDO($serverdsn,$user,$pass);
+	
+	$db_server->exec("CREATE DATABASE IF NOT EXISTS coursinator");
+	
 	if ($user)
 		$db = new PDO($dsn, $user, $pass);
 	else

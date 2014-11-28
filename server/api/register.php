@@ -1,7 +1,9 @@
 <?php
-require_once("lib/db.php");
-require_once("lib/CourseOffering.php");
-
+	require_once("lib/db.php");
+	require_once("lib/CourseOffering.php");
+	
+	date_default_timezone_set('UTC');
+	
 	//Figure out  which term to register for
 	$year = date('Y');
 	$month = date('n');
@@ -24,7 +26,7 @@ require_once("lib/CourseOffering.php");
 	
 	if (!isset($_GET['enroll']))
 	{
-		echo "<h2>Registration completed</h2>";
+		echo "<h2>No courses specified</h2>";
 	}
 	else
 	{
@@ -64,7 +66,24 @@ require_once("lib/CourseOffering.php");
 				}
 				else
 				{
-					echo '<p>Registered in '.$sectioncode.'</p>';
+					$q = new Query('course_offerings');
+					$q->select_object('CourseOffering');
+					$q->where("term=? 
+						AND year=?
+						AND course_code = ?
+						AND section = ?",[$term,$year,$course_code, $section_id]);
+					$result = $q->executeFetchAll();
+					if (isset($result[0]))
+					{
+						if ($result[0][0]->getcapacity() != 0)
+						{
+							echo '<p>Registered in '.$sectioncode.' Seats remaining:'.($result[0][0]->getcapacity()-$result[0][0]->getenrolled()).'</p>';
+						}
+						else
+						{
+							echo '<p>Registered in '.$sectioncode.'</p>';
+						}
+					}
 				}
 			}
 			else

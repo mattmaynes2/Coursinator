@@ -38,6 +38,8 @@
 	require_once("api/scheduler.php");
 	require_once("api/electives.php");
 	
+	date_default_timezone_set('UTC');
+	
 	//Use suggestedCourses.xsl to make this user-readable
 	echo "<?xml-stylesheet type='text/xsl' href='suggestedCourses.xsl'?>";
 	
