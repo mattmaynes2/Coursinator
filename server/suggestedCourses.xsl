@@ -25,7 +25,7 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 				</p>
 			</xsl:when>
 			<xsl:otherwise>
-				<h2>Schedule suggestion (does not include electives)</h2>
+				<h2>Timetable suggestion (does not include electives)</h2>
 				<xsl:for-each select= "response/schedule">
 					<a href="javascript:void(0)">
 						<xsl:attribute name="onclick">showSchedule(<xsl:value-of select="position()"/>)</xsl:attribute>
@@ -93,14 +93,14 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 							</table>
 							<h2>By pressing Confirm you will be enrolled in the following sections</h2>
 							<table border="1">
-								<xsl:for-each select="sections/section">
+								<xsl:for-each select="sections/course-offering">
 									<tr>
 										<td>
-										<label>c
-											<xsl:value-of select="concat(course-offering/code,course-offering/section)"/>
+										<label>
+											<xsl:value-of select="concat(code,section)"/>
 												<input checked="true" name="enroll[]" type="checkbox">
 													<xsl:attribute  name="value">
-														<xsl:value-of select="concat(course-offering/code,course-offering/section)"/>
+														<xsl:value-of select="concat(code,section)"/>
 													</xsl:attribute>
 												</input>
 											</label>
