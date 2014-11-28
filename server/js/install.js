@@ -1,3 +1,26 @@
+function auto_onsubmit(e) {
+	e.preventDefault();
+	
+	var res = document.getElementById("auto_result");
+	
+	var req = new XMLHttpRequest();
+	req.open("POST", "/api/autoinstall.php");
+	req.send();
+	
+	res.textContent = "Sending request…";
+	
+	req.onreadystatechange = function auto_onsubmit_res(){
+		if (req.readyState != 4) return;
+		if (200 <= req.status && req.status < 300) {
+			// Success!
+			res.textContent = "Creation Successfull!";
+		} else {
+			// Error!
+			res.textContent = req.statsText + ": " + req.responseText;
+		}
+	};
+}
+
 function create_onsubmit(e) {
 	e.preventDefault();
 	
@@ -17,7 +40,7 @@ function create_onsubmit(e) {
 			res.textContent = "Creation Successfull!";
 		} else {
 			// Error!
-			res.textContent = req.statsText + ": " + res.textContent;
+			res.textContent = req.statsText + ": " + req.responseText;
 		}
 	};
 }
@@ -41,14 +64,14 @@ function pre_onsubmit(e) {
 	
 	res.textContent = "Sending request…";
 	
-	req.onreadystatechange = function create_onsubmit_res(){
+	req.onreadystatechange = function pre_onsubmit_res(){
 		if (req.readyState != 4) return;
 		if (200 <= req.status && req.status < 300) {
 			// Success!
 			res.textContent = "Creation Successfull!";
 		} else {
 			// Error!
-			res.textContent = req.statsText + ": " + res.textContent;
+			res.textContent = req.statsText + ": " + req.responseText;
 		}
 	};
 }
@@ -72,14 +95,14 @@ function course_onsubmit(e) {
 	
 	res.textContent = "Sending request…";
 	
-	req.onreadystatechange = function create_onsubmit_res(){
+	req.onreadystatechange = function course_onsubmit_res(){
 		if (req.readyState != 4) return;
 		if (200 <= req.status && req.status < 300) {
 			// Success!
 			res.textContent = "Creation Successfull!";
 		} else {
 			// Error!
-			res.textContent = req.statsText + ": " + res.textContent;
+			res.textContent = req.statsText + ": " + req.responseText;
 		}
 	};
 }

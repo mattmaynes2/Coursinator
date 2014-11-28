@@ -39,6 +39,8 @@
 	require_once("api/scheduler.php");
 	require_once("api/electives.php");
 	
+	date_default_timezone_set('UTC');
+	
 	//Must select a pattern
 	if(!isset($_GET['pattern']))
 	{
