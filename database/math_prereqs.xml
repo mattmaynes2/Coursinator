@@ -1,264 +1,387 @@
-<!-- Prereqs on the same line are ORs and those on different lines are AND unless otherwise stated -->
-<course code="MATH0006"/>
+<prerequisites>
+<course code="MATH0006">
 	<prerequsite code="MATH0005"/>
 </course>
-<course code="MATH1005"/>
-	<prerequsite code="MATH1004"concurrent="true"/> 
-	<!-- AND --> 
-	<prerequsite code="MATH1104"concurrent="true"> <!-- OR --> <prerequsite code="MATH1107"concurrent="true"/>
+<course code="MATH1005">
+	<prerequsite code="MATH1004" concurrent="true"/>
+	<group>
+		<prerequsite code="MATH1104" concurrent="true"/>
+		<prerequsite code="MATH1107" concurrent="true"/>
+	</group>
 </course>
-<course code="MATH1402"/>
-	<prerequsite code="ECON1000"/> <!-- OR --> <prerequsite code="FYSM1003"/>
-	<!-- AND -->
-	<prerequsite code="ECON1401"/> <!-- OR --> <prerequsite code="MATH1401"/>
+<course code="MATH1402">
+	<group>
+		<prerequsite code="ECON1000"/>
+		<prerequsite code="FYSM1003"/>
+	</group>
+	<group>
+		<prerequsite code="ECON1401"/>
+		<prerequsite code="MATH1401"/>
+	</group>
 </course>
-<course code="MATH2000"/>
-	<prerequsite code="MATH1002"/> <!-- OR -->  <prerequsite code="MATH2007"/> <!-- OR --> <prerequsite code="MATH1005"/>
-	<!-- AND -->
-	<prerequsite code="MATH1102"/> <!-- OR --> <prerequsite code="MATH1107"/> <!-- OR --> <prerequsite code="MATH1104"/> 
-	<prerequsite code="MATH1800"concurrent="true"/>
+<course code="MATH2000">
+	<group>
+		<prerequsite code="MATH1002"/>
+		<prerequsite code="MATH2007"/>
+		<prerequsite code="MATH1005"/>
+	</group>
+	<group>
+		<prerequsite code="MATH1102"/>
+		<prerequsite code="MATH1107"/>
+		<prerequsite code="MATH1104"/>
+		<prerequsite code="MATH1800" concurrent="true"/>
+	</group>
 </course>
-<course code="MATH2004"/>
+<course code="MATH2004">
+	<group>
 	<prerequsite code="MATH1005"/> <prerequsite code="MATH2007"/>
+	</group>
+	<group>
 	<prerequsite code="MATH1104"/> <prerequsite code="MATH1107"/>
+	</group>
 </course>
-<course code="MATH2007"/>
+<course code="MATH2007">
+	<group>
 	<prerequsite code="MATH1004"/> <prerequsite code="MATH1007"/>
+	</group>
 </course>
-<course code="MATH2008"/>
+<course code="MATH2008">
+	<group>
 	<prerequsite code="MATH1002"/> <prerequsite code="MATH1005"/> <prerequsite code="MATH2007"/>
+	</group>
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH1104"/> <prerequsite code="MATH1107"/>
+	</group>
 </course>
-<course code="MATH2100"/>
-	<prerequsite code="MATH1102"/> 
-	<prerequsite code="MATH1800"concurrent="true"/>
+<course code="MATH2100">
+	<prerequsite code="MATH1102"/>
+	<prerequsite code="MATH1800" concurrent="true"/>
 </course>
-<course code="MATH2107"/>
+<course code="MATH2107">
+	<group>
 	<prerequsite code="MATH1104"/> <prerequsite code="MATH1107"/> <prerequsite code="MATH1109"/>
+	</group>
 	<prerequsite code="MATH1007"/>
 </course>
-<course code="MATH2108"/>
+<course code="MATH2108">
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH2107"/>
-	<prerequsite code="MATH1800"concurrent="true"/>
+	</group>
+	<prerequsite code="MATH1800" concurrent="true"/>
 </course>
-<course code="MATH2404"/>
+<course code="MATH2404">
 	<prerequsite code="MATH1002"/>
+	<group>
 	<prerequsite code="MATH1102"/>  <prerequsite code="MATH1107"/> <!-- AND --> <prerequsite code="MATH2007"/>
+	</group>
 </course>
-<course code="MATH2454"/>
-	<prerequsite code="MATH1002"/> <prerequsite code="MATH2007"/> <prerequsite code="MATH1005"/>  
+<course code="MATH2454">
+	<group>
+	<prerequsite code="MATH1002"/> <prerequsite code="MATH2007"/> <prerequsite code="MATH1005"/>
+	</group>
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH2107"/>
+	</group>
 </course>
-<course code="MATH2800"/>
+<course code="MATH2800">
 	<prerequsite code="COMP1006"/>
+	<group>
 	<prerequsite code="MATH1007"/> <prerequsite code="MATH1107"/> <prerequsite code="STAT2507"/>
+	</group>
 </course>
-<course code="MATH3001"/>
+<course code="MATH3001">
 	<prerequsite code="MATH2000"/>
 </course>
-<course code="MATH3002"/>
+<course code="MATH3002">
 	<prerequsite code="MATH3001"/>
 </course>
-<course code="MATH3003"/>
+<course code="MATH3003">
 	<prerequsite code="MATH3001"/>
 </course>
-<course code="MATH3007"/>
+<course code="MATH3007">
+	<group>
 	<prerequsite code="MATH2004"/> <prerequsite code="MATH2008"/> <prerequsite code="MATH2009"/>
+	</group>
 </course>
-<course code="MATH3008"/>
+<course code="MATH3008">
 	<prerequsite code="MATH2000"/>
 	<prerequsite code="MATH2454"/>
 </course>
-<course code="MATH3009"/>
+<course code="MATH3009">
+	<group>
 	<prerequsite code="MATH2004"/> <prerequsite code="MATH2008"/> <prerequsite code="MATH2009"/>
+	</group>
 </course>
-<course code="MATH3057"/>
+<course code="MATH3057">
 	<prerequsite code="MATH2000"/>
 </course>
-<course code="MATH3101"/>
+<course code="MATH3101">
+	<group>
 	<prerequsite code="MATH2107"/> <prerequsite code="MATH1102"/>
-	<prerequsite code="COMP1805"/> <!-- AND --> <prerequsite code="MATH1805"/>  <prerequsite code="MATH1800 concurrent="true"/>
+	</group>
+	<prerequsite code="COMP1805"/>
+	<group>
+	<prerequsite code="MATH1805"/>  <prerequsite code="MATH1800" concurrent="true"/>
+	</group>
 </course>
-<course code="MATH3106"/>
+<course code="MATH3106">
 	<prerequsite code="MATH2100"/>
 </course>
-<course code="MATH3107"/>
+<course code="MATH3107">
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH2107"/>
+	</group>
+	<group>
 	<prerequsite code="MATH1002"/> <prerequsite code="MATH2007"/>
+	</group>
 </course>
-<course code="MATH3108"/>
+<course code="MATH3108">
 	<prerequsite code="MATH2108"/>
 </course>
-<course code="MATH3158"/>
+<course code="MATH3158">
 	<prerequsite code="MATH2100"/>
 </course>
-<course code="MATH3206"/>
+<course code="MATH3206">
+	<group>
 	<prerequsite code="MATH2100"/> <prerequsite code="MATH2108"/> <prerequsite code="MATH3101"/>
+	</group>
 </course>
-<course code="MATH3210"/>
+<course code="MATH3210">
+	<group>
 	<prerequsite code="MATH2100"/> <prerequsite code="MATH2108"/> <prerequsite code="MATH3101"/>
+	</group>
 </course>
-<course code="MATH3306"/>
+<course code="MATH3306">
 	<prerequsite code="MATH2100"/>
 </course>
-<course code="MATH3355"/>
+<course code="MATH3355">
+	<group>
 	<prerequsite code="MATH2100"/> <prerequsite code="MATH2108"/> <prerequsite code="MATH3101"/>
+	</group>
 </course>
-<course code="MATH3404"/>
+<course code="MATH3404">
+	<group>
 	<prerequsite code="MATH2404"/> <prerequsite code="MATH2008"/>
+	</group>
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH2107"/>
+	</group>
 </course>
-<course code="MATH3705"/>
+<course code="MATH3705">
+	<group>
 	<prerequsite code="MATH1005"/> <prerequsite code="MATH2404"/>
+	</group>
+	<group>
 	<prerequsite code="MATH2004"/> <prerequsite code="MATH2008"/> <prerequsite code="MATH2009"/>
+	</group>
 </course>
-<course code="MATH3800"/>
-	<prerequsite code="MATH1107"/> <prerequsite code="MATH1104"/> 
+<course code="MATH3800">
+	<group>
+	<prerequsite code="MATH1107"/> <prerequsite code="MATH1104"/>
+	</group>
+	<group>
 	<prerequsite code="MATH1005"/> <prerequsite code="MATH2007"/>
+	</group>
 </course>
-<course code="MATH3801"/>
+<course code="MATH3801">
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH2107"/>
+	</group>
 </course>
-<course code="MATH3802"/>
+<course code="MATH3802">
 	<prerequsite code="MATH3801"/>
 </course>
-<course code="MATH3804"/>
+<course code="MATH3804">
+	<group>
 	<prerequsite code="COMP2002"/> <prerequsite code="COMP2402"/>
-	<prerequsite code="COMP1805"/> <prerequsite code="MATH2007"/> <!-- AND --> <prerequsite code="MATH2108"/>
+	</group>
+	<group>
+	<prerequsite code="COMP1805"/> <prerequsite code="MATH2007"/>
+	</group>
+	<prerequsite code="MATH2108"/>
 </course>
-<course code="MATH3806"/>
+<course code="MATH3806">
+	<group>
 	<prerequsite code="MATH1002"/> <prerequsite code="MATH1005"/> <prerequsite code="MATH2007"/>
+	</group>
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH2107"/>
+	</group>
 </course>
-<course code="MATH3807"/>
+<course code="MATH3807">
 	<prerequsite code="MATH3806"/>
 </course>
-<course code="MATH3808"/>
+<course code="MATH3808">
+	<group>
 	<prerequsite code="STAT2655"/> <prerequsite code="STAT2605"/> <prerequsite code="STAT2507"/> <prerequsite code="STAT2606"/> <prerequsite code="STAT3502"/> <prerequsite code="MATH3825"/> <prerequsite code="MATH3855"/>
+	</group>
 </course>
-<course code="MATH3809"/>
+<course code="MATH3809">
+	<group>
 	<prerequsite code="MATH2108"/> <prerequsite code="MATH3101"/> <prerequsite code="MATH2100"/>
+	</group>
 </course>
-<course code="MATH3815"/>
+<course code="MATH3815">
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH1107"/>
+	</group>
+	<group>
 	<prerequsite code="MATH1002"/> <prerequsite code="MATH2007"/>
+	</group>
 </course>
-<course code="MATH3816"/>
+<course code="MATH3816">
+	<group>
 	<prerequsite code="MATH1002"/> <prerequsite code="MATH2007"/>
+	</group>
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH1107"/>
+	</group>
 </course>
-<course code="MATH3819"/>
+<course code="MATH3819">
+	<group>
 	<prerequsite code="MATH2108"/> <prerequsite code="MATH3101"/> <prerequsite code="MATH2100"/>
+	</group>
 </course>
-<course code="MATH3825"/>
+<course code="MATH3825">
+	<group>
 	<prerequsite code="MATH2108"/> <prerequsite code="MATH3101"/>
+	</group>
 </course>
-<course code="MATH3855"/>
+<course code="MATH3855">
+	<group>
 	<prerequsite code="MATH2100"/> <prerequsite code="MATH2108"/> <prerequsite code="MATH3101"/>
+	</group>
 </course>
-<course code="MATH4002"/>
+<course code="MATH4002">
 	<prerequsite code="MATH3001"/>
 </course>
-<course code="MATH4003"/>
+<course code="MATH4003">
 	<prerequsite code="MATH4007"/>
 </course>
-<course code="MATH4007"/>
+<course code="MATH4007">
 	<prerequsite code="MATH3001"/>
 </course>
-<course code="MATH4102"/>
+<course code="MATH4102">
+	<group>
 	<prerequsite code="MATH3106"/> <prerequsite code="MATH3108"/>
+	</group>
 </course>
-<course code="MATH4105"/>
+<course code="MATH4105">
 	<prerequsite code="MATH3158"/>
 </course>
-<course code="MATH4106"/>
+<course code="MATH4106">
 	<prerequsite code="MATH3106"/>
 </course>
-<course code="MATH4107"/>
+<course code="MATH4107">
 	<prerequsite code="MATH3158"/>
 </course>
-<course code="MATH4108"/>
+<course code="MATH4108">
 	<prerequsite code="MATH3158"/>
 </course>
-<course code="MATH4109"/>
+<course code="MATH4109">
+	<group>
 	<prerequsite code="MATH2100"/> <prerequsite code="MATH3101"/> <prerequsite code="MATH2108"/>
+	</group>
 </course>
-<course code="MATH4205"/>
+<course code="MATH4205">
 	<prerequsite code="MATH3001"/>
 </course>
-<course code="MATH4206"/>
+<course code="MATH4206">
+	<group>
 	<prerequsite code="MATH3106"/>
 	<prerequsite code="MATH4205"/>
+	</group>
 </course>
-<course code="MATH4207"/>
+<course code="MATH4207">
 	<prerequsite code="MATH3106"/>
 </course>
-<course code="MATH4208"/>
+<course code="MATH4208">
 	<prerequsite code="MATH3002"/>
 </course>
-<course code="MATH4305"/>
+<course code="MATH4305">
 	<prerequsite code="MATH3057"/>
 </course>
-<course code="MATH4306"/>
+<course code="MATH4306">
 	<prerequsite code="MATH3158" concurrent="true"/>
 </course>
-<course code="MATH4600"/>
-	<prerequsite code="STAT2509"/> <prerequsite code="STAT2559"/> 
+<course code="MATH4600">
+	<group>
+	<prerequsite code="STAT2509"/> <prerequsite code="STAT2559"/>
+	</group>
 	<prerequsite code="MATH3801"/>
 </course>
-<course code="MATH4700"/>
+<course code="MATH4700">
 	<prerequsite code="MATH3057"/>
+	<group>
 	<prerequsite code="MATH3008"/> <prerequsite code="MATH3705"/>
+	</group>
 </course>
-<course code="MATH4701"/>
+<course code="MATH4701">
 	<prerequsite code="MATH3008"/>
+	<group>
 	<prerequsite code="MATH3002"/> <prerequsite code="MATH3057"/>
+	</group>
 </course>
-<course code="MATH4703"/>
+<course code="MATH4703">
 	<prerequsite code="MATH3001"/>
 	<prerequsite code="MATH3008"/>
 </course>
-<course code="MATH4708"/>
+<course code="MATH4708">
 	<prerequsite code="MATH3057"/>
+	<group>
 	<prerequsite code="MATH3008"/> <prerequsite code="MATH3705"/>
+	</group>
 </course>
-<course code="MATH4801"/>
+<course code="MATH4801">
 	<prerequsite code="MATH2100"/>
 	<prerequsite code="MATH3855"/>
 </course>
-<course code="MATH4802"/>
+<course code="MATH4802">
 	<prerequsite code="MATH2100"/>
 </course>
-<course code="MATH4803"/>
+<course code="MATH4803">
+	<group>
 	<prerequsite code="MATH2100"/>  <prerequsite code="MATH3855"/>
+	</group>
 </course>
-<course code="MATH4805"/>
+<course code="MATH4805">
+	<group>
 	<prerequsite code="MATH3106"/>  <prerequsite code="MATH3158"/> <prerequsite code="MATH3855"/>
+	</group>
 </course>
-<course code="MATH4806"/>
+<course code="MATH4806">
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH2107"/>
+	</group>
 	<prerequsite code="MATH2000"/>
 	<prerequsite code="MATH3806"/>
 </course>
-<course code="MATH4807"/>
+<course code="MATH4807">
 	<prerequsite code="MATH3801"/>
 </course>
-<course code="MATH4808"/>
+<course code="MATH4808">
+	<group>
 	<prerequsite code="MATH3106"/> <prerequsite code="MATH3158"/> <prerequsite code="MATH3855"/>
+	</group>
 </course>
-<course code="MATH4809"/>
+<course code="MATH4809">
 	<prerequsite code="MATH3158"/>
 </course>
-<course code="MATH4811"/>
+<course code="MATH4811">
 	<prerequsite code="MATH3855"/>
 </course>
-<course code="MATH4816"/>
+<course code="MATH4816">
 	<prerequsite code="MATH2454"/>
 	<prerequsite code="MATH3806"/>
 </course>
-<course code="MATH4821"/>
+<course code="MATH4821">
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH2107"/>
+	</group>
 </course>
-<course code="MATH4822"/>
+<course code="MATH4822">
+	<group>
 	<prerequsite code="MATH1102"/> <prerequsite code="MATH2107"/>
+	</group>
 </course>
+</prerequisites>

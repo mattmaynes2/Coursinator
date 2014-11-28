@@ -5,11 +5,11 @@
 		return $r;
 	}
 	
-	function getChildrenByTag($e, $t) {
+	function getChildrenByTag($e, $t = NULL) {
 		$r = [];
 		foreach ($e->childNodes as $c) {
 			if (!is_a($c, 'DOMElement')) continue;
-			if ($c->tagName != $t) continue;
+			if ($t != NULL && $c->tagName != $t) continue;
 			
 			$r[] = $c;
 		}
