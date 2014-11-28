@@ -36,7 +36,7 @@ public class CRRequest extends Request{
 	 * 
 	 * @since November 9, 2014
 	 */
-	private static final String crRoot = "/server";
+	private static final String crRoot = "/Coursinator/server";
 
 	/**
 	 * Creates a Coursinator server request object

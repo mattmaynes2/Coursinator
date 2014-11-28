@@ -5,10 +5,10 @@ import javax.swing.JPanel;
 import java.awt.GridLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-
 import java.util.List;
 import java.util.ArrayList;
 
+import cr.CRRequest;
 import cr.ProgramElement;
 
 public class CourseGrid extends JPanel implements SubmitRequestListener
@@ -44,7 +44,7 @@ public class CourseGrid extends JPanel implements SubmitRequestListener
 
 	@Override
 	public void requestSubmitted(SubmitRequest request) {
-		//TODO send request to server
+		CRRequest req = new CRRequest();
 		
 	}
 }
