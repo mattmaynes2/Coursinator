@@ -1,7 +1,9 @@
 package cr;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import xml.XMLObject;
 
@@ -23,6 +25,7 @@ public class CourseOffering extends XMLObject{
 	 */
 	public static final String SCHEMA_IDENTIFIER = "course-offering";
 	
+	private static final Color[] colors = {Color.RED, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.GRAY, Color.CYAN, Color.DARK_GRAY, Color.LIGHT_GRAY, Color.MAGENTA, Color.PINK};
 	
 	/**
 	 * The ID of the offering. This integer does not correspond to the code of the course
@@ -116,12 +119,18 @@ public class CourseOffering extends XMLObject{
 	private int endTime;
 	
 	/**
+	 * Stores the color of this offering
+	 */
+	private Color color;
+	
+	/**
 	 * Constructs an empty course offering 
 	 * 
 	 * @since November 9, 2014
 	 * @author Matthew Maynes
 	 */
 	public CourseOffering(){
+		Random rand = new Random();
 		this.id = -1;
 		this.year = -1;
 		this.term = -1;
@@ -132,6 +141,7 @@ public class CourseOffering extends XMLObject{
 		this.days = "";
 		this.room = "";	
 		this.section = "";
+		this.color = colors[rand.nextInt(colors.length)];
 	}
 	
 	/**
@@ -151,6 +161,14 @@ public class CourseOffering extends XMLObject{
 		this.days = c.days;
 		this.room = c.room;	
 		this.section = c.section;
+		this.color = c.color;
+	}
+	
+	/**
+	 * @return Returns the color of this offering
+	 */
+	public Color getColor(){
+		return this.color;
 	}
 	
 	/**

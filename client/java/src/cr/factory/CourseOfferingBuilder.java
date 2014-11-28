@@ -30,51 +30,51 @@ public class CourseOfferingBuilder extends XMLBuilder<CourseOffering> {
 		NodeList nodes;
 	
 		nodes = node.getElementsByTagName("id");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setId(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		nodes = node.getElementsByTagName("code");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null)
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals(""))
 			offering.setCode(nodes.item(0).getTextContent());
 		
 		nodes = node.getElementsByTagName("year");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setYear(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		nodes = node.getElementsByTagName("section");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setSection(nodes.item(0).getTextContent());
 		
 		nodes = node.getElementsByTagName("term");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setTerm(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		nodes = node.getElementsByTagName("days");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setDays(nodes.item(0).getTextContent());
 		
 		nodes = node.getElementsByTagName("enrolled");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setEnrolled(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		nodes = node.getElementsByTagName("capacity");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setCapacity(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		nodes = node.getElementsByTagName("room");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setRoom(nodes.item(0).getTextContent());
 		
 		nodes = node.getElementsByTagName("type");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setType(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		nodes = node.getElementsByTagName("start_time");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setStartTime(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		nodes = node.getElementsByTagName("end_time");
-		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
+		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null && !nodes.item(0).getTextContent().equals("")) 
 			offering.setEndTime(Integer.parseInt(nodes.item(0).getTextContent()));
 		
 		return offering;	

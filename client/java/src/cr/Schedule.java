@@ -73,10 +73,12 @@ public class Schedule extends XMLObject{
 	}
 	
 	public int roundStart(int time){
+		if(time < START_TIME) return time;
 		return time - 5;
 	}
 	
 	public int roundEnd(int time){
+		if(time < START_TIME ) return time;
 		String buffer = Integer.toString(time);
 		if(buffer.charAt(buffer.length() - 2) == '2')
 			return time + 5;

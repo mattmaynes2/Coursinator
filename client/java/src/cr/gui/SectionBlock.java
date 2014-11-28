@@ -1,7 +1,7 @@
 package cr.gui;
 
-import java.awt.Color;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -25,17 +25,17 @@ public class SectionBlock extends JPanel{
 	public SectionBlock(CourseOffering offering){
 		this.offering = offering;
 		courseCodeLabel = new JLabel();
-		
-
-		setBackground(Color.WHITE);
 		setSize(100, 100);
 		this.add(courseCodeLabel);
+		this.setBorder(BorderFactory.createEtchedBorder());
 	}
 
 	public void display(){
 		if(offering != null){
 			courseCodeLabel.setText(offering.getCode() + " " + offering.getSection());
+			setBackground(offering.getColor());
 		}
+		
 	}	
 	
 }

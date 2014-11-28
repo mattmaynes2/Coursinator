@@ -66,8 +66,8 @@ public class CoursePicker extends JPanel{
 		JScrollPane optionsScrollPane = new JScrollPane(options);
 		JScrollPane takenScrollPane = new JScrollPane(taken);
 		
-		optionsScrollPane.setPreferredSize(new Dimension(100, 300));
-		takenScrollPane.setPreferredSize(new Dimension(100, 300));
+		optionsScrollPane.setPreferredSize(new Dimension(100, 380));
+		takenScrollPane.setPreferredSize(new Dimension(100, 380));
 		
 		
 		addButton.addActionListener(addListener());

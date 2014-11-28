@@ -1,6 +1,10 @@
 package cr.gui;
 
+import javax.swing.BorderFactory;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.BevelBorder;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -30,32 +34,63 @@ public class CourseGrid extends JPanel implements SubmitRequestListener
 
 	private int currentSchedule;
 	
+	private static final String[] COLUMNS = {
+		"Time",
+		"Monday",
+		"Tuesday",
+		"Wednesday",
+		"Thursday",
+		"Friday"
+	};
+	
 	public CourseGrid()
 	{
 		schedules = new ArrayList<Schedule>();
 		currentSchedule = 0;
-		
-		setLayout(new GridLayout(Schedule.TIME_SLOTS,5));
+		schedules.add(new Schedule());
+		setLayout(new GridLayout(Schedule.TIME_SLOTS + 1, COLUMNS.length));
 		setPreferredSize(new Dimension(800,600));
 		setBackground(Color.WHITE);
+		update();
 	}
 	
 	public void update(){
 		displaySchedule(this.schedules.get(currentSchedule));
 	}
 	
-	private SectionBlock[] organizeSchedule(Schedule s){
-		ArrayList<SectionBlock> blocks = new ArrayList<SectionBlock>();
+	private JComponent[] organizeSchedule(Schedule s){
+		ArrayList<JComponent> blocks = new ArrayList<JComponent>();
+		JLabel label;
 		CourseOffering[] offers = s.getCourseOfferingByBlock();
 		String days = "MTWRF";
 		boolean added;
 		
-		for(int i = 0; i < Schedule.TIME_SLOTS; i++){
-			for(int j = 0; j < days.length(); j++){
+		
+		// Rows
+		for(int i = 0; i < Schedule.TIME_SLOTS + 1; i++){
+			// Columns
+			for(int j = 0; j < COLUMNS.length; j++){
+				// Column headers
+				if(i == 0){
+					label = new JLabel(COLUMNS[j]);
+					label.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+					blocks.add(label);
+					continue;
+				}
+				// Row times
+				if(j == 0){
+					label = new JLabel("" + s.trueTime(Schedule.START_TIME, i - 1));
+					label.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+					blocks.add(label);
+					continue;
+				}
+				
+				
+				
 				added = false;
 				for(int k = 0; k < offers.length; k++){
 					CourseOffering c = offers[k];
-					if(c.getDays().contains(days.subSequence(j, j + 1))){
+					if(c.getDays().contains(days.subSequence(j - 1, j))){
 						if(!added && c.getStartTime() == s.trueTime(Schedule.START_TIME, i)){
 							added = true;
 							blocks.add(new SectionBlock(c));
@@ -65,18 +100,19 @@ public class CourseGrid extends JPanel implements SubmitRequestListener
 				}
 				if(!added){
 					blocks.add(new SectionBlock());
+					
 				}
 			}
 		}
 		
-		return blocks.toArray(new SectionBlock[0]);
+		return blocks.toArray(new JComponent[0]);
 	}
 	
 	public void displaySchedule(Schedule s){
 		this.removeAll();
-		for(SectionBlock b : this.organizeSchedule(s)){
+		for(JComponent b : this.organizeSchedule(s)){
 			this.add(b);
-			b.display();
+			if(b instanceof SectionBlock) ((SectionBlock)b).display();
 		}
 		this.repaint();
 	}
