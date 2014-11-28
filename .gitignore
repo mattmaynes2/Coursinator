@@ -10,3 +10,5 @@
 # Java
 *.class
 *.jar
+
+META-INF
