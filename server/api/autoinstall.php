@@ -6,7 +6,7 @@
 	function post($url, $file = FALSE, $mime = 'application/xml') {
 		global $root;
 		
-		$c = curl_init("$_SERVER[HTTP_HOST]$url");
+		$c = curl_init("$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]/../..$url");
 		
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, TRUE);
 		curl_setopt($c, CURLOPT_PUT, TRUE);
