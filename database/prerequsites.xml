@@ -1,24 +1,394 @@
+<?xml version="1.0"?>
 <prerequisites>
-	<course code="SYSC2001">
-		<prerequsite code="SYSC2006" concurrent="true"/> 
-	</course>
-	<course code="SYSC2004">
+<course code="ELEC2501">
+	<prerequsite code="MATH1005"/>
+	<group>
+		<prerequsite code="PHYS1004"/>
+		<prerequsite code="PHYS1002"/>
+	</group>
+</course>	
+<course code="ELEC2507">
+	<prerequsite code="ELEC2501"/>
+</course>	
+<course code="ELEC2607">
+	<group>
+		<prerequsite code="PHYS1004"/>
+		<prerequsite code="PHYS1002"/>
+	</group>
+</course>	
+<course code="ELEC3105">
+	<prerequsite code="MATH2004"/>
+	<group>
+		<prerequsite code="PHYS1004"/>
+		<prerequsite code="PHYS1002"/>
+	</group>
+</course>	
+<course code="ELEC3500">
+	<prerequsite code="ELEC2507"/>
+	<prerequsite code="ELEC2607"/>
+</course>	
+<course code="ELEC3508">
+	<prerequsite code="ELEC2501"/>
+	<prerequsite code="ELEC2507"/>
+</course>	
+<course code="ELEC3509">
+	<prerequsite code="ELEC2507"/>
+</course>	
+<course code="ELEC3605">
+	<prerequsite code="MATH1005"/>
+	<group>
+		<prerequsite code="PHYS1004"/>
+		<prerequsite code="PHYS1002"/>
+	</group>
+</course>	
+<course code="ELEC3907">
+	<prerequsite code="ELEC2607"/>
+	<prerequsite code="ELEC2507"/>
+	<prerequsite code="ECOR2606"/>
+</course>	
+<course code="ELEC3908">
+	<prerequsite code="ELEC2507"/>
+</course>	
+<course code="ELEC3909">
+	<prerequsite code="ELEC3105"/>
+</course>	
+<course code="ELEC4502">
+	<prerequsite code="ELEC4503" concurrent="true"/>
+</course>	
+<course code="ELEC4503">
+	<prerequsite code="ELEC3909"/>
+</course>	
+<course code="ELEC4505">
+	<prerequsite code="ELEC3509"/>
+	<group>
+		<prerequsite code="SYSC3501"/>
+		<prerequsite code="SYSC3503"/>
+	</group>
+</course>	
+<course code="ELEC4601">
+	<prerequsite code="ELEC2607"/>
+	<group>
+		<prerequsite code="SYSC2003"/>
+		<prerequsite code="SYSC3003"/>
+		<prerequsite code="SYSC3006"/>
+	</group>
+</course>	
+<course code="ELEC4609">
+	<group>
+		<prerequsite code="ELEC3500"/>
+		<prerequsite code="ELEC3908"/>
+	</group>
+</course>	
+<course code="ELEC4700">
+	<prerequsite code="ELEC3908"/>
+</course>	
+<course code="ELEC4702">
+	<prerequsite code="ELEC3908"/> 
+	<prerequsite code="ELEC3909"/>
+</course>	
+<course code="ELEC4704">
+	<prerequsite code="ELEC3908"/>
+</course>	
+<course code="ELEC4706">
+	<prerequsite code="ELEC3500"/>
+</course>	
+<course code="ELEC4707">
+	<prerequsite code="ELEC3509"/>
+</course>	
+<course code="ELEC4708">
+	<prerequsite code="ELEC3500"/>
+</course>	
+<course code="ELEC4907">
+	<prerequsite code="ELEC3907"/>
+	<prerequsite code="ECOR4995" concurrent="true"/>
+</course>	
+<course code="ELEC4908">
+	<prerequsite code="ECOR4995" concurrent="true"/>
+</course>	
+<course code="SYSC1005">
+	<prerequsite code="ECOR1606"/>
+	<prerequsite code="SYSC1101"/>
+	<prerequsite code="COMP1005"/>
+	<prerequsite code="COMP1405"/>
+</course>	
+<course code="SYSC2001">
+	<group>
+		<prerequsite code="ECOR1606"/>
+		<prerequsite code="SYSC1005"/>
+	</group>
+</course>	
+<course code="SYSC2003">
+	<prerequsite code="SYSC2001"/>
+	<group>
+		<prerequsite code="SYSC2002"/>
 		<prerequsite code="SYSC2006"/>
-		<prerequsite code="SYSC2001"/>
-	</course>
-	<course code="MATH1005">
-		<prerequsite code="MATH1004"/>
-	</course>
+	</group>
+</course>	
+<course code="SYSC2004">
+	<group>
+		<prerequsite code="SYSC2002"/> 
+		<prerequsite code="SYSC2006"/>
+	</group>
+</course>	
+<course code="SYSC2006">
+	<group>
+		<prerequsite code="ECOR1606"/>
+		<prerequsite code="SYSC1005"/>
+	</group>	
+</course>	
+<course code="SYSC2100">
+	<group>
+		<prerequsite code="SYSC1102"/>
+		<prerequsite code="SYSC2006"/>
+	</group>
+	<group>
+		<prerequsite code="SYSC1101"/>
+		<prerequsite code="SYSC2004"/>
+	</group>
+</course>	
+<course code="SYSC3006">
+	<group>
+		<prerequsite code="SYSC2002"/>
+		<prerequsite code="SYSC2006"/>
+	</group>
+	<prerequsite code="ELEC2607"/>
+</course>	
+<course code="SYSC3010">
+	<prerequsite code="SYSC2004"/>
+	<prerequsite code="SYSC2100"/>
+</course>	
+<course code="SYSC3020">
+	<prerequsite code="SYSC2004"/> 
+	<group>
+		<prerequsite code="SYSC2006"/> 
+		<prerequsite code="SYSC2002"/>
+	</group>
+</course>	
+<course code="SYSC3101">
+	<group>
+		<prerequsite code="SYSC2004"/>
+		<prerequsite code="SYSC2100"/>
+	</group>
+</course>	
+<course code="SYSC3110">
+	<prerequsite code="SYSC2004"/>
+	<prerequsite code="SYSC2100"/>
+</course>	
+<course code="SYSC3120">
+	<prerequsite code="SYSC2004"/> 
+	<prerequsite code="SYSC2100"/>
+</course>	
+<course code="SYSC3200">
+	<prerequsite code="MATH1004"/>
+	<prerequsite code="MATH1104"/>
+	<group>
+		<prerequsite code="ECOR1606"/>
+		<prerequsite code="SYSC1100"/>
+	</group>
+</course>	
+<course code="SYSC3203">
+	<prerequsite code="MATH3705"/> 
+	<prerequsite code="PHYS1004"/>
+</course>	
+<course code="SYSC3303">
+	<prerequsite code="SYSC2003"/> 
+	<group>
+		<prerequsite code="SYSC2004"/>
+		<prerequsite code="SYSC2100"/>
+	</group>
+	<group>
+		<prerequsite code="COMP2003"/>
+		<prerequsite code="COMP2401"/>
+	</group>
+	<group>
+		<prerequsite code="COMP2002"/>
+		<prerequsite code="COMP2402"/>
+	</group>
+</course>	
+<course code="SYSC3500">
+	<prerequsite code="MATH2004"/>
+</course>	
+<course code="SYSC3501">
+	<prerequsite code="MATH3705"/>
+	 <group>
+	 	<prerequsite code="SYSC3600"/>
+	 	<prerequsite code="SYSC3610"/>
+	 </group>
+</course>	
+<course code="SYSC3503">
+	<prerequsite code="SYSC3500"/>
+	<prerequsite code="STAT2605"/>
+</course>	
+<course code="SYSC3600">
+	<prerequsite code="MATH1005"/>
+	<group>
+		<prerequsite code="ECOR1101"/>
+		<prerequsite code="PHYS1001"/>
+	</group>
+</course>	
+<course code="SYSC3601">
+	<prerequsite code="ELEC2607"/> 
+	<prerequsite code="SYSC2003"/>
 	
-	<!--<course code="SYSC2003">
+</course>	
+<course code="SYSC3610">
+	<prerequsite code="MATH3705"/> 
+	<prerequsite code="ECOR1101"/>
+</course>	
+<course code="SYSC4001">
+	<group>
+		 <prerequsite code="SYSC2002"/>
+		 <prerequsite code="SYSC2100"/>
+	 </group>
+	<group>
+	 	<prerequsite code="SYSC2003"/>
+	 	<prerequsite code="SYSC3006"/>
+	 </group>
+</course>	
+<course code="SYSC4005">
+	<group>
+		<prerequsite code="STAT2605"/>
+		<prerequsite code="STAT3502"/>
+	</group>
+</course>	
+<course code="SYSC4101">
+	<group>
+		<prerequsite code="SYSC3100"/> 
+		<prerequsite code="SYSC3120"/>
+		<prerequsite code="SYSC3020"/>
+	</group>
+</course>	
+<course code="SYSC4102">
+	<prerequsite code="STAT3502"/>
+	<group>
+		<prerequsite code="SYSC3001"/>
+		<prerequsite code="SYSC4001"/>
+	</group>
+</course>	
+<course code="SYSC4106">
+	<group>
+		<prerequsite code="SYSC3100"/>
+		<prerequsite code="SYSC3020"/>
+		<prerequsite code="SYSC3120"/>
+		<prerequsite code="COMP3004"/>
+	</group>
+</course>
+<course code="SYSC4120">
+	<group>
+		<prerequsite code="SYSC3120"/>
+		<prerequsite code="SYSC3100"/>
+	</group>
+</course>	
+<course code="SYSC4201">
+	<group>
+		<prerequsite code="ELEC3605"/>
+		<prerequsite code="SYSC3203"/>
+	</group>
+</course>	
+<course code="SYSC4205">
+	<prerequsite code="MATH3705"/>
+</course>	
+<course code="SYSC4405">
+	<group>
+		<prerequsite code="SYSC3500"/>
+		<prerequsite code="SYSC3600"/>
+		<prerequsite code="SYSC3610"/>
+	</group>
+</course>	
+<course code="SYSC4502">
+	<prerequsite code="SYSC4602"/>
+	<group>
+		<prerequsite code="SYSC2004"/>
+		<prerequsite code="SYSC2100"/>
+	</group>
+</course>	
+<course code="SYSC4504">
+	<group>
+		<prerequsite code="SYSC2004"/>
+		<prerequsite code="SYSC2100"/>
+	</group>
+</course>	
+<course code="SYSC4505">
+	<prerequsite code="MATH2004"/>
+	<group>
+		<prerequsite code="SYSC3500"/>
+		<prerequsite code="SYSC3600"/>
+		<prerequsite code="SYSC3610"/>
+	</group>
+</course>	
+<course code="SYSC4507">
+	<prerequsite code="ELEC2607"/>
+	<group>
 		<prerequsite code="SYSC2001"/>
-		<prerequsite code="SYSC2006"/>
-	</course>-->
-	<!-- <course code="SYSC2100"> -->
-	<!-- 	<prerequsite code="SYSC2006"/> -->
-	<!-- </course> -->
-	<!-- <course code="SYSC4001"> -->
-	<!-- 	<prerequsite code="SYSC2003"/> -->
-	<!-- 	<prerequsite code="SYSC2100"/> -->
-	<!-- </course> -->
+		<prerequsite code=" SYSC3006"/>
+	</group>
+
+</course>	
+<course code="SYSC4600">
+	<prerequsite code="SYSC3501"/> 
+	<prerequsite code="STAT3502"/>
+</course>	
+<course code="SYSC4602">
+	<group>
+		<prerequsite code="STAT2605"/>
+		<prerequsite code="STAT3502" concurrent="true"/>
+	</group>
+</course>	
+<course code="SYSC4604">
+	<prerequsite code="SYSC3503"/>
+</course>	
+<course code="SYSC4607">
+	<group>
+		<prerequsite code="SYSC3501"/>
+		<prerequsite code="SYSC3503"/>
+	</group>
+</course>	
+<course code="SYSC4700">
+	<group>
+		<prerequsite code="SYSC3501"/>
+		<prerequsite code="SYSC3503"/>
+	</group>
+</course>	
+<course code="SYSC4805">
+	<prerequsite code="SYSC3303"/>
+	<group>
+		<prerequsite code="SYSC3020"/>
+		<prerequsite code="SYSC4800"/>
+	</group>
+</course>	
+<course code="SYSC4806">
+	<group>
+		<prerequsite code="SYSC4800"/>
+		<prerequsite code="SYSC4120"/>
+	</group>
+</course>	
+<course code="SYSC4907">
+	<prerequsite code="ECOR4995" concurrent="true"/>
+</course>	
+<course code="SYSC4917">
+	<prerequsite code="ECOR4995" concurrent="true"/>
+</course>	
+<course code="SYSC4927">
+	<prerequsite code="ECOR4995" concurrent="true"/>
+</course>	
+<course code="SYSC4937">
+	<prerequsite code="ECOR4995" concurrent="true"/>
+	<prerequsite code="ECOR1010"/>
+	<prerequsite code="ECOR1000"/>
+	
+</course>	
+<course code="ECOR1101">
+	<prerequsite code="MATH1004"/>
+	<prerequsite code="MATH1104"/>
+	
+</course>	
+<course code="ECOR2606">
+	<prerequsite code="MATH1005"/>
+	<group>
+		<prerequsite code="ECOR1606"/>
+		<prerequsite code="SYSC1005"/>
+		<prerequsite code="ECOR1010"/>
+		<prerequsite code="ELEC1908"/>
+	</group>
+</course>	
 </prerequisites>
