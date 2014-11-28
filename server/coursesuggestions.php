@@ -1,4 +1,3 @@
-<?xml-stylesheet type="text/xsl" href="suggestedCourses.xsl"?>
 <?php 
 	/*
 		RESPONSE FORMAT
@@ -38,6 +37,8 @@
 	require_once("api/lib/Course.php");
 	require_once("api/scheduler.php");
 	require_once("api/electives.php");
+	
+	echo "<?xml-stylesheet type='text/xsl' href='suggestedCourses.xsl'?>";
 	
 	//Must select a pattern
 	if(!isset($_GET['pattern']))

@@ -96,7 +96,7 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 								<xsl:for-each select="sections/section">
 									<tr>
 										<td>
-										<label>
+										<label>c
 											<xsl:value-of select="concat(course-offering/code,course-offering/section)"/>
 												<input checked="true" name="enroll[]" type="checkbox">
 													<xsl:attribute  name="value">
