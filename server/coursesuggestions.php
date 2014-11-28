@@ -71,6 +71,10 @@
 	{
 		$completed = $_GET['completed'];
 	}
+	else if ($_GET['pattern'] == 'offpattern')
+	{
+		$completed = array();
+	}
 	else if ($_GET['pattern'] == 'onpattern' and isset($_GET['year_select']))
 	{
 		$completed_year = $_GET['year_select'];
