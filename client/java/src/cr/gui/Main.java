@@ -17,7 +17,7 @@ public class Main extends JFrame
 		studentInfo = new StudentInfoPanel();
 		courses = new CourseGrid();
 		setLayout(new BorderLayout());
-		setSize(1000, 500);
+		setSize(1000, 650);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		setDefaultLookAndFeelDecorated(false);

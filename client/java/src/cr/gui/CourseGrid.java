@@ -5,22 +5,22 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 import java.io.IOException;
-import java.util.List;
 import java.util.ArrayList;
 
 import cr.CRRequest;
 import cr.Course;
 import cr.CourseOffering;
-import cr.ProgramElement;
 import cr.Schedule;
 
 public class CourseGrid extends JPanel implements SubmitRequestListener
 {
 		
+	
+	
 	/**
 	 * 
 	 */
@@ -35,19 +35,50 @@ public class CourseGrid extends JPanel implements SubmitRequestListener
 		schedules = new ArrayList<Schedule>();
 		currentSchedule = 0;
 		
-		setLayout(new GridLayout(8,0));
-		setPreferredSize(new Dimension(500,500));
-		
+		setLayout(new GridLayout(Schedule.TIME_SLOTS,5));
+		setPreferredSize(new Dimension(800,600));
+		setBackground(Color.WHITE);
 	}
 	
 	public void update(){
 		displaySchedule(this.schedules.get(currentSchedule));
 	}
 	
-	public void displaySchedule(Schedule s){
-		for(CourseOffering c : s.getCourseOfferings()){
-			System.out.println(c.toString());
+	private SectionBlock[] organizeSchedule(Schedule s){
+		ArrayList<SectionBlock> blocks = new ArrayList<SectionBlock>();
+		CourseOffering[] offers = s.getCourseOfferingByBlock();
+		String days = "MTWRF";
+		boolean added;
+		
+		for(int i = 0; i < Schedule.TIME_SLOTS; i++){
+			for(int j = 0; j < days.length(); j++){
+				added = false;
+				for(int k = 0; k < offers.length; k++){
+					CourseOffering c = offers[k];
+					if(c.getDays().contains(days.subSequence(j, j + 1))){
+						if(!added && c.getStartTime() == s.trueTime(Schedule.START_TIME, i)){
+							added = true;
+							blocks.add(new SectionBlock(c));
+						}
+						
+					}
+				}
+				if(!added){
+					blocks.add(new SectionBlock());
+				}
+			}
 		}
+		
+		return blocks.toArray(new SectionBlock[0]);
+	}
+	
+	public void displaySchedule(Schedule s){
+		this.removeAll();
+		for(SectionBlock b : this.organizeSchedule(s)){
+			this.add(b);
+			b.display();
+		}
+		this.repaint();
 	}
 	
 	public void reset(){
