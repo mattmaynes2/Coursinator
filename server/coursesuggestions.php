@@ -62,10 +62,8 @@
 		{
 			$year = $year + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
 		}
-		$term = 0;
-		$year = $year-1;
 	}
-
+	
 	//Get the list of courses that they have completed.
 	//If on pattern query their pattern in the database
 	if(isset($_GET['completed']))
@@ -100,6 +98,8 @@
 	
 	echo '<response e="0">';
 
+	
+	
 	//Get the actual course objects from the database
 	$completed_as_courses = array();
 	
@@ -224,6 +224,11 @@
 	
 	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
 
+	if (count($s->getSchedules()) == 0)
+	{
+		echo '<noschedulemessage> Could not generate a conflict free schedule</noschedulemessage>';
+	}
+	
 	if ($s == null && count($electives) == 0)
 	{
 		$iter = 0;

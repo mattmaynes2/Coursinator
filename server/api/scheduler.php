@@ -59,7 +59,7 @@
 			$s->setYear($year);
 			
 			if (count($courses) <= 0)
-				return null;
+				return new Schedule();
 			
 			$i = 0;
 			//Get all of the offerings for each of the desired courses
