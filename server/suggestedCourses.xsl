@@ -53,34 +53,34 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 											<td>
 												<xsl:choose>
 													<xsl:when test="@depth = 2">
-														<xsl:attribute name="style">background-color:red</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:red</xsl:attribute>
 													</xsl:when>
 													<xsl:when test="@depth  = 1">
-														<xsl:attribute name="style">background-color:blue</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:blue</xsl:attribute>
 													</xsl:when>
 													<xsl:when test="@depth  = 3">
-														<xsl:attribute name="style">background-color:green</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:green</xsl:attribute>
 													</xsl:when>
 													<xsl:when test="@depth  = 4">
-														<xsl:attribute name="style">background-color:orange</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:orange</xsl:attribute>
 													</xsl:when>
 													<xsl:when test="@depth  = 5">
-														<xsl:attribute name="style">background-color:purple</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:purple</xsl:attribute>
 													</xsl:when>
 													<xsl:when test="@depth  = 0">
-														<xsl:attribute name="style">background-color:aqua</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:aqua</xsl:attribute>
 													</xsl:when>
 													<xsl:when test="@depth  = 6">
-														<xsl:attribute name="style">background-color:maroon</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:maroon</xsl:attribute>
 													</xsl:when>
 													<xsl:when test="@depth  = 7">
-														<xsl:attribute name="style">background-color:navy</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:navy</xsl:attribute>
 													</xsl:when>
 													<xsl:when test="@depth  = 8">
-														<xsl:attribute name="style">background-color:fuschia</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:fuscia</xsl:attribute>
 													</xsl:when>
 													<xsl:when test="@depth  = 9">
-														<xsl:attribute name="style">background-color:white</xsl:attribute>
+														<xsl:attribute name="style">border-style:solid; border-width:3px; border-color:white</xsl:attribute>
 													</xsl:when>
 												</xsl:choose>
 												<xsl:value-of select=".">
