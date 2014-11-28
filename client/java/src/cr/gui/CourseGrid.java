@@ -14,7 +14,9 @@ import java.util.ArrayList;
 
 import cr.CRRequest;
 import cr.Course;
+import cr.CourseOffering;
 import cr.ProgramElement;
+import cr.Schedule;
 
 public class CourseGrid extends JPanel implements SubmitRequestListener
 {
@@ -24,39 +26,50 @@ public class CourseGrid extends JPanel implements SubmitRequestListener
 	 */
 	private static final long serialVersionUID = 1809847793779415302L;
 	
-	private ArrayList<CourseToggle> toggles;
+	private ArrayList<Schedule> schedules;
+
+	private int currentSchedule;
 	
 	public CourseGrid()
 	{
+		schedules = new ArrayList<Schedule>();
+		currentSchedule = 0;
+		
 		setLayout(new GridLayout(8,0));
 		setPreferredSize(new Dimension(500,500));
-
-		toggles = new ArrayList<CourseToggle>();
+		
 	}
 	
-	public void loadCourses(List<ProgramElement> elements)
-	{
-		GridBagConstraints gbc = new GridBagConstraints();
-		
-		for (ProgramElement e : elements)
-		{
-			CourseToggle newToggle = new CourseToggle(e);
-			toggles.add(newToggle);
-			gbc.gridx = e.getTerm();
-			this.add(newToggle, gbc);
+	public void update(){
+		displaySchedule(this.schedules.get(currentSchedule));
+	}
+	
+	public void displaySchedule(Schedule s){
+		for(CourseOffering c : s.getCourseOfferings()){
+			System.out.println(c.toString());
 		}
+	}
+	
+	public void reset(){
+		this.schedules.clear();
 	}
 
 	@Override
 	public void requestSubmitted(SubmitRequest request) {
 		CRRequest req = new CRRequest();
+		Schedule[] schedules;
+		this.reset();
 		try {
 			if(request.isOnPattern()){
-				System.out.println(req.getSchedule("" + request.getYear(), "" + request.getProgram().getId()));
+				schedules = req.getSchedule("" + request.getYear(), "" + request.getProgram().getId());
 			}
 			else{
-				System.out.println(req.getSchedule(request.getCompletedCourses().toArray(new Course[0]), "" + request.getProgram().getId()));			
+				schedules = req.getSchedule(request.getCompletedCourses().toArray(new Course[0]), "" + request.getProgram().getId());
 			}
+			for(Schedule s : schedules){
+				this.schedules.add(s);
+			}
+			update();
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 		}		
