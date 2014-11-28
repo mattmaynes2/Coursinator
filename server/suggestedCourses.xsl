@@ -39,7 +39,7 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 							<xsl:attribute name="style">display:block</xsl:attribute>
 						</xsl:if>
 						<xsl:attribute name="id">Schedule<xsl:value-of select="position()"/></xsl:attribute>
-						<form action="api/register.php" method="POST">
+						<form action="api/register.php" method="GET">
 							<table cellpadding="10" border="1" style='border-style: solid; border-bottom: none; width:50%; table-layout: fixed;'>
 								<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Time</th>
 								<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Monday</th>

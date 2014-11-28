@@ -22,13 +22,13 @@ require_once("lib/CourseOffering.php");
 		}
 	}
 
-	if (!isset($_POST['enroll']))
+	if (!isset($_GET['enroll']))
 	{
 		echo "<h2>Registration completed</h2>";
 	}
 	else
 	{
-		foreach($_POST['enroll'] as $sectioncode)
+		foreach($_GET['enroll'] as $sectioncode)
 		{
 			$course_code = substr($sectioncode,0,8);
 			$section_id = substr($sectioncode,8);
