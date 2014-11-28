@@ -228,7 +228,7 @@
 		}
 		$endIndex = $i;
 	}
-	var_dump($pattern);
+
 	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
 
 	if (count($s->getSchedules()) == 0 && count($electives)==0)
