@@ -73,7 +73,7 @@
 				$q->where('course_code=?
 							AND term=?
 							AND year=?
-							AND (capacity - enrolled) > 0 
+							AND ((capacity - enrolled > 0) OR (capacity=0))
 							AND type=0', [$course->getcode(),$term,$year]);
 		
 				$rows = $q->executeFetchAll();

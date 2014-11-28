@@ -38,6 +38,7 @@
 	require_once("api/scheduler.php");
 	require_once("api/electives.php");
 	
+	//Use suggestedCourses.xsl to make this user-readable
 	echo "<?xml-stylesheet type='text/xsl' href='suggestedCourses.xsl'?>";
 	
 	//Must select a pattern
@@ -222,6 +223,7 @@
 		$endIndex = $i;
 	}
 	
+	
 	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
 
 	if (count($s->getSchedules()) == 0)
@@ -232,7 +234,7 @@
 	if ($s == null && count($electives) == 0)
 	{
 		$iter = 0;
-		while ($iter < count($scheduling) && $s==null)
+		while ($iter < count($scheduling) && ($s==null or count($s->getSchedules() == 0)))
 		{
 				$s = Schedule::buildConflictFreeSchedule(array_slice($scheduling,$iter), $year, $term, array_slice($pattern, $endIndex+1));
 				$iter++;
