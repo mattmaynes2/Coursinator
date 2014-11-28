@@ -86,12 +86,12 @@
 			<prerequsite code="SYSC2003"/>
 			<prerequsite code="SYSC2004"/>
 			<prerequsite code="SYSC2100"/>
-			<prerequsite code="COMP 2003"/>
-			<prerequsite code="COMP 2401"/>
+			<prerequsite code="COMP2003"/>
+			<prerequsite code="COMP2401"/>
 		</group>
 		<group>
-			<prerequsite code="COMP 2002"/>
-			<prerequsite code="COMP 2402"/>
+			<prerequsite code="COMP2002"/>
+			<prerequsite code="COMP2402"/>
 		</group>
 	</course>
 	<course code="SYSC3500">
@@ -158,7 +158,7 @@
 			<prerequsite code="SYSC3100"/>
 			<prerequsite code="SYSC3020" concurrent="true"/>
 			<prerequsite code="SYSC3120" concurrent="true"/>
-			<prerequsite code="COMP 3004"/>
+			<prerequsite code="COMP3004"/>
 		</group>
 	</course>
 	<course code="SYSC4120">
