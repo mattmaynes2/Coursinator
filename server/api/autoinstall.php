@@ -29,6 +29,7 @@
 	case 'POST':
 		post('/api/create.php?force');
 		post('/api/courseofferings.php', 'course_data.csv');
+		post('/api/courseofferings.php', 'datawinter.csv');
 		post('/api/prerequsites.php', 'prerequsites.xml');
 		
 		post('/api/addPattern.php', 'software_pattern_fall2012.csv');

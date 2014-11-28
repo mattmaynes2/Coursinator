@@ -1,7 +1,9 @@
 <?php
-require_once("lib/db.php");
-require_once("lib/CourseOffering.php");
-
+	require_once("lib/db.php");
+	require_once("lib/CourseOffering.php");
+	
+	date_default_timezone_set('UTC');
+	
 	//Figure out  which term to register for
 	$year = date('Y');
 	$month = date('n');
