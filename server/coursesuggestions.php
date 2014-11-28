@@ -63,17 +63,15 @@
 		{
 			$year = $year + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
 		}
+		$term=0;
+		$year=2014;
 	}
 	
 	//Get the list of courses that they have completed.
 	//If on pattern query their pattern in the database
-	if(isset($_GET['completed']))
+	if(isset($_GET['completed']) && $_GET['pattern'] == 'offpattern')
 	{
 		$completed = $_GET['completed'];
-	}
-	else if ($_GET['pattern'] == 'offpattern')
-	{
-		$completed = array();
 	}
 	else if ($_GET['pattern'] == 'onpattern' and isset($_GET['year_select']))
 	{
@@ -133,7 +131,7 @@
 							   OR
 							   (credit_type <> 0))
 							   ORDER BY element_year ASC, term ASC, credit_type DESC", array_merge([$_GET['program_select']], $completed));
-		$pattern = $programQuery->executeFetchAll(); 
+		$pattern = $programQuery->executeFetchAll();
 	}
 	else
 	{
@@ -222,11 +220,10 @@
 		}
 		$endIndex = $i;
 	}
-	
-	
+
 	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
 
-	if (count($s->getSchedules()) == 0)
+	if (count($s->getSchedules()) == 0 && count($electives)==0)
 	{
 		echo '<noschedulemessage> Could not generate a conflict free schedule</noschedulemessage>';
 	}
