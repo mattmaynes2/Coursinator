@@ -229,14 +229,11 @@
 		$endIndex = $i;
 	}
 
+	//Attempt to create a schedule with the 5 preferred courses
 	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
-
-	if (count($s->getSchedules()) == 0 && count($electives)==0)
-	{
-		echo '<noschedulemessage> Could not generate a conflict free schedule</noschedulemessage>';
-	}
 	
-	if ($s == null && count($electives) == 0)
+	//If we couln't find a schedule with those courses and their alternatives, reduce the number of courses we are trying to schedule
+	if (count($s->getSchedules()) == 0 && count($electives) == 0)
 	{
 		$iter = 0;
 		while ($iter < count($scheduling) && ($s==null or count($s->getSchedules() == 0)))
@@ -253,11 +250,13 @@
 			$s = new Schedule();
 		}
 		
+		//Output the schedule
 		foreach($s->getSchedules() as $sched)
 		{
 			$sched->to_xml();
 		}
 		
+		//Output the elective options
 		echo '<electives>';
 		foreach($electives as $elective)
 		{
