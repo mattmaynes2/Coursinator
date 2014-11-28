@@ -32,8 +32,6 @@
 		post('/api/courseofferings.php', 'datawinter.csv');
 		
 		post('/api/prerequsites.php', 'prerequsites.xml');
-		post('/api/prerequsites.php', 'math_prereqs.xml');
-		post('/api/prerequsites.php', 'sysc_preres.xml');
 		
 		post('/api/addPattern.php', 'software_pattern_fall2012.csv');
 		

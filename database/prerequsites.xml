@@ -196,14 +196,6 @@
 		<prerequsite code="SYSC2004"/>
 		<prerequsite code="SYSC2100"/>
 	</group>
-	<group>
-		<prerequsite code="COMP2003"/>
-		<prerequsite code="COMP2401"/>
-	</group>
-	<group>
-		<prerequsite code="COMP2002"/>
-		<prerequsite code="COMP2402"/>
-	</group>
 </course>	
 <course code="SYSC3500">
 	<prerequsite code="MATH2004"/>
@@ -268,8 +260,8 @@
 <course code="SYSC4106">
 	<group>
 		<prerequsite code="SYSC3100"/>
-		<prerequsite code="SYSC3020"/>
-		<prerequsite code="SYSC3120"/>
+		<prerequsite code="SYSC3020" concurrent="true"/>
+		<prerequsite code="SYSC3120" concurrent="true"/>
 		<prerequsite code="COMP3004"/>
 	</group>
 </course>
