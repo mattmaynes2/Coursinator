@@ -91,6 +91,14 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 									</tr>
 								</xsl:for-each>
 							</table>
+							<table>
+								<xsl:for-each select="notimes/course-offering">
+									<tr>
+										<td style="color:red">Please note that <xsl:value-of select="concat(code,section)"/> 
+										currently has no time associated with it. This is an online course; it is not displayed in your schedule; if you do not wish to register for this course please deselect it below</td>
+									</tr>
+								</xsl:for-each>
+							</table>
 							<h2>By pressing Confirm you will be enrolled in the following sections</h2>
 							<table border="1">
 								<xsl:for-each select="sections/course-offering">
