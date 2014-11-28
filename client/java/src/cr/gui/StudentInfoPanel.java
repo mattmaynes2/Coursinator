@@ -149,6 +149,8 @@ public class StudentInfoPanel extends JPanel
 				request.setOnPattern(onPattern.isSelected());
 				request.setProgram(prog);
 				request.setYear(Integer.parseInt(yearStatus.getSelectedItem().toString()));
+				request.setCompletedCourses(coursePicker.getSelectedCourses());
+				
 				for(SubmitRequestListener listener: requestListeners){
 					listener.requestSubmitted(request);
 				}

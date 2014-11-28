@@ -1,14 +1,19 @@
 package cr.gui;
 
 import javax.swing.JPanel;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import java.awt.GridLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
-
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 
+import cr.CRRequest;
+import cr.Course;
 import cr.ProgramElement;
 
 public class CourseGrid extends JPanel implements SubmitRequestListener
@@ -44,8 +49,17 @@ public class CourseGrid extends JPanel implements SubmitRequestListener
 
 	@Override
 	public void requestSubmitted(SubmitRequest request) {
-		//TODO send request to server
-		
+		CRRequest req = new CRRequest();
+		try {
+			if(request.isOnPattern()){
+				System.out.println(req.getSchedule("" + request.getYear(), "" + request.getProgram().getId()));
+			}
+			else{
+				System.out.println(req.getSchedule(request.getCompletedCourses().toArray(new Course[0]), "" + request.getProgram().getId()));			
+			}
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+		}		
 	}
 }
 
