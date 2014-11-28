@@ -176,7 +176,31 @@ public class CRRequest extends Request{
 		CourseBuilder builder = new CourseBuilder();
 		return builder.read(this.sendGetRequest(route, params));
 	}
+	
+	public String getSchedule(String year, String programId) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
+		String route = crRoot + "/coursesuggestions.php";
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("pattern", "onpattern");
+		params.put("year_select", year);
+		params.put("program_select", programId);
+		return this.bufferStream(this.sendGetRequest(route, params));
+	}
 
+
+	public String getSchedule(Course[] complete, String programId) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
+		StringBuffer buffer = new StringBuffer();
+		String route = crRoot + "/coursesuggestions.php";
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("pattern", "offpattern");
+		params.put("program_select", programId);
+		for(Course c : complete){
+			buffer.append("complete[]=" + c.getCode() + "&");
+		}
+		if(buffer.length() > 0) buffer.deleteCharAt(buffer.length() - 1);
+		params.put(buffer.toString(), "");
+		
+		return this.bufferStream(this.sendGetRequest(route, params));
+	}
 	
 	/**
 	 * Returns a list of courses that match the given pattern
