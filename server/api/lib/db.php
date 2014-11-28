@@ -1,6 +1,6 @@
 <?php
 	$defaultdsn  = 'mysql:dbname=coursinator';
-	$defaultuser = 'user';
+	$defaultuser = 'root';
 	$serverdsn = 'mysql:host=localhost';
 	$defaultpass = '';
 	
