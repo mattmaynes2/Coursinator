@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<prerequsites>
+<prerequisites>
 	<course code="SYSC2001">
 		<group>
 			<prerequsite code="ECOR1606"/>
@@ -273,4 +273,4 @@
 	<course code="SYSC4937">
 		<prerequsite code="ECOR4995" concurrent="true"/>
 	</course>
-</prerequsites>
+</prerequisites>
