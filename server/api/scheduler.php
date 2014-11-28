@@ -6,12 +6,28 @@
 	//Schedules are divided into half-hour time slots
 	class Schedule
 	{
+		/* 2D array of days and timeslots
+		* Each day is broken down into 26 half-hour time slots
+		* Each timeslot has a CourseOffering object associated with it, or the string "NOCOURSE" if it is an empty slot
+		*/
 		private $timeslots;
+		
+		//The sections registered in this schedule
 		private $registeredSections;
+		
+		//The term this schedule is built for
 		private $term;
+		
+		//The year this schedule if built for
 		private $year;
+		
+		//A list of alternative schedules
 		private $schedules;
+		
+		//Courses which have no assigned meeting time
 		private $notimes;
+		
+		const MAX_SCHEDULES = 5;
 		
 		function __construct()
 		{
@@ -99,11 +115,14 @@
 				$i++;
 			}
 			$list = [];
-			$s->scheduleCourses($offerings,0,5,$alternates, $list);
+			$s->scheduleCourses($offerings,0,Schedule::MAX_SCHEDULES,$alternates, $list);
 			return $s;
 		}
 		
-		//If all lab sections for this course are full the algorithm assumes this is normal/university needs to deal with it, and allows the course to be added to the schedule
+		/*
+		* Main Scheduling Algorithm
+		* Builds all possible schedules with the given course offerings, up to a maximum number $scheduleLimit
+		*/
 		function scheduleCourses($offerings, $depth, $scheduleLimit, $alternates = [], & $list=[], $numGenerated = 0)
 		{	
 			$success = false;	
@@ -127,6 +146,7 @@
 				{
 					continue;
 				}
+				//If there are no labs attached to this course, try to schedule remaining courses
 				if (count($lecture['labs']) == 0)
 				{
 					if ($this->scheduleCourses(array_slice($offerings, 1),$depth+1,$scheduleLimit,$list,$numGenerated))
@@ -146,6 +166,7 @@
 						}
 					}
 				}
+				//If there are labs attached to this course, for each lab section, attempt to schedule the remaining courses
 				foreach($lecture['labs'] as $lab)
 				{
 					//This lab doesn't have a time 
@@ -196,7 +217,7 @@
 				}
 				$this->removeCourse($lecture['lecture']);
 			}
-			//Try and replace this one with alternate courses to satisfy the schedule
+			//If we have failed to build any schedule, try and replace this one with alternate courses to satisfy the schedule
 			$result = false;
 			while(isset($alternatives[0]))
 			{
@@ -207,6 +228,7 @@
 			return $result;
 		}
 		
+		//This will get a list of all attached labs required to schedule a course
 		function getOfferingInfo($course_code)
 		{
 				$offerings = array();
@@ -238,13 +260,14 @@
 				return $offerings;
 		}
 		
+		//Converts a range of times to the number of timeslots occupied
 		static function getLengthForRange($startTime, $endTime)
 		{	
 			$halfHours1 = ($endTime['hours'] - $startTime['hours']) * 2 ;
 			$halfHours2 = ($endTime['minutes'] - $startTime['minutes']) == 20 ? 1:0;
 			return $halfHours2 + $halfHours1;
 		}
-		
+		//Converts a timestamp as stored in the database to a useable format
 		static function getTimeFromTimestamp($t)
 		{
 			if (strlen($t) == 3)
@@ -259,6 +282,7 @@
 			return $r;
 		}
 		
+		//Removes a course offering from this schedule
 		function removeCourse($offering)
 		{
 			foreach(str_split($offering->getdays()) as $day)
@@ -274,6 +298,7 @@
 			}
 		}
 		
+		//Adds a course offering to this schedule
 		function setCourseAt($offering)
 		{
 			foreach(str_split($offering->getdays()) as $day)
@@ -285,6 +310,7 @@
 			}
 		}
 		
+		//Checks if a time range is free on this schedule (accepts a course offering as input and uses its start and end times as the range)
 		function isTimeFree($offering)
 		{
 			foreach(str_split($offering->getdays()) as $day)
@@ -301,6 +327,7 @@
 			return true;
 		}
 		
+		//Converts a time to an index in the timeslots array
 		static function timeToSlot($t)
 		{
 			$hourOffset = ($t['hours'] - 8) * 2;
@@ -319,6 +346,7 @@
 			return $hourOffset + $minuteOffset;
 		}
 		
+		//Converts an index in the timeslots array to a timestamp hour:minute
 		static function slotToTime($offset)
 		{
 			$hour = floor(($offset+1)/2) + 8;
@@ -330,6 +358,7 @@
 			return $hour.':'.$minute;
 		}
 		
+		//Output this schedule to a client, XML format described coursesuggestions.php
 		function to_xml()
 		{
 			echo '<schedule>';

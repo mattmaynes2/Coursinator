@@ -25,7 +25,7 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 				</p>
 			</xsl:when>
 			<xsl:otherwise>
-				<h2>Timetable suggestion (does not include electives)</h2>
+				<h2>Timetable suggestion</h2>
 				<xsl:for-each select= "response/schedule">
 					<a href="javascript:void(0)">
 						<xsl:attribute name="onclick">showSchedule(<xsl:value-of select="position()"/>)</xsl:attribute>
@@ -40,7 +40,7 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 						</xsl:if>
 						<xsl:attribute name="id">Schedule<xsl:value-of select="position()"/></xsl:attribute>
 						<form action="api/register.php" method="POST">
-							<table cellpadding="10" border="1" style='border-style: solid; border-bottom: none; table-layout: fixed;'>
+							<table cellpadding="10" border="1" style='border-style: solid; border-bottom: none; width:50%; table-layout: fixed;'>
 								<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Time</th>
 								<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Monday</th>
 								<th style='border-style: solid; border-top:none; border-left:none; border-right:none'>Tuesday</th>
