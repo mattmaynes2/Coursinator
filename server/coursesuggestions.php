@@ -63,8 +63,6 @@
 		{
 			$year = $year + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
 		}
-		$term=0;
-		$year=2014;
 	}
 	
 	//Get the list of courses that they have completed.
