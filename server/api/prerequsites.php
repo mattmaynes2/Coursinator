@@ -24,7 +24,11 @@
 			');
 		}
 		
-		global $db;
+		if ($xml->tagName == 'group') {
+			$preq = getChildrenByTag($xml, 'prerequsite');
+		} else if ($xml->tagName == 'prerequsite') {
+			$preq = [$xml];
+		} else return;
 		
 		$scoursegroup->execute([
 			"Prerequsites for $code",
@@ -33,19 +37,29 @@
 		
 		$gid = +$db->lastInsertId('coursegroups_id_seq');
 		
-		$scoursegroupperson->execute([
-			$gid,
-			$xml->getAttribute('code'),
-			$xml->hasAttribute('concurrent')? 1 : 0,
-		]);
-		$scoursegroupperson->closeCursor();
+		foreach ($preq as $e) {
+			try {
+				$scoursegroupperson->execute([
+					$gid,
+					$e->getAttribute('code'),
+					$e->hasAttribute('concurrent')? 1 : 0,
+				]);
+				$scoursegroupperson->closeCursor();
+			} catch (Exception $e) {
+				// Ingore, we don't know about this course to add prereqs.
+			}
+		}
 		
-		$sprerequsite->execute([
-			$code,
-			$gid,
-			1,
-		]);
-		$sprerequsite->closeCursor();
+		try {
+			$sprerequsite->execute([
+				$code,
+				$gid,
+				1,
+			]);
+			$sprerequsite->closeCursor();
+		} catch (Exception $e) {
+			// Ingore, we don't know about this course to add prereqs.
+		}
 	}
 	
 	switch ($_SERVER['REQUEST_METHOD']) {
@@ -66,7 +80,7 @@
 		foreach (getChildrenByTag($root, 'course') as $course) {
 			$code = $course->getAttribute('code');
 			
-			foreach (getChildrenByTag($course, 'prerequsite') as $preq) {
+			foreach (getChildrenByTag($course) as $preq) {
 				makeprereq($code, $preq);
 			}
 		}
