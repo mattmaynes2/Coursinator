@@ -50,7 +50,6 @@
 			$year,
 			$note
 		) = str_getcsv($line);
-		if ($code == '########') $code = NULL;
 		try {
 			db_exec($insert, [
 				$id,

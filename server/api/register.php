@@ -6,23 +6,29 @@ require_once("lib/CourseOffering.php");
 	$year = date('Y');
 	$month = date('n');
 	
+	$year = date('Y');
+	$month = date('n');
+	
 	if ($month >= 6 and $month <= 7)
 	{
 		$term = 0;
 	}
 	else
 	{
-		$term = 0;
-		$year = 2013 + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
+		$term = 1;
+		if ($month > 7)
+		{
+			$year = $year + 1;
+		}
 	}
-
-	if (!isset($_POST['enroll']))
+	
+	if (!isset($_GET['enroll']))
 	{
-		echo "<h2>Registration completed</h2>";
+		echo "<h2>No courses specified</h2>";
 	}
 	else
 	{
-		foreach($_POST['enroll'] as $sectioncode)
+		foreach($_GET['enroll'] as $sectioncode)
 		{
 			$course_code = substr($sectioncode,0,8);
 			$section_id = substr($sectioncode,8);
@@ -41,7 +47,7 @@ require_once("lib/CourseOffering.php");
 				continue;
 			}
 
-			if ($result[0][0]->getcapacity() - $result[0][0]->getenrolled() > 0)
+			if (($result[0][0]->getcapacity() - $result[0][0]->getenrolled() > 0) or $result[0][0]->getcapacity() == 0)
 			{
 				$sql = "UPDATE course_offerings
 						SET enrolled=enrolled+1
@@ -50,7 +56,7 @@ require_once("lib/CourseOffering.php");
 						AND year=?
 						AND course_code=?
 						AND section=?
-						AND enrolled < capacity";
+						AND (enrolled < capacity OR capacity=0)";
 				$result = db_exec($sql, [$term,$year,$course_code,$section_id]);
 				if ($result->rowCount() == 0)
 				{
@@ -58,7 +64,24 @@ require_once("lib/CourseOffering.php");
 				}
 				else
 				{
-					echo '<p>Registered in '.$sectioncode.'</p>';
+					$q = new Query('course_offerings');
+					$q->select_object('CourseOffering');
+					$q->where("term=? 
+						AND year=?
+						AND course_code = ?
+						AND section = ?",[$term,$year,$course_code, $section_id]);
+					$result = $q->executeFetchAll();
+					if (isset($result[0]))
+					{
+						if ($result[0][0]->getcapacity() != 0)
+						{
+							echo '<p>Registered in '.$sectioncode.' Seats remaining:'.($result[0][0]->getcapacity()-$result[0][0]->getenrolled()).'</p>';
+						}
+						else
+						{
+							echo '<p>Registered in '.$sectioncode.'</p>';
+						}
+					}
 				}
 			}
 			else

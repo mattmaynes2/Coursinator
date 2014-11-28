@@ -3,12 +3,16 @@
 		<prerequsite code="SYSC1005"/>
 	</course>
 	<course code="SYSC2001">
-		<prerequsite code="SYSC2006" concurrent="true"/>
+		<prerequsite code="SYSC2006" concurrent="true"/> 
 	</course>
 	<course code="SYSC2004">
 		<prerequsite code="SYSC2006"/>
 		<prerequsite code="SYSC2001"/>
 	</course>
+	<course code="MATH1005">
+		<prerequsite code="MATH1004"/>
+	</course>
+	
 	<!--<course code="SYSC2003">
 		<prerequsite code="SYSC2001"/>
 		<prerequsite code="SYSC2006"/>

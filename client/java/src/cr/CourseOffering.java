@@ -1,7 +1,9 @@
 package cr;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import xml.XMLObject;
 
@@ -23,6 +25,7 @@ public class CourseOffering extends XMLObject{
 	 */
 	public static final String SCHEMA_IDENTIFIER = "course-offering";
 	
+	private static final Color[] colors = {Color.RED, Color.YELLOW, Color.GREEN, Color.ORANGE, Color.BLUE, Color.GRAY, Color.CYAN, Color.DARK_GRAY, Color.LIGHT_GRAY, Color.MAGENTA, Color.PINK};
 	
 	/**
 	 * The ID of the offering. This integer does not correspond to the code of the course
@@ -105,6 +108,20 @@ public class CourseOffering extends XMLObject{
 	 */
 	private int type;
 
+	/**
+	 * The time that the class starts
+	 */
+	private int startTime;
+	
+	/**
+	 * The time that the class ends
+	 */
+	private int endTime;
+	
+	/**
+	 * Stores the color of this offering
+	 */
+	private Color color;
 	
 	/**
 	 * Constructs an empty course offering 
@@ -113,6 +130,7 @@ public class CourseOffering extends XMLObject{
 	 * @author Matthew Maynes
 	 */
 	public CourseOffering(){
+		Random rand = new Random();
 		this.id = -1;
 		this.year = -1;
 		this.term = -1;
@@ -121,9 +139,37 @@ public class CourseOffering extends XMLObject{
 		this.type = -1;
 		this.code = "";
 		this.days = "";
-		this.room = "";		
+		this.room = "";	
+		this.section = "";
+		this.color = colors[rand.nextInt(colors.length)];
 	}
 	
+	/**
+	 * Copy constructor
+	 * 
+	 * @since November 9, 2014
+	 * @author Matthew Maynes
+	 */
+	public CourseOffering(CourseOffering c){
+		this.id = c.id;
+		this.year = c.year;
+		this.term = c.term;
+		this.enrolled = c.enrolled;
+		this.capacity = c.capacity;
+		this.type = c.type;
+		this.code = c.code;
+		this.days = c.days;
+		this.room = c.room;	
+		this.section = c.section;
+		this.color = c.color;
+	}
+	
+	/**
+	 * @return Returns the color of this offering
+	 */
+	public Color getColor(){
+		return this.color;
+	}
 	
 	/**
 	 * @return the id
@@ -196,11 +242,41 @@ public class CourseOffering extends XMLObject{
 	}
 
 	/**
+	 * @return the startTime
+	 */
+	public int getStartTime(){
+		return startTime;
+	}
+	
+	/**
+	 * @return the startEnd
+	 */
+	public int getEndTime(){
+		return endTime;
+	}
+	
+	/**
+	 * @param startTime the endTime to set
+	 */
+	public void setEndTime(int endTime){
+		this.endTime = endTime;
+	}
+	
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public void setStartTime(int startTime){
+		this.startTime = startTime;
+	}
+	
+	
+	/**
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
+
 
 	/**
 	 * Sets the course code for this course and normalizes any invalid whitespace
@@ -291,6 +367,8 @@ public class CourseOffering extends XMLObject{
 		if(this.getType() >= 0) schema.put("type",  Integer.toString(this.getType()));
 		if(this.getEnrolled() >= 0) schema.put("enrolled",  Integer.toString(this.getEnrolled()));
 		if(this.getCapacity() >= 0) schema.put("capacity",  Integer.toString(this.getCapacity()));
+		if(this.getStartTime() >= 0) schema.put("start_time",  Integer.toString(this.getStartTime()));
+		if(this.getEndTime() >= 0) schema.put("end_time",  Integer.toString(this.getEndTime()));
 		
 		// Build the XML output
 		buffer.append("<" + SCHEMA_IDENTIFIER + ">");

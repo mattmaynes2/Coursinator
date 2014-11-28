@@ -1,4 +1,3 @@
-<?xml-stylesheet type="text/xsl" href="suggestedCourses.xsl"?>
 <?php 
 	/*
 		RESPONSE FORMAT
@@ -41,6 +40,9 @@
 	
 	date_default_timezone_set('UTC');
 	
+	//Use suggestedCourses.xsl to make this user-readable
+	echo "<?xml-stylesheet type='text/xsl' href='suggestedCourses.xsl'?>";
+	
 	//Must select a pattern
 	if(!isset($_GET['pattern']))
 	{
@@ -63,13 +65,12 @@
 		{
 			$year = $year + 1;	//TODO CHANGE THIS TO MATCH THE ACTUAL TERM TO SCHEDULE FOR
 		}
-		$term = 0;
-		$year = $year-1;
 	}
-
+	
 	//Get the list of courses that they have completed.
 	//If on pattern query their pattern in the database
-	if(isset($_GET['completed']))
+	//If off pattern use the list of courses specified
+	if(isset($_GET['completed']) && $_GET['pattern'] == 'offpattern')
 	{
 		$completed = $_GET['completed'];
 	}
@@ -100,8 +101,8 @@
 	header('Content-Type: text/xml; charset=utf-8');
 	
 	echo '<response e="0">';
-	echo $year.' '.$term;
-	//Get the actual course objects from the database
+	
+	//Fetch course objects from database
 	$completed_as_courses = array();
 	
 	foreach ($completed as $c)
@@ -133,7 +134,7 @@
 							   OR
 							   (credit_type <> 0))
 							   ORDER BY element_year ASC, term ASC, credit_type DESC", array_merge([$_GET['program_select']], $completed));
-		$pattern = $programQuery->executeFetchAll(); 
+		$pattern = $programQuery->executeFetchAll();
 	}
 	else
 	{
@@ -174,7 +175,6 @@
 		}
 	}
 
-
 	$found = 0;
 	$discarded = array();
 	$scheduling = array();
@@ -182,6 +182,14 @@
 	$alternatives = array();
 	$endIndex = 0;
 	
+	/*
+	Course selection algorithm:
+	
+	Goal is to find 5 courses that they haven't taken, and for which they have satisfied the prerequisites
+	Electives count as one course found, these are added to a list of electives but not scheduled
+	Courses for which the prerequisites are satisfied but are not immediately considered for scheduling are added to a list of alternatives
+	This algorithm also attempts to schedule concurrent prerequisites together
+	*/
 	for($i=0; $i<count($pattern); $i++)
 	{
 	
@@ -222,13 +230,15 @@
 		}
 		$endIndex = $i;
 	}
-	
-	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
 
-	if ($s == null && count($electives) == 0)
+	//Attempt to create a schedule with the 5 preferred courses
+	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
+	
+	//If we couln't find a schedule with those courses and their alternatives, reduce the number of courses we are trying to schedule
+	if (count($s->getSchedules()) == 0 && count($electives) == 0)
 	{
 		$iter = 0;
-		while ($iter < count($scheduling) && $s==null)
+		while ($iter < count($scheduling) && ($s==null or count($s->getSchedules() == 0)))
 		{
 				$s = Schedule::buildConflictFreeSchedule(array_slice($scheduling,$iter), $year, $term, array_slice($pattern, $endIndex+1));
 				$iter++;
@@ -241,8 +251,14 @@
 		{
 			$s = new Schedule();
 		}
-		$s->to_xml();
 		
+		//Output the schedule
+		foreach($s->getSchedules() as $sched)
+		{
+			$sched->to_xml();
+		}
+		
+		//Output the elective options
 		echo '<electives>';
 		foreach($electives as $elective)
 		{
@@ -256,7 +272,6 @@
 		}
 		echo '</electives>';
 	}
-	
 	echo '</response>';
 	
 ?>

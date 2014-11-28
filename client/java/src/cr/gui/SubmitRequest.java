@@ -73,6 +73,13 @@ public class SubmitRequest {
 	public void setCompletedCourses(ArrayList<Course> completedCourses) {
 		this.completedCourses = completedCourses;
 	}
+	/**
+	 * @param completedCourses the completedCourses to set
+	 */
+	public void setCompletedCourses(Course[] completedCourses) {
+		for(Course c : completedCourses)
+		this.completedCourses.add(c);
+	}
 
 	/**
 	 * @param program the program to set

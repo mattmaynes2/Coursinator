@@ -188,7 +188,7 @@ public class Request{
 	public String joinParameters(HashMap<String, String> params){
 		StringBuffer list = new StringBuffer();
 		for(Entry<String, String> entry : params.entrySet()){
-			list.append(entry.getKey() + (entry.getValue() == null ? "" : "=" + entry.getValue()));
+			list.append(entry.getKey() + (entry.getValue() == null || entry.getValue().equals("") ? "" : "=" + entry.getValue()));
 			list.append('&');
 		}
 		return list.length() > 0 ? list.deleteCharAt(list.length() - 1).toString() : "";
