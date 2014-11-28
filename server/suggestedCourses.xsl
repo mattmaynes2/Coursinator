@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 
-<xsl:stylesheet version="1.0"
-xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:my="http://my.com" exclude-result-prefixes="my">
+<xsl:stylesheet version="3.0"
+xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
 
 <xsl:template match="/">
@@ -15,9 +14,7 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
 		<header style="background-color:#CC0033; padding:0.4em">
 			<img src="logo.png"/>
 		</header>
-		<xsl:for-each select="response/errormessage">
-			<xsl:message terminate="yes" style="color:red"><xsl:value-of select="current()"/></xsl:message>
-		</xsl:for-each>
+
 		<xsl:choose>
 			<xsl:when test="response/noschedulemessage">
 				<p>
