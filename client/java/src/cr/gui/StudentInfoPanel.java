@@ -71,7 +71,7 @@ public class StudentInfoPanel extends JPanel
 		program.addItemListener(programListener());
 		onPattern.addActionListener(this.hideCoursePickerListener());
 		offPattern.addActionListener(this.showCoursePickerListener());
-		
+		onPattern.setSelected(true);
 		
 		//Add components
 		add(instructions);

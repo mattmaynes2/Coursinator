@@ -1,12 +1,17 @@
 package cr.gui;
 
 import javax.swing.JFrame;
+import javax.xml.parsers.ParserConfigurationException;
 
+import org.xml.sax.SAXException;
+
+import cr.CRRequest;
 import cr.CourseOffering;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 
 public class Main extends JFrame implements ScheduleSelectedListener
@@ -28,9 +33,7 @@ public class Main extends JFrame implements ScheduleSelectedListener
 		setDefaultLookAndFeelDecorated(false);
 		studentInfo.addSubmitRequestListener(courses);
 		
-		
 		add(studentInfo, BorderLayout.WEST);
-	
 		add(courses,BorderLayout.EAST);
 		courses.addScheduleSelectedListener(this);
 		
@@ -47,10 +50,26 @@ public class Main extends JFrame implements ScheduleSelectedListener
 			}
 		};
 	}
+	
+	public ActionListener registerListener(){
+		return new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				CRRequest request = new CRRequest();
+				try {
+					registerPanel.setResponse(request.register(registerPanel.getSelectedCourses()));
+				} catch (ParserConfigurationException | SAXException | IOException e1) {
+					e1.printStackTrace();
+				}
+
+				
+			}
+		};
+	}
 
 	public void scheduleSelected(CourseOffering[] offerings) {
 		this.registerPanel = new RegisterPanel(offerings);
 		this.registerPanel.addBackListener(backListener());
+		this.registerPanel.addRegisterListener(registerListener());
 		remove(studentInfo);
 		add(registerPanel, BorderLayout.WEST);
 		repaint();

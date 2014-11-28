@@ -238,6 +238,38 @@ public class CRRequest extends Request{
 		return builder.read(this.sendGetRequest(route, params));
 	}
 	
+	
+	/**
+	 * Registers this user in all of the courses selected in the given course offerings
+	 *
+	 * Routes to /api/register.php
+	 *
+	 * @param complete The courses that have been completed
+	 * @param programId The id of this users program
+	 *
+	 * @return An array of schedules that meet the given criteria or an empty array
+	 *
+	 * @throws MalformedURLException If there is an issue with the end point for this server
+	 * @throws IOException If the HTTP connection is closed or hangs
+	 * @throws SAXException If there is an issue with the XML input stream
+	 * @throws ParserConfigurationException If the XML data is malformed
+	 *
+	 * @author Matthew Maynes
+	 */
+	public String register(CourseOffering[] complete) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
+		StringBuffer buffer = new StringBuffer();
+		String route = crRoot + "/api/register.php";
+		HashMap<String, String> params = new HashMap<String, String>();
+		for(CourseOffering c : complete){
+			buffer.append("enroll[]=" + c.getCode() + c.getSection() + "&");
+		}
+		
+		if(buffer.length() > 0) buffer.deleteCharAt(buffer.length() - 1);
+		params.put(buffer.toString(), "");
+		
+		return this.bufferStream(this.sendGetRequest(route, params));
+	}
+	
 	/**
 	 * Returns a list of courses that match the given pattern
 	 *
