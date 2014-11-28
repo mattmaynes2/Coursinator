@@ -41,7 +41,7 @@ public class RegisterPanel extends JPanel{
 		this.selections = new HashMap<CourseOffering, JCheckBox>();
 		setLayout(new BorderLayout());
 		for(CourseOffering c : offerings){
-			box = new JCheckBox(c.getCode());
+			box = new JCheckBox(c.getCode() + " " + c.getSection());
 			box.setSelected(true);
 			this.selections.put(c, box);
 			checkBoxPanel.add(box);
