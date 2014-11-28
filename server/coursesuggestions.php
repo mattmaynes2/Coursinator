@@ -67,7 +67,8 @@
 	
 	//Get the list of courses that they have completed.
 	//If on pattern query their pattern in the database
-	if(isset($_GET['completed']))
+	//If off pattern use the list of courses specified
+	if(isset($_GET['completed']) && $_GET['pattern'] == 'offpattern')
 	{
 		$completed = $_GET['completed'];
 	}
@@ -98,10 +99,8 @@
 	header('Content-Type: text/xml; charset=utf-8');
 	
 	echo '<response e="0">';
-
 	
-	
-	//Get the actual course objects from the database
+	//Fetch course objects from database
 	$completed_as_courses = array();
 	
 	foreach ($completed as $c)
@@ -133,7 +132,7 @@
 							   OR
 							   (credit_type <> 0))
 							   ORDER BY element_year ASC, term ASC, credit_type DESC", array_merge([$_GET['program_select']], $completed));
-		$pattern = $programQuery->executeFetchAll(); 
+		$pattern = $programQuery->executeFetchAll();
 	}
 	else
 	{
@@ -174,7 +173,6 @@
 		}
 	}
 
-
 	$found = 0;
 	$discarded = array();
 	$scheduling = array();
@@ -182,6 +180,14 @@
 	$alternatives = array();
 	$endIndex = 0;
 	
+	/*
+	Course selection algorithm:
+	
+	Goal is to find 5 courses that they haven't taken, and for which they have satisfied the prerequisites
+	Electives count as one course found, these are added to a list of electives but not scheduled
+	Courses for which the prerequisites are satisfied but are not immediately considered for scheduling are added to a list of alternatives
+	This algorithm also attempts to schedule concurrent prerequisites together
+	*/
 	for($i=0; $i<count($pattern); $i++)
 	{
 	
@@ -222,11 +228,10 @@
 		}
 		$endIndex = $i;
 	}
-	
-	
+
 	$s = Schedule::buildConflictFreeSchedule($scheduling, $year, $term, $alternatives);
 
-	if (count($s->getSchedules()) == 0)
+	if (count($s->getSchedules()) == 0 && count($electives)==0)
 	{
 		echo '<noschedulemessage> Could not generate a conflict free schedule</noschedulemessage>';
 	}
