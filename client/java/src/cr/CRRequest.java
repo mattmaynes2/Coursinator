@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 import cr.factory.CourseBuilder;
 import cr.factory.CourseOfferingBuilder;
 import cr.factory.ProgramBuilder;
+import cr.factory.ScheduleBuilder;
 
 
 /**
@@ -177,19 +178,54 @@ public class CRRequest extends Request{
 		return builder.read(this.sendGetRequest(route, params));
 	}
 	
-	public String getSchedule(String year, String programId) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
+	/**
+	 * Returns a list of schedules for an on pattern user
+	 *
+	 * Routes to /coursesuggestions.php
+	 *
+	 * @param year The current year of study
+	 * @param programId The id of this users program
+	 *
+	 * @return An array of schedules that meet the given criteria or an empty array
+	 *
+	 * @throws MalformedURLException If there is an issue with the end point for this server
+	 * @throws IOException If the HTTP connection is closed or hangs
+	 * @throws SAXException If there is an issue with the XML input stream
+	 * @throws ParserConfigurationException If the XML data is malformed
+	 *
+	 * @author Matthew Maynes
+	 */
+	public Schedule[] getSchedule(String year, String programId) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
 		String route = crRoot + "/coursesuggestions.php";
+		ScheduleBuilder builder = new ScheduleBuilder();
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("pattern", "onpattern");
 		params.put("year_select", year);
 		params.put("program_select", programId);
-		return this.bufferStream(this.sendGetRequest(route, params));
+		return builder.read(this.sendGetRequest(route, params));
 	}
 
-
-	public String getSchedule(Course[] complete, String programId) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
+	/**
+	 * Returns a list of schedules for an off pattern user who has completed some courses
+	 *
+	 * Routes to /coursesuggestions.php
+	 *
+	 * @param complete The courses that have been completed
+	 * @param programId The id of this users program
+	 *
+	 * @return An array of schedules that meet the given criteria or an empty array
+	 *
+	 * @throws MalformedURLException If there is an issue with the end point for this server
+	 * @throws IOException If the HTTP connection is closed or hangs
+	 * @throws SAXException If there is an issue with the XML input stream
+	 * @throws ParserConfigurationException If the XML data is malformed
+	 *
+	 * @author Matthew Maynes
+	 */
+	public Schedule[] getSchedule(Course[] complete, String programId) throws MalformedURLException, ParserConfigurationException, SAXException, IOException{
 		StringBuffer buffer = new StringBuffer();
 		String route = crRoot + "/coursesuggestions.php";
+		ScheduleBuilder builder = new ScheduleBuilder();
 		HashMap<String, String> params = new HashMap<String, String>();
 		params.put("pattern", "offpattern");
 		params.put("program_select", programId);
@@ -199,7 +235,7 @@ public class CRRequest extends Request{
 		if(buffer.length() > 0) buffer.deleteCharAt(buffer.length() - 1);
 		params.put(buffer.toString(), "");
 		
-		return this.bufferStream(this.sendGetRequest(route, params));
+		return builder.read(this.sendGetRequest(route, params));
 	}
 	
 	/**

@@ -105,6 +105,15 @@ public class CourseOffering extends XMLObject{
 	 */
 	private int type;
 
+	/**
+	 * The time that the class starts
+	 */
+	private int startTime;
+	
+	/**
+	 * The time that the class ends
+	 */
+	private int endTime;
 	
 	/**
 	 * Constructs an empty course offering 
@@ -196,11 +205,41 @@ public class CourseOffering extends XMLObject{
 	}
 
 	/**
+	 * @return the startTime
+	 */
+	public int getStartTime(){
+		return startTime;
+	}
+	
+	/**
+	 * @return the startEnd
+	 */
+	public int getEndTime(){
+		return endTime;
+	}
+	
+	/**
+	 * @param startTime the endTime to set
+	 */
+	public void setEndTime(int endTime){
+		this.endTime = endTime;
+	}
+	
+	/**
+	 * @param startTime the startTime to set
+	 */
+	public void setStartTime(int startTime){
+		this.startTime = startTime;
+	}
+	
+	
+	/**
 	 * @param id the id to set
 	 */
 	public void setId(int id) {
 		this.id = id;
 	}
+
 
 	/**
 	 * Sets the course code for this course and normalizes any invalid whitespace
