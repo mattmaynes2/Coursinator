@@ -10,9 +10,11 @@ xmlns:my="http://my.com" exclude-result-prefixes="my">
   <head>
 	<script type="text/javascript" src="js/showSchedules.js"/>
   </head>
-		<img src="logo.png"/>
 		<div style="background-color:#CC0033; width:100%;"><xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text></div>
 	<body style="background-color:#DDDDDD">
+		<header style="background-color:#CC0033; padding:0.4em">
+			<img src="logo.png"/>
+		</header>
 		<xsl:for-each select="response/errormessage">
 			<xsl:message terminate="yes" style="color:red"><xsl:value-of select="current()"/></xsl:message>
 		</xsl:for-each>
