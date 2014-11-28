@@ -9,7 +9,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <head>
 	<script type="text/javascript" src="js/showSchedules.js"/>
   </head>
-		<div style="background-color:#CC0033; width:100%;"><xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text></div>
+		<div style="background-color:#CC0033; width:100%;"><xsl:text>&#xA0;</xsl:text></div>
 	<body style="background-color:#DDDDDD">
 		<header style="background-color:#CC0033; padding:0.4em">
 			<img src="logo.png"/>
@@ -30,7 +30,7 @@ xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 						<xsl:attribute name="onclick">showSchedule(<xsl:value-of select="position()"/>)</xsl:attribute>
 						Schedule <xsl:value-of select="position()"/>
 					</a>
-					<xsl:text disable-output-escaping="yes"><![CDATA[&nbsp;]]></xsl:text>
+					<xsl:text disable-output-escaping="yes">&#xA0;</xsl:text>
 				</xsl:for-each>
 				<xsl:for-each select = "response/schedule">
 					<div name="schedulediv" style="display:none">
