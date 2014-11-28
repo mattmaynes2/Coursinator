@@ -31,6 +31,8 @@ public class CourseGrid extends JPanel implements SubmitRequestListener
 	private static final long serialVersionUID = 1809847793779415302L;
 	
 	private ArrayList<Schedule> schedules;
+	
+	private ArrayList<ScheduleSelectedListener> scheduleSelectedListeners;
 
 	private int currentSchedule;
 	
@@ -46,6 +48,7 @@ public class CourseGrid extends JPanel implements SubmitRequestListener
 	public CourseGrid()
 	{
 		schedules = new ArrayList<Schedule>();
+		scheduleSelectedListeners = new ArrayList<ScheduleSelectedListener>();
 		currentSchedule = 0;
 		schedules.add(new Schedule());
 		setLayout(new GridLayout(Schedule.TIME_SLOTS + 1, COLUMNS.length));
@@ -115,6 +118,13 @@ public class CourseGrid extends JPanel implements SubmitRequestListener
 			if(b instanceof SectionBlock) ((SectionBlock)b).display();
 		}
 		this.repaint();
+		for(ScheduleSelectedListener listener : scheduleSelectedListeners){
+			listener.scheduleSelected(s.getCourseOfferings());
+		}
+	}
+	
+	public void addScheduleSelectedListener(ScheduleSelectedListener listen){
+		this.scheduleSelectedListeners.add(listen);
 	}
 	
 	public void reset(){
