@@ -230,7 +230,7 @@ public class CRRequest extends Request{
 		params.put("pattern", "offpattern");
 		params.put("program_select", programId);
 		for(Course c : complete){
-			buffer.append("complete[]=" + c.getCode() + "&");
+			buffer.append("completed[]=" + c.getCode() + "&");
 		}
 		if(buffer.length() > 0) buffer.deleteCharAt(buffer.length() - 1);
 		params.put(buffer.toString(), "");
