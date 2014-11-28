@@ -4,7 +4,7 @@ function auto_onsubmit(e) {
 	var res = document.getElementById("auto_result");
 	
 	var req = new XMLHttpRequest();
-	req.open("POST", "/api/autoinstall.php");
+	req.open("POST", "api/autoinstall.php");
 	req.send();
 	
 	res.textContent = "Sending request…";
@@ -28,7 +28,7 @@ function create_onsubmit(e) {
 	var res   = document.getElementById("create_result");
 	
 	var req = new XMLHttpRequest();
-	req.open("POST", "/api/create.php"+(force? "?force" : ""));
+	req.open("POST", "api/create.php"+(force? "?force" : ""));
 	req.send();
 	
 	res.textContent = "Sending request…";
@@ -58,7 +58,7 @@ function pre_onsubmit(e) {
 	}
 	
 	var req = new XMLHttpRequest();
-	req.open("POST", "/api/prerequsites.php");
+	req.open("POST", "api/prerequsites.php");
 	req.setRequestHeader("Content-Type", "application/xml");
 	req.send(data);
 	
@@ -89,7 +89,7 @@ function course_onsubmit(e) {
 	}
 	
 	var req = new XMLHttpRequest();
-	req.open("POST", "/api/courseofferings.php");
+	req.open("POST", "api/courseofferings.php");
 	req.setRequestHeader("Content-Type", "application/xml");
 	req.send(data);
 	
