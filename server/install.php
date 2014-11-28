@@ -8,7 +8,6 @@
 	<p>Welcome to the install wizard.  You can either use the auto-install to install with the default data or use the other tools to upload custom data.</p>
 	
 	<h2>Auto-Install</h2>
-	<p>Before running this tool a database with the name "coursinator" should be created.</p>
 	<p>The MySQL username and password must be set at the top of server/api/lib/db.php using the variables $defaultuser and $defaultpass</p>
 	
 	<p>Use the default data to create a complete working database.</p>
