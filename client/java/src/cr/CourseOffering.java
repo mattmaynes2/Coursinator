@@ -130,9 +130,28 @@ public class CourseOffering extends XMLObject{
 		this.type = -1;
 		this.code = "";
 		this.days = "";
-		this.room = "";		
+		this.room = "";	
+		this.section = "";
 	}
 	
+	/**
+	 * Copy constructor
+	 * 
+	 * @since November 9, 2014
+	 * @author Matthew Maynes
+	 */
+	public CourseOffering(CourseOffering c){
+		this.id = c.id;
+		this.year = c.year;
+		this.term = c.term;
+		this.enrolled = c.enrolled;
+		this.capacity = c.capacity;
+		this.type = c.type;
+		this.code = c.code;
+		this.days = c.days;
+		this.room = c.room;	
+		this.section = c.section;
+	}
 	
 	/**
 	 * @return the id
@@ -330,6 +349,8 @@ public class CourseOffering extends XMLObject{
 		if(this.getType() >= 0) schema.put("type",  Integer.toString(this.getType()));
 		if(this.getEnrolled() >= 0) schema.put("enrolled",  Integer.toString(this.getEnrolled()));
 		if(this.getCapacity() >= 0) schema.put("capacity",  Integer.toString(this.getCapacity()));
+		if(this.getStartTime() >= 0) schema.put("start_time",  Integer.toString(this.getStartTime()));
+		if(this.getEndTime() >= 0) schema.put("end_time",  Integer.toString(this.getEndTime()));
 		
 		// Build the XML output
 		buffer.append("<" + SCHEMA_IDENTIFIER + ">");

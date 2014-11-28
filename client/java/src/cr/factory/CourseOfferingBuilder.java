@@ -69,11 +69,11 @@ public class CourseOfferingBuilder extends XMLBuilder<CourseOffering> {
 		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
 			offering.setType(Integer.parseInt(nodes.item(0).getTextContent()));
 		
-		nodes = node.getElementsByTagName("startTime");
+		nodes = node.getElementsByTagName("start_time");
 		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
 			offering.setStartTime(Integer.parseInt(nodes.item(0).getTextContent()));
 		
-		nodes = node.getElementsByTagName("endTime");
+		nodes = node.getElementsByTagName("end_time");
 		if(nodes.getLength() > 0 && nodes.item(0).getTextContent() != null) 
 			offering.setEndTime(Integer.parseInt(nodes.item(0).getTextContent()));
 		
